@@ -1,37 +1,42 @@
-/**************************************** */
-/*** IP:		62.108.32.***:3306
-/*** USER:		jrlwd_root	
-/*** PASSWORT:	dhbw2020#
-/**************************************** */
+/**********************************************************************
+* Project           : DeHaBewe: Smarte Kroetenzaune
+*
+* Program name      : create.sql
+*
+* Author            : Dominik Deseyve
+*
+* Purpose           : Create all tables
+* 
+/**********************************************************************/
+
+DROP TABLE IF EXISTS empty_bucket;
+DROP TABLE IF EXISTS bucket;
+DROP TABLE IF EXISTS fench;
+DROP TABLE IF EXISTS location; 
+DROP TABLE IF EXISTS session;
+DROP TABLE IF EXISTS user;
 
 /**************************************** */
 /*** USER
 /**************************************** */
-GRANT SELECT
-ON log
-TO server;
-
-/**************************************** */
-/*** TABLES
-/**************************************** */
-/* USER */
-INSERT INTO user(firstname, lastname, birthday,plz,city,password,mail) VALUES('Max','Mustermann','2002-06-03','88400','Biberach an der Riﬂ','<<hash>>', 'max@mustermann.de');
-DROP TABLE user;
 CREATE TABLE IF NOT EXISTS user (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id),  
   firstname varchar(31) default NULL,
   lastname varchar(63) default NULL,
   birthday DATE default '2000-01-01',
   plz varchar(5) default NULL,
   city varchar(127) default NULL,
+  role ENUM('USER', 'ADMIN') DEFAULT 'USER',
   password varchar(128) default NULL,
   mail varchar(127) default NULL,
+  UNIQUE KEY(mail),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/* SESSION */
-DROP TABLE session;
+/**************************************** */
+/*** SESSION
+/**************************************** */
 CREATE TABLE IF NOT EXISTS session (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
@@ -41,8 +46,9 @@ CREATE TABLE IF NOT EXISTS session (		/* USER-TABLE like mentioned in SM05 */
   end_ts varchar(31) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/* LOCATION */
-INSERT INTO location(name, latitude, longitude) VALUES('Buchenwald',19.311143,1.582031);
+/**************************************** */
+/*** LOCATION
+/**************************************** */
 CREATE TABLE IF NOT EXISTS location (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
@@ -54,8 +60,9 @@ CREATE TABLE IF NOT EXISTS location (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/* BUCKET */
-INSERT INTO bucket(name) VALUES('Eimer 23');
+/**************************************** */
+/*** BUCKET
+/**************************************** */
 CREATE TABLE IF NOT EXISTS bucket (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
@@ -67,9 +74,9 @@ CREATE TABLE IF NOT EXISTS bucket (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/* BUCKET-EMPTY PROCESS */
-INSERT INTO empty_bucket(bucket_id, user_id) VALUES(1,16);
-DROP TABLE empty_bucket;
+/**************************************** */
+/*** EMPTY-BUCKET
+/**************************************** */
 CREATE TABLE IF NOT EXISTS empty_bucket (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
@@ -80,8 +87,9 @@ CREATE TABLE IF NOT EXISTS empty_bucket (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/* FENCH */
-INSERT INTO fench(name) VALUES('Zaun 23');
+/**************************************** */
+/*** FENCH
+/**************************************** */
 CREATE TABLE IF NOT EXISTS fench (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
@@ -92,12 +100,16 @@ CREATE TABLE IF NOT EXISTS fench (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
+/**************************************** */
+/*** LOG
+/**************************************** */
 CREATE TABLE IF NOT EXISTS log (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   log varchar(100) default NULL,
   ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
 
 /**************************************** */
 /*** VIEWS
@@ -108,7 +120,6 @@ CREATE OR REPLACE VIEW sys_user AS
 	JOIN session s
 	ON s.user_id = u.id
 	GROUP BY u.id;
-SELECT * FROM sys_user;
 
 CREATE OR REPLACE VIEW sys_sessioning AS
 	SELECT firstname, lastname,mail, start_ts, end_ts
@@ -118,17 +129,3 @@ CREATE OR REPLACE VIEW sys_sessioning AS
 
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
-#CREATE INDEX;
-/**************************************** */
-/*** TEST
-/**************************************** */
-DROP TABLE location;
-
-INSERT INTO log(log) VALUES('test');
-SELECT * FROM bucket;
-
-UPDATE bucket SET name='123' WHERE id = 4;
-
-
-CREATE OR REPLACE VIEW ui_log AS
-SELECT * FROM log;
