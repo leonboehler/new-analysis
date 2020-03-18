@@ -9,6 +9,12 @@
 * 
 /**********************************************************************/
 
+select * from mysql.user;
+
+CREATE DATABASE IF NOT EXISTS dehabewe;
+USE dehabewe;
+GRANT SELECT ON *.* TO 'server'@'%' IDENTIFIED BY "dhbw2020#" WITH max_user_connections 5;
+
 DROP TABLE IF EXISTS empty_bucket;
 DROP TABLE IF EXISTS bucket;
 DROP TABLE IF EXISTS fench;
@@ -107,6 +113,8 @@ CREATE TABLE IF NOT EXISTS log (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   log varchar(100) default NULL,
+  session_id varchar(100) default NULL,
+  user varchar(100) default NULL,
   ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -129,3 +137,5 @@ CREATE OR REPLACE VIEW sys_sessioning AS
 
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
+	
+/*-i sample_data.sql;*/

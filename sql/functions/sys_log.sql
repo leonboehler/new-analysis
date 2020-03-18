@@ -17,8 +17,9 @@ CREATE PROCEDURE sys_log(pFunction varchar(256), pText varchar(256))
 	
 BEGIN	
 	
-	INSERT INTO log(log) VALUES(CONCAT(pFunction,' ',pText));	
+	INSERT INTO log(log, user, session_id) VALUES(CONCAT('[',pFunction,']: ',pText),CURRENT_USER(), CONNECTION_ID());	
   	
 END //
 delimiter ;
+
 
