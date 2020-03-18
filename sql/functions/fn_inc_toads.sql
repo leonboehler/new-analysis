@@ -13,26 +13,19 @@ delimiter //
 
 DROP FUNCTION IF EXISTS fn_inc_toads//
 
-CREATE FUNCTION fn_inc_toads (pBucketID int(11)) 
+CREATE FUNCTION fn_inc_toads (pBucketID int(11), pCount int(11)) 
     RETURNS varchar(120) DETERMINISTIC
-BEGIN
-	DECLARE _successful bool DEFAULT false;
-	DECLARE _userID int(11);
-
+BEGIN	
 	IF (pBucketID < 0) THEN
-		 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Please enter a valid mail address.';
+		return '{code: 402, message: "bucket id is wrong"}';
 	END IF;	       
 	
-	UPDATE bucket SET toads_count = toads_count + 1 WHERE id = pBucketID;
+	INSERT INTO log_bucket(bucket_id, toads_count) VALUES (pBucketID, pCount);
+	UPDATE st_bucket SET toads_count = toads_count + pCount WHERE id = pBucketID;
 	IF (ROW_COUNT() > 0) THEN
-		SET _successful=true; 
+		return CONCAT('{code: 200, message: "',@MESSAGE_200,'"}');
 	ELSE
-		 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Could not find a matching bucket-id.';
-	END IF;	
-	
-  
-  	return CONCAT('{success: ',IF(_successful,'true','false'),'}');
+		return '{code: 402, message: "bucket id is wrong"}';
+	END IF;	  	
 END //
 delimiter ;
-
-SELECT fn_inc_toads(1);

@@ -15,16 +15,19 @@ CREATE DATABASE IF NOT EXISTS dehabewe;
 USE dehabewe;
 GRANT SELECT ON *.* TO 'server'@'%' IDENTIFIED BY "dhbw2020#" WITH max_user_connections 5;
 
-DROP TABLE IF EXISTS empty_bucket;
-DROP TABLE IF EXISTS bucket;
-DROP TABLE IF EXISTS location; 
-DROP TABLE IF EXISTS session;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS log_bucket;
+DROP TABLE IF EXISTS log_empty_bucket;
+DROP TABLE IF EXISTS st_bucket;
+DROP TABLE IF EXISTS st_location;
+DROP TABLE IF EXISTS st_readiness;
+DROP TABLE IF EXISTS log_session;
+DROP TABLE IF EXISTS st_user;
 
+SET AUTOCOMMIT = 0;
 /**************************************** */
 /*** USER
 /**************************************** */
-CREATE TABLE IF NOT EXISTS user (		/* USER-TABLE like mentioned in SM05 */
+CREATE TABLE IF NOT EXISTS st_user (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   firstname varchar(31) default NULL,
@@ -42,25 +45,42 @@ CREATE TABLE IF NOT EXISTS user (		/* USER-TABLE like mentioned in SM05 */
 /**************************************** */
 /*** SESSION
 /**************************************** */
-CREATE TABLE IF NOT EXISTS session (		/* USER-TABLE like mentioned in SM05 */
+CREATE TABLE IF NOT EXISTS log_session (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   user_id int(11) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-  start_ts varchar(31) default NULL,
-  end_ts varchar(31) default NULL
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  start_ts DATETIME default NULL,
+  end_ts DATETIME default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+/**************************************** */
+/*** READINESS
+/**************************************** */
+CREATE TABLE IF NOT EXISTS st_readiness (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  user_id int(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  location_id int(11) NOT NULL,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  start_ts DATETIME default NULL,
+  end_ts DATETIME default NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
 /*** LOCATION
 /**************************************** */
-CREATE TABLE IF NOT EXISTS location (
+CREATE TABLE IF NOT EXISTS st_location (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   name varchar(100) default NULL,
   info varchar(200) default NULL,
   latitude DECIMAL(10,7) default NULL,
   longitude DECIMAL(10,7) default NULL,
+  plz varchar(5) default NULL,
+  city varchar(127) default NULL,
   country VARCHAR(100) default 'Deutschland',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
@@ -68,30 +88,16 @@ CREATE TABLE IF NOT EXISTS location (
 /**************************************** */
 /*** BUCKET
 /**************************************** */
-CREATE TABLE IF NOT EXISTS bucket (
+CREATE TABLE IF NOT EXISTS st_bucket (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
-  location_id int(11) DEFAULT NULL,
-  FOREIGN KEY (location_id) REFERENCES location(id),
+  location_id int(11) NOT NULL,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
   name varchar(100) default NULL, 
   info varchar(200) default NULL,
   toads_count int(11) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
-
-/**************************************** */
-/*** EMPTY-BUCKET
-/**************************************** */
-CREATE TABLE IF NOT EXISTS empty_bucket (
-  id int(11) NOT NULL auto_increment,
-  PRIMARY KEY (id),
-  bucket_id int(11) DEFAULT NULL,
-  FOREIGN KEY (bucket_id) REFERENCES bucket(id),
-  user_id int(11) DEFAULT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
-
 
 /**************************************** */
 /*** LOG
@@ -102,21 +108,40 @@ CREATE TABLE IF NOT EXISTS log (
   log varchar(100) default NULL,
   session_id varchar(100) default NULL,
   user varchar(100) default NULL,
-  ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
+/**************************************** */
+/*** LOG-BUCKET
+/**************************************** */
+CREATE TABLE IF NOT EXISTS log_bucket (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),  
+  bucket_id int(11) NOT NULL,
+  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  toads_count int(11) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+/**************************************** */
+/*** LOG-EMPTY-BUCKET
+/**************************************** */
+CREATE TABLE IF NOT EXISTS log_empty_bucket (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  user_id int(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bucket_id int(11) NOT NULL,
+  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  toads_count int(11) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
 /*** VIEWS
 /**************************************** */
-CREATE OR REPLACE VIEW sys_user AS
-	SELECT firstname, lastname,mail, 'online' AS status
-	FROM user u
-	JOIN session s
-	ON s.user_id = u.id
-	GROUP BY u.id;
-
-CREATE OR REPLACE VIEW sys_sessioning AS
+/* USER */
+CREATE OR REPLACE VIEW ui_user AS
 	SELECT u.id AS 'user_id', firstname, lastname,mail,
 		MAX(
 			CASE WHEN end_ts IS NULL
@@ -130,13 +155,34 @@ CREATE OR REPLACE VIEW sys_sessioning AS
 	        	ELSE end_ts
 	    	END
 	    ) AS last_activity
-	FROM session s
-	JOIN user u
+	FROM log_session s
+	JOIN st_user u
 	ON s.user_id = u.id
 	GROUP BY u.id;
 
+SELECT * FROM ui_user;
 
-SELECT * FROM sys_sessioning;
+/* BUCKET */
+CREATE OR REPLACE VIEW ui_bucket AS
+	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count
+	FROM st_bucket b
+	JOIN st_location l
+	ON b.location_id = l.id;
+
+SELECT * FROM ui_bucket;
+
+/* USER-READINESS */
+CREATE OR REPLACE VIEW ui_readiness AS
+	SELECT l.name AS 'location_name', l.city, u.firstname, u.lastname, r.start_ts, r.end_ts
+	FROM st_location l
+	JOIN st_readiness r
+	ON r.location_id = l.id
+	JOIN st_user u
+	ON r.user_id = u.id
+	ORDER BY location_name;
+
+SELECT * FROM ui_readiness;
+
 
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
