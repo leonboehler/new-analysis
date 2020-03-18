@@ -16,9 +16,9 @@ DROP FUNCTION IF EXISTS fn_register//
 CREATE FUNCTION fn_register(pFirstname varchar(127), pLastname varchar(127), pMail varchar(127), pPassword varchar(128)) 
    RETURNS varchar(120) DETERMINISTIC
 BEGIN
-	declare _successful bool default false;	
+	DECLARE _successful bool default false;	
 	
-	CALL sys_log('fn_register', 'REGISTER USER');
+	CALL proc_log('fn_register', 'REGISTER USER');
 
 	IF (pMail = '' OR LENGTH(pMail) <= 5) THEN
 		 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Please enter a valid mail address.';
@@ -34,7 +34,7 @@ BEGIN
 	END IF;	
  
   
-  	return CONCAT('{success: ',IF(_successful,'true','false'),'}');
+  	RETURN CONCAT('{success: ',IF(_successful,'true','false'),'}');
 END //
 delimiter ;
 

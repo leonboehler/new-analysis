@@ -11,9 +11,9 @@
 /**********************************************************************/
 delimiter //
 
-DROP PROCEDURE IF EXISTS sys_log//
+DROP PROCEDURE IF EXISTS proc_log//
 
-CREATE PROCEDURE sys_log(pFunction varchar(256), pText varchar(256))  
+CREATE PROCEDURE proc_log(pFunction varchar(256), pText varchar(256))  
 	
 BEGIN	
 	

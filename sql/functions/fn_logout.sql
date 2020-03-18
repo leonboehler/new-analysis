@@ -24,7 +24,7 @@ BEGIN
 	END IF;	       
 	
 	SELECT id INTO _userID FROM user WHERE mail = pMail;
-	UPDATE session SET end_ts = NOW() WHERE user_id = _userID;
+	UPDATE session SET end_ts = NOW() WHERE user_id = _userID AND end_ts IS NULL;
  	SET _logoutSuccessful=true;  
   
   	return CONCAT('{success: ',IF(_logoutSuccessful,'true','false'),'}');

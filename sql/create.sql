@@ -17,7 +17,6 @@ GRANT SELECT ON *.* TO 'server'@'%' IDENTIFIED BY "dhbw2020#" WITH max_user_conn
 
 DROP TABLE IF EXISTS empty_bucket;
 DROP TABLE IF EXISTS bucket;
-DROP TABLE IF EXISTS fench;
 DROP TABLE IF EXISTS location; 
 DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS user;
@@ -93,18 +92,6 @@ CREATE TABLE IF NOT EXISTS empty_bucket (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/**************************************** */
-/*** FENCH
-/**************************************** */
-CREATE TABLE IF NOT EXISTS fench (
-  id int(11) NOT NULL auto_increment,
-  PRIMARY KEY (id),
-  location_id int(11) DEFAULT NULL,
-  FOREIGN KEY (location_id) REFERENCES location(id),
-  name varchar(100) default NULL,  
-  info varchar(200) default NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
 /*** LOG
@@ -130,10 +117,26 @@ CREATE OR REPLACE VIEW sys_user AS
 	GROUP BY u.id;
 
 CREATE OR REPLACE VIEW sys_sessioning AS
-	SELECT firstname, lastname,mail, start_ts, end_ts
+	SELECT u.id AS 'user_id', firstname, lastname,mail,
+		MAX(
+			CASE WHEN end_ts IS NULL
+				THEN 'online'
+	        	ELSE 'offline'
+	    	END
+	    ) AS status,
+	   MAX(
+			CASE WHEN end_ts IS NULL
+				THEN start_ts
+	        	ELSE end_ts
+	    	END
+	    ) AS last_activity
 	FROM session s
 	JOIN user u
-	ON s.user_id = u.id;
+	ON s.user_id = u.id
+	GROUP BY u.id;
+
+
+SELECT * FROM sys_sessioning;
 
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
