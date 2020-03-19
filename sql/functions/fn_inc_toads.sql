@@ -11,21 +11,27 @@
 /**********************************************************************/
 delimiter //
 
-DROP FUNCTION IF EXISTS fn_inc_toads//
+DROP PROCEDURE IF EXISTS fn_inc_toads//
 
-CREATE FUNCTION fn_inc_toads (pBucketID int(11), pCount int(11)) 
-    RETURNS varchar(120) DETERMINISTIC
+CREATE PROCEDURE fn_inc_toads (IN pMac varchar(17), IN pCount int(11)) 
+  
 BEGIN	
-	IF (pBucketID < 0) THEN
-		return '{code: 402, message: "bucket id is wrong"}';
+	DECLARE _bucketID int(11);
+
+	IF (LENGTH(pMac) < 17) THEN
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 402, MESSAGE_TEXT = 'mac id is wrong';
 	END IF;	       
 	
-	INSERT INTO log_bucket(bucket_id, toads_count) VALUES (pBucketID, pCount);
-	UPDATE st_bucket SET toads_count = toads_count + pCount WHERE id = pBucketID;
-	IF (ROW_COUNT() > 0) THEN
-		return CONCAT('{code: 200, message: "',@MESSAGE_200,'"}');
-	ELSE
-		return '{code: 402, message: "bucket id is wrong"}';
+	SET AUTOCOMMIT = 0;
+	START TRANSACTION;
+	INSERT INTO rt_sensor(mac, toads_count) VALUES (pMac, pCount);
+	SELECT bucket_id INTO _bucketID FROM sys_sensor WHERE sensor_mac = pMac;
+	UPDATE st_bucket SET toads_count = toads_count + pCount WHERE id = _bucketID;
+	IF (ROW_COUNT() != 1) THEN	
+		ROLLBACK;
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 402, MESSAGE_TEXT = 'bucket id is wrong';
+	ELSE 
+		COMMIT;
 	END IF;	  	
 END //
 delimiter ;

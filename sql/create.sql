@@ -15,11 +15,12 @@ CREATE DATABASE IF NOT EXISTS dehabewe;
 USE dehabewe;
 GRANT SELECT ON *.* TO 'server'@'%' IDENTIFIED BY "dhbw2020#" WITH max_user_connections 5;
 
-DROP TABLE IF EXISTS log_bucket;
+DROP TABLE IF EXISTS rt_sensor;
 DROP TABLE IF EXISTS log_empty_bucket;
+DROP TABLE IF EXISTS st_sensor;
 DROP TABLE IF EXISTS st_bucket;
-DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS st_readiness;
+DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS log_session;
 DROP TABLE IF EXISTS st_user;
 
@@ -54,20 +55,6 @@ CREATE TABLE IF NOT EXISTS log_session (		/* USER-TABLE like mentioned in SM05 *
   end_ts DATETIME default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/**************************************** */
-/*** READINESS
-/**************************************** */
-CREATE TABLE IF NOT EXISTS st_readiness (
-  id int(11) NOT NULL auto_increment,
-  PRIMARY KEY (id),
-  user_id int(11) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  location_id int(11) NOT NULL,
-  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  start_ts DATETIME default NULL,
-  end_ts DATETIME default NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
 /*** LOCATION
@@ -86,6 +73,20 @@ CREATE TABLE IF NOT EXISTS st_location (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
+/*** READINESS
+/**************************************** */
+CREATE TABLE IF NOT EXISTS st_readiness (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  user_id int(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  location_id int(11) NOT NULL,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  start_ts DATETIME default NULL,
+  end_ts DATETIME default NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+/**************************************** */
 /*** BUCKET
 /**************************************** */
 CREATE TABLE IF NOT EXISTS st_bucket (
@@ -96,6 +97,20 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   name varchar(100) default NULL, 
   info varchar(200) default NULL,
   toads_count int(11) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+/**************************************** */
+/*** SENSOR
+/**************************************** */
+CREATE TABLE IF NOT EXISTS st_sensor (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  bucket_id int(11) NOT NULL,
+  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  mac varchar(100) default NULL, 
+  UNIQUE KEY(mac),
+  info varchar(200) default NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -112,13 +127,12 @@ CREATE TABLE IF NOT EXISTS log (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
-/*** LOG-BUCKET
+/*** RT-SENSOR
 /**************************************** */
-CREATE TABLE IF NOT EXISTS log_bucket (
+CREATE TABLE IF NOT EXISTS rt_sensor (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
-  bucket_id int(11) NOT NULL,
-  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  mac varchar(17) NOT NULL,
   toads_count int(11) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
@@ -164,12 +178,23 @@ SELECT * FROM ui_user;
 
 /* BUCKET */
 CREATE OR REPLACE VIEW ui_bucket AS
-	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count
+	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count, s.mac
 	FROM st_bucket b
 	JOIN st_location l
-	ON b.location_id = l.id;
+	ON b.location_id = l.id
+	JOIN st_sensor s
+	ON s.bucket_id = b.id;
 
 SELECT * FROM ui_bucket;
+
+/* SENSOR */
+CREATE OR REPLACE VIEW sys_sensor AS
+	SELECT s.mac AS 'sensor_mac', b.id AS 'bucket_id',b.name AS 'bucket_name'
+	FROM st_sensor s
+	JOIN st_bucket b
+	ON s.bucket_id = b.id;
+
+SELECT * FROM sys_sensor;
 
 /* USER-READINESS */
 CREATE OR REPLACE VIEW ui_readiness AS

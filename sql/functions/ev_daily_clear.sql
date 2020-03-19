@@ -27,7 +27,7 @@ CREATE PROCEDURE sys_daily_clear()
 BEGIN
 	/*DELETE FROM log_session WHERE start_ts IS NOT NULL AND end_ts IS NOT NULL;*/
 	TRUNCATE log_empty_bucket;	
-	TRUNCATE log_bucket;	
+	TRUNCATE rt_sensor;	
 END // 
   
 delimiter ;

@@ -11,23 +11,28 @@
 /**********************************************************************/
 delimiter //
 
-DROP FUNCTION IF EXISTS fn_register//
+DROP PROCEDURE IF EXISTS fn_register//
 
-CREATE FUNCTION fn_register(pFirstname varchar(127), pLastname varchar(127), pMail varchar(127), pPassword varchar(128)) 
-   RETURNS varchar(120) DETERMINISTIC
+CREATE PROCEDURE fn_register (
+	IN pFirstname varchar(127),
+	IN pLastname varchar(127),
+	IN pBirthday date,
+	IN pPLZ varchar(5),
+	IN pCity varchar(100),
+	IN pMail varchar(127),
+	IN pPassword varchar(128)
+)  
 BEGIN
 	CALL proc_log('fn_register', 'REGISTER USER');
 
 	IF (pMail = '' OR LENGTH(pMail) <= 5) THEN
-		return '{code: 301, message: "Please enter a valid mail address"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 301, MESSAGE_TEXT = 'please enter a valid mail';
 	END IF;	       
 	
- 	INSERT INTO st_user(firstname, lastname, birthday, plz, city, mail, password) VALUES(pFirstname, pLastname,'2002-06-03','88400','Biberach an der Riß', pMail, pPassword);
+ 	INSERT INTO st_user(firstname, lastname, birthday, plz, city, mail, password) VALUES(pFirstname, pLastname, pBirthday, pPLZ, pCity, pMail, pPassword);
 
-	IF (ROW_COUNT() > 0) THEN
-		return CONCAT('{code: 200, message: "',@MESSAGE_200,'"}');
-	ELSE
-		return '{code: 501, message: "unknown error"}';
+	IF (ROW_COUNT() != 1) THEN
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';
 	END IF;	  	
 END //
 delimiter ;

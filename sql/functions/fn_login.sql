@@ -11,10 +11,9 @@
 /**********************************************************************/
 delimiter //
 
-DROP FUNCTION IF EXISTS fn_login//
+DROP PROCEDURE IF EXISTS fn_login//
 
-CREATE FUNCTION fn_login (pMail varchar(127), pPassword varchar(128)) 
-   RETURNS varchar(120) DETERMINISTIC
+CREATE PROCEDURE fn_login (IN pMail varchar(127), IN pPassword varchar(128))  
 BEGIN	
 	DECLARE _password varchar(128);
 	DECLARE _userID int(11);
@@ -23,30 +22,29 @@ BEGIN
 	/* CHECK IF USER EXISTS */
 	SELECT id, password INTO _userID, _password FROM st_user WHERE mail = pMail; 
 	IF _userID IS NULL THEN
-		return '{code: 411, message: "User does not exist"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 411, MESSAGE_TEXT = 'user does not exist';
 	END IF;
 
 	/* VALIDATE EMAIL */
 	IF (pMail = '' OR LENGTH(pMail) <= 5) THEN
-		return '{code: 301, message: "Please enter a valid mail address"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 301, MESSAGE_TEXT = 'enter a valid mail';
 	END IF;
 
 	/* VALIDATE PASSWORD */
 	IF (pPassword = '' OR LENGTH(pPassword) <= 4) THEN
-		return '{code: 302, message: "Please enter a valid password"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 302, MESSAGE_TEXT = 'enter a valid pw';
 	END IF;
 	
 	/* CHECK IF USER IS ALREADY LOGGED IN */
 	SELECT status INTO _userStatus FROM ui_user WHERE user_id = _userID;
 	IF (_userStatus = 'online') THEN
-		return '{code: 412, message: "User is already logged in"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 412, MESSAGE_TEXT = 'user already logged in';
 	END IF;	       
 	
 	IF (_password = pPassword) THEN
-	 	INSERT INTO log_session(user_id, start_ts) VALUES(_userID,NOW());
-		return CONCAT('{code: 200, message: "',@MESSAGE_200,'"}');
+	 	INSERT INTO log_session(user_id, start_ts) VALUES(_userID,NOW());	
 	ELSE 
-		return '{code: 413, message: "Wrong Password"}';
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 413, MESSAGE_TEXT = 'wrong pw';
  	END IF;
   
   	
