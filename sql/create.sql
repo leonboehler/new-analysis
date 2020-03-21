@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   location_id int(11) NOT NULL,
   FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
   name varchar(100) default NULL, 
-  info varchar(200) default NULL,
+  max_toads int(11) default NULL,
   toads_count int(11) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
@@ -109,8 +109,7 @@ CREATE TABLE IF NOT EXISTS st_sensor (
   bucket_id int(11) NOT NULL,
   FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
   mac varchar(100) default NULL, 
-  UNIQUE KEY(mac),
-  info varchar(200) default NULL, 
+  UNIQUE KEY(mac), 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -127,7 +126,7 @@ CREATE TABLE IF NOT EXISTS log (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
-/*** RT-SENSOR
+/*** RUNTIME-TABLE: SENSOR
 /**************************************** */
 CREATE TABLE IF NOT EXISTS rt_sensor (
   id int(11) NOT NULL auto_increment,
@@ -154,7 +153,11 @@ CREATE TABLE IF NOT EXISTS log_empty_bucket (
 /**************************************** */
 /*** VIEWS
 /**************************************** */
-/* USER */
+
+
+/**************************************** */
+/*** VIEW: USER
+/**************************************** */
 CREATE OR REPLACE VIEW ui_user AS
 	SELECT u.id AS 'user_id', firstname, lastname,mail,
 		MAX(
@@ -176,7 +179,21 @@ CREATE OR REPLACE VIEW ui_user AS
 
 SELECT * FROM ui_user;
 
-/* BUCKET */
+/**************************************** */
+/*** VIEW: LOCATION
+/**************************************** */
+CREATE OR REPLACE VIEW ui_location AS
+	SELECT l.id, l.name AS 'location_name', l.city,l.country, SUM(b.toads_count) AS 'toads_count', COUNT(*) AS 'bucket_count'
+	FROM st_bucket b
+	JOIN st_location l
+	ON b.location_id = l.id
+	GROUP BY l.id;
+
+SELECT * FROM ui_location;
+
+/**************************************** */
+/*** VIEW: BUCKET
+/**************************************** */
 CREATE OR REPLACE VIEW ui_bucket AS
 	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count, s.mac
 	FROM st_bucket b
