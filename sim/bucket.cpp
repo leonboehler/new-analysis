@@ -2,7 +2,15 @@
 
 int main(int argc, char ** argv) //setup()
 {
-    cout << "main" << endl;
+    if(debug) if(debug) cout << "main" << endl;
+    
+    if(argc==3)
+    {
+        bucket_id = stoi(argv[1]);
+        time_deepsleep = stoi(argv[2]);
+        if(debug) cout << "use sim parameter";
+    }
+    
     if(dummyReadMemory(1) == 0)
     {
         calibrate();
@@ -12,7 +20,7 @@ int main(int argc, char ** argv) //setup()
 }
 void loop()
 {
-    cout << "loop" << endl;
+    if(debug) cout << "loop" << endl;
     while(true)
     {
         sendData(parseData(readSensor(), readVoltage()));
@@ -21,29 +29,31 @@ void loop()
 }
 void calibrate()
 {
-    cout << "calibrate" << endl;
+    if(debug) cout << "calibrate" << endl;
     dummyWriteMemory(1,1);
     return;
 }
 uint8_t readSensor()
 {
-    cout << "readSensor" << endl;
-    return rand() % 10;
+    if(debug) cout << "readSensor" << endl;
+    frogs += rand() % 2;
+    return frogs;
 }
 float readVoltage()
 {
-    cout << "readVoltage" << endl;
-    return 3.7;
+    if(debug) cout << "readVoltage" << endl;
+    battery -= 0.01 * (rand() %5);
+    return battery;
 }
 string parseData(uint8_t frogs, float volt)
 {
-    cout << "parseData" << endl;
+    if(debug) cout << "parseData" << endl;
     
     return (to_string(frogs)+";"+to_string(volt)+";"+to_string(bucket_id));
 }
 void sendData(string sendStr)
 {
-    cout << "sendData" << endl;
+    if(debug) cout << "sendData" << endl;
     dummy433Send(sendStr);
     bool received = false;
     chrono::seconds sleepTime(time_listen433);
@@ -53,7 +63,7 @@ void sendData(string sendStr)
         switch(dummy433Receive())
         {
             case 0: received = true;break; //nothing to do
-            case 1: received = true;break; //restart
+            case 1: dummyRestart; received = true;break; //restart
             case 2: calibrate(); received = true;break;
             default: break;
         }
@@ -63,21 +73,24 @@ void sendData(string sendStr)
 // dummy Klassen um Arduino Funktionen zu ersetzten
 void dummySleep(uint8_t sleep)
 {
-    cout << "dummySleep" << endl;
+    if(debug) cout << "dummySleep" << endl;
     chrono::minutes sleepTime(sleep);
     this_thread::sleep_for(sleepTime);
 }
 void dummy433Send(string sendStr)
 {
-    cout << "dummy433Send" << endl;
+    if(debug) cout << "dummy433Send" << endl;
     ofstream myfile;
     myfile.open ("send.txt",std::ofstream::out | std::ofstream::app);
-    myfile << sendStr +"\n";
-    myfile.close();
+    if (myfile.is_open())
+    {
+        myfile << sendStr +"\n";
+        myfile.close();
+    }else if(debug) cout << "Unable to open send.txt"; 
 }
 uint8_t dummy433Receive()
 {
-    cout << "dummy433Receive" << endl;
+    if(debug) cout << "dummy433Receive" << endl;
     string line;
     ifstream myfile ("receive.txt");
     if (myfile.is_open())
@@ -99,22 +112,24 @@ uint8_t dummy433Receive()
             delete_line("receive.txt",count);
             return stoi(line.substr(0,1));
         }
-    }
-    else 
-        cout << "Unable to open file";     
+    }else if(debug) cout << "Unable to open receive.txt";   
+
     return 0; 
 }
 void dummyWriteMemory(uint16_t addr, uint8_t val)
 {
-    cout << "dummyWriteMemory" << endl;
+    if(debug) cout << "dummyWriteMemory" << endl;
     ofstream myfile;
     myfile.open (to_string(bucket_id)+"_memory.txt");
-    myfile << to_string(val) +"\n";
-    myfile.close();
+    if (myfile.is_open())
+    {
+        myfile << to_string(val) +"\n";
+        myfile.close();
+    }else if(debug) cout << "Unable to open "+to_string(bucket_id)+"_memory.txt"; 
 }
 uint8_t dummyReadMemory(uint16_t addr)
 {
-    cout << "dummyReadMemory" << endl;
+    if(debug) cout << "dummyReadMemory" << endl;
     string line;
     ifstream myfile (to_string(bucket_id)+"_memory.txt");
     if (myfile.is_open())
@@ -125,7 +140,11 @@ uint8_t dummyReadMemory(uint16_t addr)
             return 0;
         else
             return stoi(line);
-    }
-    else cout << "Unable to open file"; 
+    }else if(debug) cout << "Unable to open "+to_string(bucket_id)+"_memory.txt"; 
+
     return 0;
+}
+void dummyRestart()
+{
+    if(debug) cout << "dummyRestart" << endl;
 }
