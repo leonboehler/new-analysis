@@ -1,0 +1,78 @@
+<div>
+  <h2>
+    Unsere Ziele:
+  </h2>
+  <p>
+    Wir die Tierschutz Ag m&ouml;chten mit diesem Projekt den Fr&ouml;schen
+    und unseren Mitarbeitern eine einfachere und Angenehmere Lebensweise Erm&ouml;glichen.
+    Insbesondere unseren Mitarbeitern m&ouml;chten wir mit dieser Webseite das Leben erleichtern.
+  </p>
+
+  <h2>Kontakte:</h2>
+  <p>Sollten sie Probleme oder Verbesserungen haben treten sie einfach mit uns in Kontakt!</p>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Information</th>
+    </tr>
+    <tr *ngFor="let admin of adminList">
+      <td>{{ admin.name }}</td>
+      <td>{{ admin.email }}</td>
+      <td>{{ admin.info }}</td>
+    </tr>
+  </table>
+
+  <h2>Impressum</h2>
+  <!-- Muster Impressum von https://www.abmahnung.de/muster-impressum-eingetragener-verein-e-v -->
+  <div class="abmahnbox">
+    <p style="text-align: justify;">
+      <strong>Musterverein e.V.</strong><br>
+      Musterstr. 1<br>
+      12345 Musterstadt
+    </p>
+    <p style="text-align: justify;">
+      <br>
+      <strong>Telefon:</strong> +49 (0)815 / 12 34 50<br>
+      <strong>Telefax:</strong> +49 (0)815 / 12 34 51
+    </p>
+    <p style="text-align: justify;">
+      <strong>E-Mail</strong>: hallo@mustermann.de
+    </p>
+    <p style="text-align: justify;">
+      <strong>
+        Gemeinschaftlich vertretungsbefugt:<br>
+        1. Vorsitzender: Andreas Mustermann<br>
+        c/o
+      </strong>Musterstr. 1<br>
+      12345 Musterstadt
+    </p>
+    <p style="text-align: justify;">
+      <strong>Telefon:</strong> +49 (0)815 / 12 34 50 1<br>
+      <strong>E-Mail</strong>: verein@mustermann.de
+    </p>
+    <p style="text-align: justify;">
+      2. Vorsitzende: Andrea Musterfrau<br>
+      <strong>c/o </strong>Musterstr. 1<br>
+      12345 Musterstadt
+    </p>
+    <p style="text-align: justify;">
+      <strong>Telefon:</strong> +49 (0)815 / 12 34 50 2<br>
+      <strong>E-Mail</strong>: verein@musterfrau.de
+    </p>
+    <p style="text-align: justify;">
+      <strong>Das Impressum gilt für: </strong>http://musterstadt/vereine/musterverein.de
+    </p>
+    <p style="text-align: justify;">
+      <strong>Registergericht</strong>: Amtsgericht Musterstadt<br>
+      <strong>Registernummer</strong>: HRB 1234
+    </p>
+    <p style="text-align: justify;">
+      <strong>Umsatzsteuer-Identifikationsnummer gem. § 27 a Umsatzsteuergesetz</strong>: DE 1234567<br>
+      <strong>Wirtschaftsidentifikationsnummer gem. § 139 c Abgabenordnung</strong>: DE 1234567
+    </p>
+    <p style="text-align: justify;">
+      <strong>Verantwortliche i.S.d. § 55 Abs. 2 RStV</strong>: Andreas Mustermann, Musterstr. 1, 12345 Musterstadt
+    </p>
+  </div>
+</div>

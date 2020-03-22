@@ -1,0 +1,13 @@
+ul {
+  height: 100%;
+  width: 100%;
+  list-style-type: none;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+ul li {
+  display: inline;
+  padding: 5px;
+}
