@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "string": "cpp",
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "string_view": "cpp",
+        "istream": "cpp",
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "iomanip": "cpp"
+    }
+}

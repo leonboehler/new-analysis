@@ -1,0 +1,1 @@
+"slave_post_data": { "station_id": 987654321,"battery":3.800000, buckets: [{"forg_amount":8,"bucket_id":123456789,"battery":3.700000}]}
