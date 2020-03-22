@@ -9,6 +9,7 @@ import { DataProtectionComponent } from './components/data-protection/data-prote
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     SettingsComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
