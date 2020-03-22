@@ -48,8 +48,8 @@ export class CommunicationService {
     return new Observable<AdminInfo[]>((observer) => {
       const list: AdminInfo[] = [
         {
-          first_name: 'Ron',
-          last_name: 'Chef',
+          firstName: 'Ron',
+          lastName: 'Chef',
           mail: 'ron@dhbw.de',
           address: {
             street: 'strasse1',
@@ -61,8 +61,8 @@ export class CommunicationService {
           }
       },
       {
-        first_name: 'Chris',
-        last_name: 'Boss',
+        firstName: 'Chris',
+        lastName: 'Boss',
         mail: 'chris@dhbw.de',
         address: {
           street: 'strasse2',

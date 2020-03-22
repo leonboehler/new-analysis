@@ -1,6 +1,6 @@
 export class AdminInfo {
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     mail: string;
     address: {
       street: string;
