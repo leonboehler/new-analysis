@@ -8,6 +8,7 @@ import { AboutComponent } from './components/about/about.component';
 import { AgbComponent } from './components/agb/agb.component';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,8 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     DataProtectionComponent
     TestComponent,
     ToolbarComponent
+    TestComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule
