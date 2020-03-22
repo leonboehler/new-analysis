@@ -1,0 +1,14 @@
+Sensor:  65 LOC
+setup() 10
+loop() 15
+readSensor() 10
+parseData() 20
+sendData() 10
+
+Station: 50 LOC
+main() 15
+receiveData() 10
+parseData() 20
+sendRequest() 5
+
+Die LOCs sind abhängig davon, dass die verwendeten Bibliotheken die hausptsächlich verwendeten Funktionen bereitstellen. Werden bestimmte Funktionen nicht bereitgestellt könnten sich LOCs von einezelnen Teilen erhöhen.
