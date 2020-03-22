@@ -23,7 +23,7 @@ float readVoltage();
 string parseData(uint8_t,float);
 void sendData(string);
 
-// dummy Klassen um Arduino Funktionen zu ersetzten
+// dummy Funktionen um Arduino Funktionen zu ersetzten
 void dummySleep(uint8_t);
 void dummy433Send(string);
 uint8_t dummy433Receive();

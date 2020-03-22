@@ -31,7 +31,6 @@ void calibrate()
 {
     if(debug) cout << "calibrate" << endl;
     dummyWriteMemory(1,1);
-    return;
 }
 uint8_t readSensor()
 {
@@ -63,14 +62,14 @@ void sendData(string sendStr)
         switch(dummy433Receive())
         {
             case 0: received = true;break; //nothing to do
-            case 1: dummyRestart; received = true;break; //restart
+            case 1: dummyRestart(); received = true;break; //restart
             case 2: calibrate(); received = true;break;
             default: break;
         }
     }
 }
 
-// dummy Klassen um Arduino Funktionen zu ersetzten
+// dummy Funktionen um Arduino Funktionen zu ersetzten
 void dummySleep(uint8_t sleep)
 {
     if(debug) cout << "dummySleep" << endl;

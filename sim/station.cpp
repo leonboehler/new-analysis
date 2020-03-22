@@ -75,7 +75,7 @@ void sendRequest(string req)
     // d.Parse(response);
 }
 
-// dummy Klassen um Arduino Funktionen zu ersetzten
+// dummy Funktionen um Arduino Funktionen zu ersetzten
 void dummy433Send(string sendStr)
 {
     if(debug) cout << "dummy433Send" << endl;

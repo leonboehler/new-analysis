@@ -27,7 +27,7 @@ float readVoltage();
 string parseData();
 void sendRequest(string);
 
-// dummy Klassen um Arduino Funktionen zu ersetzten
+// dummy Funktionen um Arduino Funktionen zu ersetzten
 void dummy433Send(string);
 string dummy433Receive();
 string dummySendRequest(string);
