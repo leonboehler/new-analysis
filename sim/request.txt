@@ -1,1 +1,0 @@
-"slave_post_data": { "station_id": 8348948,"battery":3.799999, buckets: [{"forg_amount":6,"bucket_id":834823478,"battery":3.750000},{"forg_amount":7,"bucket_id":987654321,"battery":3.700000},{"forg_amount":7,"bucket_id":123456788,"battery":3.700000}]}

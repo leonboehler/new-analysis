@@ -1,9 +1,0 @@
-“response”: {
-   “success”: bool,
-   “action_station”: uint,
-   “action_bucket”:[
-{ 
-“bucket_id”: uint,
-“action”:uint, (siehe unten)
-},...
-]
