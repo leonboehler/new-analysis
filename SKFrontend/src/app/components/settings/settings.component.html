@@ -1,0 +1,23 @@
+<div>
+    <h1>Einstellungen</h1>
+    <div *ngFor="let element of data">
+        <table>
+            <tr>
+                <td class="firstColumn">
+                    <h3>{{ element.name }}</h3>
+                </td>
+                <td>
+                    <input type="{{ element.type }}" value="{{ element.value }}" />
+                </td>
+                <td>
+                    <div *ngIf="element.changeable; else notChangeable">
+                        <input type="button" value="Speichern" />
+                    </div>
+                    <ng-template #notChangeable>
+                        <input type="button" value="Nicht &auml;nderbar" />
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -9,6 +9,7 @@ import { AgbComponent } from './components/agb/agb.component';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './map/map.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -17,11 +18,11 @@ import { MapComponent } from './map/map.component';
     FooterComponent,
     AboutComponent,
     AgbComponent,
-    DataProtectionComponent
+    DataProtectionComponent,
+    ToolbarComponent,
     TestComponent,
-    ToolbarComponent
-    TestComponent,
-    MapComponent
+    MapComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule
