@@ -7,6 +7,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AboutComponent } from './components/about/about.component';
 import { AgbComponent } from './components/agb/agb.component';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,8 @@ import { DataProtectionComponent } from './components/data-protection/data-prote
     AboutComponent,
     AgbComponent,
     DataProtectionComponent
+    TestComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule
