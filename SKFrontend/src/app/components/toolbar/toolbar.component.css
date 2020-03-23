@@ -1,24 +1,3 @@
-.navbar {
-  align-items: stretch;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.navbar .navbar-section {
-  align-items: center;
-  display: flex;
-  flex: 1 0 0;
-}
-
-.navbar .navbar-section:not(:first-child):last-child {
-  justify-content: flex-end;
-}
-
-.btn {
-  cursor: pointer;
-  display: inline-block;
-  padding: 0.25rem 0.4rem;
-  text-align: center;
-  text-decoration: none;
+.spacer {
+  flex: 1 1 auto;
 }
