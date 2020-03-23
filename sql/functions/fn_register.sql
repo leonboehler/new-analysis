@@ -17,8 +17,13 @@ CREATE PROCEDURE fn_register (
 	IN pFirstname varchar(127),
 	IN pLastname varchar(127),
 	IN pBirthday date,
+	IN pPhone varchar(20),
+	IN pStreet varchar(50),
+	IN pStreetnumber varchar(10),
 	IN pPLZ varchar(5),
 	IN pCity varchar(100),
+	IN pState varchar(100),
+	IN pCountry varchar(100),
 	IN pMail varchar(127),
 	IN pPassword varchar(128)
 )  
@@ -29,7 +34,7 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 301, MESSAGE_TEXT = 'please enter a valid mail';
 	END IF;	       
 	
- 	INSERT INTO st_user(firstname, lastname, birthday, plz, city, mail, password) VALUES(pFirstname, pLastname, pBirthday, pPLZ, pCity, pMail, pPassword);
+ 	INSERT INTO st_user(firstname, lastname, birthday, phone, street, streetnumber, plz, city, state, country, mail, password) VALUES(pFirstname, pLastname, pBirthday, pPhone, pStreet, pStreetnumber, pPLZ, pCity, pState, pCountry, pMail, pPassword);
 
 	IF (ROW_COUNT() != 1) THEN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';

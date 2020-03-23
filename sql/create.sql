@@ -24,14 +24,20 @@ DROP TABLE IF EXISTS st_user;
 /**************************************** */
 /*** USER
 /**************************************** */
+	
 CREATE TABLE IF NOT EXISTS st_user (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   firstname varchar(31) default NULL,
   lastname varchar(63) default NULL,
   birthday DATE default '2000-01-01',
+  phone varchar(20) default NULL,
+  street varchar(50) default NULL,
+  streetnumber varchar(10) default NULL,
   plz varchar(5) default NULL,
   city varchar(127) default NULL,
+  state varchar(100) default NULL,
+  country varchar(100) default NULL,
   role ENUM('USER', 'ADMIN') DEFAULT 'USER',
   password varchar(128) default NULL,
   mail varchar(127) default NULL,
@@ -168,117 +174,6 @@ CREATE TABLE IF NOT EXISTS log_empty_bucket (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
-/**************************************** */
-/*** VIEWS
-/**************************************** */
-
-/**************************************** */
-/*** UI-VIEW: USER
-/**************************************** */
-CREATE OR REPLACE VIEW ui_user AS
-	SELECT u.id AS 'user_id', firstname, lastname, birthday, mail, plz, city, role AS 'role',
-		MAX(
-			CASE WHEN start_ts IS NULL AND end_ts IS NULL
-					THEN 'false'
-				 WHEN end_ts IS NULL
-					THEN 'online'
-	        	 ELSE 'offline'
-	    	END
-	    ) AS status,
-	   MAX(
-			CASE WHEN start_ts IS NULL AND end_ts IS NULL
-					THEN 'not logged in yet'				 
-				 WHEN end_ts IS NULL
-					THEN start_ts
-	        	ELSE end_ts
-	    	END
-	    ) AS last_activity
-	FROM st_user u
-	LEFT JOIN log_session s
-	ON s.user_id = u.id
-	GROUP BY u.id;
-
-SELECT * FROM ui_user;
-
-/**************************************** */
-/*** UI-VIEW: LOCATION
-/**************************************** */
-CREATE OR REPLACE VIEW ui_location AS
-	SELECT l.id, l.name AS 'location_name', l.city,l.country, SUM(b.toads_count) AS 'toads_count', COUNT(*) AS 'bucket_count'
-	FROM st_location l
-	JOIN st_bucket b
-	ON b.location_id = l.id
-	GROUP BY l.id;
-
-SELECT * FROM ui_location;
-
-/**************************************** */
-/*** UI-VIEW: STATION
-/**************************************** */
-CREATE OR REPLACE VIEW ui_station AS
-	SELECT s.mac AS 'station_mac', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.name AS 'location_name', b.mac AS 'bucket_mac', ul.bucket_count AS 'buckets_in_location_count'
-	FROM st_station s
-	LEFT JOIN st_location l
-	ON s.location_id = l.id
-	LEFT JOIN st_bucket b
-	ON b.location_id = l.id
-	JOIN ui_location ul
-	ON ul.id = l.id;	
-
-SELECT * FROM ui_station;
-
-/**************************************** */
-/*** UI-VIEW: BUCKET
-/**************************************** */
-CREATE OR REPLACE VIEW ui_bucket AS
-	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count
-	FROM st_bucket b
-	JOIN st_location l
-	ON b.location_id = l.id;
-
-SELECT * FROM ui_bucket;
-
-/**************************************** */
-/*** SYS-VIEW: SENSOR
-/**************************************** */
-CREATE OR REPLACE VIEW sys_bucket AS
-	SELECT b.mac AS 'bucket_mac', b.id AS 'bucket_id',b.name AS 'bucket_name'
-	FROM st_bucket b;
-	
-
-SELECT * FROM sys_bucket;
-
-/**************************************** */
-/*** UI-VIEW: READINESS
-/**************************************** */
-CREATE OR REPLACE VIEW ui_readiness AS
-	SELECT u.id AS 'user_id', u.firstname, u.lastname, r.start_ts, r.end_ts, IF(ISNULL(l.id), 'false', l.name) AS 'is_assigned'
-	FROM st_readiness r	
-	JOIN st_user u
-	ON r.user_id = u.id
-	LEFT JOIN st_location l
-	ON r.location_id = l.id;
-
-SELECT * FROM ui_readiness;
-
-/**************************************** */
-/*** UI-VIEW: STATISTICS
-/**************************************** */
-CREATE OR REPLACE VIEW ui_statistics AS
-	SELECT user_id, u.firstname, u.lastname, b.id AS 'bucket_id', b.name AS 'bucket_name', e.toads_count, e.created_at
-	FROM log_empty_bucket e
-	JOIN st_bucket b
-	ON e.bucket_id = b.id
-	JOIN st_user u
-	ON e.user_id = u.id;
-
-SELECT * FROM ui_statistics;
-
-/**************************************** */
-/*** UI-VIEW: LOG
-/**************************************** */
-CREATE OR REPLACE VIEW ui_log AS
-	SELECT * FROM log;
 
 /**************************************** */
 /*** USER: SERVER
@@ -288,6 +183,7 @@ CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
 GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 5;
 GRANT SELECT ON dehabewe.ui_bucket TO server;
 GRANT SELECT ON dehabewe.ui_user TO server;
+GRANT SELECT ON dehabewe.ui_user_profile TO server;
 GRANT SELECT ON dehabewe.ui_location TO server;
 GRANT SELECT ON dehabewe.ui_readiness TO server;
 flush PRIVILEGES;

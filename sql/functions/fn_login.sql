@@ -13,7 +13,11 @@ delimiter //
 
 DROP PROCEDURE IF EXISTS fn_login//
 
-CREATE PROCEDURE fn_login (IN pMail varchar(127), IN pPassword varchar(128))  
+CREATE PROCEDURE fn_login (
+	IN pMail varchar(127), 
+	IN pPassword varchar(128),
+	IN pSessionID varchar(128)
+)  
 BEGIN	
 	DECLARE _password varchar(128);
 	DECLARE _userID int(11);
@@ -21,6 +25,7 @@ BEGIN
 
 	/* CHECK IF USER EXISTS */
 	SELECT id, password INTO _userID, _password FROM st_user WHERE mail = pMail; 
+
 	IF _userID IS NULL THEN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 411, MESSAGE_TEXT = 'user does not exist';
 	END IF;
@@ -31,7 +36,7 @@ BEGIN
 	END IF;
 
 	/* VALIDATE PASSWORD */
-	IF (pPassword = '' OR LENGTH(pPassword) <= 4) THEN
+	IF (pPassword = '' OR LENGTH(pPassword) <= 2) THEN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 302, MESSAGE_TEXT = 'enter a valid pw';
 	END IF;
 	
@@ -42,7 +47,7 @@ BEGIN
 	END IF;	       
 	
 	IF (_password = pPassword) THEN
-	 	INSERT INTO log_session(user_id, start_ts) VALUES(_userID,NOW());	
+	 	INSERT INTO log_session(user_id, start_ts, session_id) VALUES(_userID,NOW(), pSessionID);	
 	ELSE 
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 413, MESSAGE_TEXT = 'wrong pw';
  	END IF;
