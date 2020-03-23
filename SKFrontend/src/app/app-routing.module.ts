@@ -8,6 +8,7 @@ import {SettingsComponent} from './components/settings/settings.component';
 import {MapComponent} from './components/map/map.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: '/map', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
