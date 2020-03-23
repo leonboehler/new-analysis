@@ -3,6 +3,7 @@ import {Bucket} from '../models/Bucket';
 import { Observable } from 'rxjs';
 import { interval } from 'rxjs';
 import {AdminInfo} from '../models/adminInfo';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,35 @@ export class CommunicationService {
         }
         }];
       observer.next(list);
+    });
+  }
+
+  login(mail: string, password: string): Observable<boolean> {
+    const list = [
+      {
+        mail: 'ron@dhbw.de',
+        password: 'csgo1234'
+      },
+      {
+        mail: 'chris@dhbw.de',
+        password: '1234'
+      }
+    ]
+
+    let isUser = false;
+    list.forEach(value => {
+      if (value.mail === mail && value.password === password) {
+        isUser = true;
+      }
+    });
+    return new Observable<boolean>((observer) => {
+      observer.next(isUser);
+    });
+  }
+
+  register(user: User): Observable<boolean> {
+    return new Observable((observer) => {
+      observer.next(true);
     });
   }
 }

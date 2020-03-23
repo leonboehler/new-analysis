@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CommunicationService} from '../../services/communication.service';
 
 @Component({
   selector: 'app-agb',
@@ -8,8 +9,6 @@ import { Component, OnInit } from '@angular/core';
 export class AgbComponent implements OnInit {
 
   constructor() { }
-
   ngOnInit(): void {
   }
-
 }
