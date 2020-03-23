@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommunicationService } from '../../services/communication.service'
-import { OrchestratorService } from '../../services/orchestrator.service'
+import { CommunicationService } from '../../services/communication.service';
+import { OrchestratorService } from '../../services/orchestrator.service';
 import { Router } from '@angular/router';
 
 
@@ -13,12 +13,10 @@ export class LoginComponent implements OnInit {
 
 
   constructor(private communicationService:CommunicationService, private orchestratorService:OrchestratorService, private router:Router) { }
-
   ngOnInit(): void {
   }
 
   onClickMe(){
-    //entweder registrieren seite öffen oder form erweitern
 
     var login_form = document.getElementById('login_form')
     login_form.style.display = 'none'
@@ -36,8 +34,8 @@ export class LoginComponent implements OnInit {
     event.preventDefault()
 
 
-    const username = event.target.querySelector('#username').value
-    const password = event.target.querySelector('#password').value
+    const username = event.target.querySelector('#login_username').value
+    const password = event.target.querySelector('#login_password').value
 
     if(!this.orchestratorService.validEmail(username)){
       alert("Entered wrong e-mail.")
