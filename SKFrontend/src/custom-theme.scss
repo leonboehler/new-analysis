@@ -75,14 +75,48 @@ $md-dhbwaccent: (
   )
 );
 
+$md-dhbwsilver: (
+  50 : #f7f7f7,
+  100 : #ececec,
+  200 : #e0e0e0,
+  300 : #d3d3d3,
+  400 : #c9c9c9,
+  500 : #c0c0c0,
+  600 : #bababa,
+  700 : #b2b2b2,
+  800 : #aaaaaa,
+  900 : #9c9c9c,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #ffdbdb,
+  A700 : #ffc2c2,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $SKFrontend-primary: mat-palette($md-dhbwprimary);
+$SK
 $SKFrontend-accent: mat-palette($md-dhbwaccent);
 
 // The warn palette is optional (defaults to red).
-$SKFrontend-warn: mat-palette($mat-red);
+$SKFrontend-warn: mat-palette($mat-yellow);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $SKFrontend-theme: mat-light-theme($SKFrontend-primary, $SKFrontend-accent, $SKFrontend-warn);
