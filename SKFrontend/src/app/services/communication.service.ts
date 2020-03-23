@@ -106,4 +106,34 @@ export class CommunicationService {
       observer.next(true);
     });
   }
+
+  user(): Observable<User> {
+    return new Observable<User>((observer) => {
+      const user: User = {
+        firstName: 'Paul',
+        lastName: 'Gross',
+        birthdate: 15031996,
+        mail: 'paul.riedlingen@gmail.com',
+        phoneNumber: '015782442045',
+        password: 'password123',
+        operationalReadiness: {
+          startTime: 900,
+          endTime: 1800
+        },
+        address: {
+          street: 'TheStreet',
+          streetNumber: 12,
+          postCode: 88045,
+          city: 'TheCity',
+          state: 'BW',
+          country: 'Deutschelande',
+        },
+        assignedLocations: [
+          {locationId: 4}
+        ],
+      };
+
+      observer.next(user);
+    });
+  }
 }

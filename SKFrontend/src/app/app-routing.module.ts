@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 
 
 const routes: Routes = [
+  {path: '', redirectTo: '/map', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
