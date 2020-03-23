@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { TestComponent } from './components/test/test.component';
-import { MapComponent } from './map/map.component';
+import { MapComponent } from './components/map/map.component';
 
 @NgModule({
   declarations: [
