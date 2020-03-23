@@ -15,16 +15,10 @@ export class SettingsComponent implements OnInit {
   // NICHT BEACHTEN
   /*@ViewChild("sss")
   inp: HTMLInputElement;
+  */
 
-  isReadOnly(element): boolean{
-    return element.changeable;
-  }
-
-  // #sss [readonly]="isReadOnly(element)"
-  // (click)="changeAccess(element)"
-  changeAccess(element): void{
-    //element.changeable = !element.changeable;
-    console.log(element.changeable);
+  /*saveNewInput(): void{
+    console.log("Saving...");
   }*/
 
   ngOnInit(): void {
