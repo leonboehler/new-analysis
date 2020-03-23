@@ -3,7 +3,7 @@ import {Bucket} from '../models/Bucket';
 import { Observable } from 'rxjs';
 import { interval } from 'rxjs';
 import {AdminInfo} from '../models/adminInfo';
-import {User} from '../models/user';
+import {User} from '../models/User';
 
 @Injectable({
   providedIn: 'root'
