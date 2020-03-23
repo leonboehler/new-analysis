@@ -12,6 +12,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {MatButtonModule} from '@angular/material/button';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

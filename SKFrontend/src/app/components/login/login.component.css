@@ -1,0 +1,19 @@
+.login_wrapper{
+    padding-left: 40%;
+    padding-top: 15%;
+}
+#login_form{
+
+}
+.password_wrapper{
+    padding-top: 10px;
+}
+.login_btn_wrapper{
+    padding-top: 10px;
+    float: left;
+}
+.register_btn_wrapper{
+    padding-top: 10px;
+    padding-left: 85px;
+}
+
