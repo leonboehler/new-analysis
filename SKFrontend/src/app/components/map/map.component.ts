@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import {Bucket} from '../../models/Bucket';
+import {CommunicationService} from '../../services/communication.service'
+import {OrchestratorService} from '../../services/orchestrator.service'
+
 import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
@@ -20,27 +24,33 @@ import Point from 'ol/geom/Point';
 })
 export class MapComponent implements OnInit {
 
-    features: any = [];
-    // array for data-binding
-    data: any = {
-        bucketID: -1,
-        category: ''
-    };
+    //Instance of the OL Map
+    map: Map;
+    //Vector Source containing the buckets
+    source: VectorSource;
+    //Subscription to obtain the Buckets from the CommunicationService
+    subscription: Subscription;
+    selectedBucket: number;
 
-    constructor() { }
+    constructor(private communicationService: CommunicationService,
+                private orchestratorService: OrchestratorService) { }
+
 
     ngOnInit(): void {
 
-        this.populateMarkers();
+        this.subscription = this.communicationService.buckets().subscribe(buckets => {
+            this.populateMarkers(buckets);
+        });
 
-        let source = new VectorSource();
-        let selected = null;
+        //TODO: subscribe to selectedBucket
+
+        this.source = new VectorSource();
 
         let styleFunction = function(feature) {
             let scale = 0.2;
             let opacity = 0.75;
             let color = 'white';
-            if(selected == feature){
+            if(this.selectedBucket == feature.get('bucketID')){
                 scale = 0.25;
                 opacity = 1;
             }
@@ -73,14 +83,14 @@ export class MapComponent implements OnInit {
                 })
             });
             return style;
-        }
+        }.bind(this)
 
         let markerLayer = new VectorLayer({
-            source: source,
+            source: this.source,
             style: styleFunction
         })
 
-        let map = new Map({
+        this.map = new Map({
             target: 'map',
             layers: [
                 new TileLayer({
@@ -94,40 +104,34 @@ export class MapComponent implements OnInit {
             })
         });
 
-        source.addFeatures(this.features);
-
-        map.on('click', function(e){
-            selected = null;
-            this.data.bucketID = -1
-            map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                selected = feature;
-                this.data.bucketID = feature.get('bucketID');
-                this.data.category = feature.get('category');
+        this.map.on('click', function(e){
+            this.orchestratorService.bucketSelected(null)
+            this.map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                this.orchestratorService.bucketSelected(feature.get('bucketID'))
             }.bind(this));
             markerLayer.changed();
         }.bind(this));
 
     }
 
-    populateMarkers() {
 
-        this.addMarker(1, 'own_empty', 11.55, 50.22);
-        this.addMarker(2, 'own_empty', 13.55, 51.22);
-        this.addMarker(3, 'own_full', 10.55, 49.22);
-        this.addMarker(4, 'full', 9.55, 52.22);
-        this.addMarker(5, 'empty', 11.55, 48.22);
+    populateMarkers(buckets) {
 
-    }
+        this.subscription.unsubscribe();
+        let features = [];
 
-    addMarker(bucketID, category, lon, lat) {
+        buckets.forEach(bucket => {
 
-        const coords = fromLonLat([lon, lat]);
+            const coords = fromLonLat([bucket.longitude, bucket.latitude]);
+            features.push(new Feature({
+                bucketID: bucket.id,
+                category: 'own_empty',
+                geometry: new Point(coords)
+            }));
 
-        this.features.push(new Feature({
-            bucketID: bucketID,
-            category: category,
-            geometry: new Point(coords)
-        }));
+        });
+
+        this.source.addFeatures(features);
 
     }
 
