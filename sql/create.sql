@@ -11,11 +11,12 @@
 CREATE DATABASE IF NOT EXISTS dehabewe;
 USE dehabewe;
 
-DROP TABLE IF EXISTS rt_sensor;
+DROP TABLE IF EXISTS rt_bucket;
 DROP TABLE IF EXISTS log_empty_bucket;
-DROP TABLE IF EXISTS st_sensor;
+DROP TABLE IF EXISTS st_station;
 DROP TABLE IF EXISTS st_bucket;
 DROP TABLE IF EXISTS st_readiness;
+DROP TABLE IF EXISTS st_assignment;
 DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS log_session;
 DROP TABLE IF EXISTS st_user;
@@ -65,6 +66,10 @@ CREATE TABLE IF NOT EXISTS st_location (
   country VARCHAR(100) default 'Deutschland',
   latitude DECIMAL(10,7) default NULL,
   longitude DECIMAL(10,7) default NULL,
+  start_latitude DECIMAL(10,7) default NULL,
+  start_longitude DECIMAL(10,7) default NULL,
+  end_latitude DECIMAL(10,7) default NULL,
+  end_longitude DECIMAL(10,7) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -75,11 +80,24 @@ CREATE TABLE IF NOT EXISTS st_readiness (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   user_id int(11) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE, 
   location_id int(11) DEFAULT NULL,
-  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE, 
   start_ts TIMESTAMP NULL default NULL,
   end_ts TIMESTAMP NULL default NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+/**************************************** */
+/*** ASSIGNMENT
+/**************************************** */
+CREATE TABLE IF NOT EXISTS st_assignment (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  user_id int(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  location_id int(11) DEFAULT NULL,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 /**************************************** */
@@ -91,20 +109,24 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   location_id int(11) NOT NULL,
   FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
   name varchar(100) default NULL, 
+  mac varchar(100) default NULL, 
+  UNIQUE KEY(mac), 
   max_toads int(11) default NULL,
   toads_count int(11) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
-/*** SENSOR
+/*** STADION
 /**************************************** */
-CREATE TABLE IF NOT EXISTS st_sensor (
+CREATE TABLE IF NOT EXISTS st_station (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
-  bucket_id int(11) NOT NULL,
-  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  location_id int(11) NOT NULL,
+  FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
   mac varchar(100) default NULL, 
+  latitude DECIMAL(10,7) default NULL,
+  longitude DECIMAL(10,7) default NULL,
   UNIQUE KEY(mac), 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
@@ -124,7 +146,7 @@ CREATE TABLE IF NOT EXISTS log (
 /**************************************** */
 /*** RUNTIME-TABLE: SENSOR
 /**************************************** */
-CREATE TABLE IF NOT EXISTS rt_sensor (
+CREATE TABLE IF NOT EXISTS rt_bucket (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   mac varchar(17) NOT NULL,
@@ -183,12 +205,27 @@ SELECT * FROM ui_user;
 /**************************************** */
 CREATE OR REPLACE VIEW ui_location AS
 	SELECT l.id, l.name AS 'location_name', l.city,l.country, SUM(b.toads_count) AS 'toads_count', COUNT(*) AS 'bucket_count'
-	FROM st_bucket b
-	JOIN st_location l
+	FROM st_location l
+	JOIN st_bucket b
 	ON b.location_id = l.id
 	GROUP BY l.id;
 
 SELECT * FROM ui_location;
+
+/**************************************** */
+/*** UI-VIEW: STATION
+/**************************************** */
+CREATE OR REPLACE VIEW ui_station AS
+	SELECT s.mac AS 'station_mac', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.name AS 'location_name', b.mac AS 'bucket_mac', ul.bucket_count AS 'buckets_in_location_count'
+	FROM st_station s
+	LEFT JOIN st_location l
+	ON s.location_id = l.id
+	LEFT JOIN st_bucket b
+	ON b.location_id = l.id
+	JOIN ui_location ul
+	ON ul.id = l.id;	
+
+SELECT * FROM ui_station;
 
 /**************************************** */
 /*** UI-VIEW: BUCKET
@@ -204,13 +241,12 @@ SELECT * FROM ui_bucket;
 /**************************************** */
 /*** SYS-VIEW: SENSOR
 /**************************************** */
-CREATE OR REPLACE VIEW sys_sensor AS
-	SELECT s.mac AS 'sensor_mac', b.id AS 'bucket_id',b.name AS 'bucket_name'
-	FROM st_sensor s
-	JOIN st_bucket b
-	ON s.bucket_id = b.id;
+CREATE OR REPLACE VIEW sys_bucket AS
+	SELECT b.mac AS 'bucket_mac', b.id AS 'bucket_id',b.name AS 'bucket_name'
+	FROM st_bucket b;
+	
 
-SELECT * FROM sys_sensor;
+SELECT * FROM sys_bucket;
 
 /**************************************** */
 /*** UI-VIEW: READINESS
@@ -249,7 +285,11 @@ CREATE OR REPLACE VIEW ui_log AS
 /**************************************** */
 DROP USER IF EXISTS server;
 CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT SELECT, EXECUTE ON dehabewe.* TO server WITH max_user_connections 5;
+GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 5;
+GRANT SELECT ON dehabewe.ui_bucket TO server;
+GRANT SELECT ON dehabewe.ui_user TO server;
+GRANT SELECT ON dehabewe.ui_location TO server;
+GRANT SELECT ON dehabewe.ui_readiness TO server;
 flush PRIVILEGES;
 
 /*select * from mysql.user;*/

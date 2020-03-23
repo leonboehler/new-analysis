@@ -17,10 +17,12 @@ CALL fn_logout('max@mustermann.de');
 
 CALL fn_add_readiness(1 /*USER-ID*/,'2020-03-21 16:00:00','2020-03-21 18:30:00');
 CALL fn_add_location('Buchenwald', 'Der Buchenwald neben der Kirche', '88400', 'Biberach an der Riﬂ', 'Germany', 19.311143, 1.582031);
-CALL fn_add_bucket('Eimer 1', 50 /*MAX-TOADS*/, 1/*LOCATION-ID*/);
+CALL fn_add_bucket('AA:CC:DD:EE:FF:AA','Eimer 1', 50 /*MAX-TOADS*/, 1/*LOCATION-ID*/);
+CALL fn_add_station('AA:CC:DD:EE:FF:BB', 1 /*LOCATION-ID*/, 19.311143, 1.582031);
 
 INSERT INTO st_sensor(mac, bucket_id) VALUES('AA:CC:DD:EE:FF:GG',(SELECT id FROM st_bucket LIMIT 1));
 
+INSERT INTO rt_bucket(mac, toads_count) VALUES ('AA:CC:DD:EE:FF:GG',10);
 
 CALL fn_inc_toads('AA:CC:DD:EE:FF:GG', 10);
 CALL fn_empty_bucket(1 /*BUCKET-ID*/,1 /*USER-ID*/);
