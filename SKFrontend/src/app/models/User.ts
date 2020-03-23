@@ -4,7 +4,7 @@ export class User {
    birthdate: number;
    mail: string;
    phoneNumber: string;
-   password: string
+   password: string;
    operationalReadiness: {
      startTime: number
      endTime: number
