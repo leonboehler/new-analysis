@@ -5,15 +5,128 @@
 #login_form{
 
 }
-.password_wrapper{
+.login_password_wrapper{
     padding-top: 10px;
 }
 .login_btn_wrapper{
     padding-top: 10px;
     float: left;
 }
+
 .register_btn_wrapper{
     padding-top: 10px;
     padding-left: 85px;
+}
+
+/*---start register page-------------------------------------------------------------------------------------*/
+
+.register_wrapper{
+  padding-left: 35%;
+  padding-top: 15%;
+}
+
+/*firstname*/
+
+.register_firstname_wrapper{
+  padding-top: 0.625em;
+}
+#register_firstname{
+  display: inline-block;
+}
+#text_firstname{
+  padding-right: 5em;
+  float: left;
+  margin: 0px;
+}
+
+/*name*/
+.register_name_wrapper{
+  padding-top: 10px;
+}
+#register_name{
+  display: inline-block;
+}
+#text_name{
+  padding-right: 70px;
+  float: left;
+  margin: 0px;
+}
+
+/*email*/
+.register_email_wrapper{
+  padding-top: 10px;
+}
+#register_email{
+  display: inline-block;
+}
+#text_email{
+  padding-right: 94px;
+  float: left;
+  margin: 0px;
+}
+
+/*birthday*/
+.register_birthday_wrapper{
+  padding-top: 10px;
+}
+#register_birthday{
+  display: inline-block;
+}
+#text_birthday{
+  padding-right: 50px;
+  float: left;
+  margin: 0px;
+}
+
+/*telephonenumber*/
+.register_telnumber_wrapper{
+  padding-top: 10px;
+}
+#register_telnumber{
+  display: inline-block;
+}
+#text_telnumber{
+  padding-right: 38px;
+  float: left;
+  margin: 0px;
+}
+/*password*/
+.register_password_wrapper{
+  padding-top: 10px;
+}
+#register_password{
+  display: inline-block;
+}
+#text_password{
+  padding-right: 82px;
+  float: left;
+  margin: 0px;
+}
+
+/*password_confirm*/
+.register_password_confirm_wrapper{
+  padding-top: 10px;
+}
+#register_password_confirm{
+  display: inline-block;
+}
+#text_password_confirm{
+  padding-right: 57px;
+  float: left;
+  margin: 0px;
+}
+
+/*agb's*/
+.register_agb_wrapper{
+  padding-top: 10px;
+}
+#register_checkbox_agb{
+  padding-right: 57px;
+  float: left;
+  margin: 1px 7px 1px 1px;
+}
+#text_agb{
+  display: inline-block;
+  margin: 0px;
 }
 
