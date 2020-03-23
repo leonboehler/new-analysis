@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {Bucket} from '../../models/Bucket';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
+import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
