@@ -11,10 +11,24 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+
   constructor(private communicationService:CommunicationService, private orchestratorService:OrchestratorService, private router:Router) { }
 
-
   ngOnInit(): void {
+  }
+
+  onClickMe(){
+    //entweder registrieren seite öffen oder form erweitern
+
+    var login_form = document.getElementById('login_form')
+    login_form.style.display = 'none'
+
+    var register_form = document.getElementById('register_form')
+    register_form.style.display = 'block'
+  }
+
+  registerUser(event){
+
   }
 
 
@@ -43,8 +57,6 @@ export class LoginComponent implements OnInit {
         }
       })
     }
-
-    console.log(username, +' '+ password)
 
   }
 
