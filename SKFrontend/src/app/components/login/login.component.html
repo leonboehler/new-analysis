@@ -1,11 +1,11 @@
 <!-- start login page-->
-
+<button mat-raised-button color="accent">Hello</button>
 <form id="login_form" style="display: block" (submit)="loginUser($event)">
 <div class="login_wrapper">
     <div class="login_username_wrapper"><input type="email" placeholder="Email" id="login_username"></div>
     <div class="login_password_wrapper"><input type="password" placeholder="Password" id="login_password"></div>
-    <div class="login_btn_wrapper"><input type="submit" value="Login" id="login_button"></div>
-    <div class="register_btn_wrapper"><input type="button" value="Registrieren" id="register_button" (click)="onClickMe()"></div>
+  <div class="login_btn_wrapper"><button mat-raised-button color="accent" id="login_button">Login</button></div>
+  <div class="register_btn_wrapper"><button mat-raised-button color="accent" (click)="onClickMe()">Registrieren</button></div>
 </div>
 </form>
 
