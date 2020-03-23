@@ -14,7 +14,10 @@ delimiter //
 DROP PROCEDURE IF EXISTS fn_empty_bucket//
 
 
-CREATE PROCEDURE fn_empty_bucket (IN pBucketID int(11),IN pUserID int(11)) 
+CREATE PROCEDURE fn_empty_bucket (
+	IN pBucketID int(11),
+	IN pUserID int(11)
+)
   
 BEGIN
 	DECLARE _toadsCount int(11);

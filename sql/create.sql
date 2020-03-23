@@ -8,12 +8,8 @@
 * Purpose           : Create all tables
 * 
 /**********************************************************************/
-
-select * from mysql.user;
-
 CREATE DATABASE IF NOT EXISTS dehabewe;
 USE dehabewe;
-GRANT SELECT ON *.* TO 'server'@'%' IDENTIFIED BY "dhbw2020#" WITH max_user_connections 5;
 
 DROP TABLE IF EXISTS rt_sensor;
 DROP TABLE IF EXISTS log_empty_bucket;
@@ -24,7 +20,6 @@ DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS log_session;
 DROP TABLE IF EXISTS st_user;
 
-SET AUTOCOMMIT = 0;
 /**************************************** */
 /*** USER
 /**************************************** */
@@ -51,8 +46,9 @@ CREATE TABLE IF NOT EXISTS log_session (		/* USER-TABLE like mentioned in SM05 *
   PRIMARY KEY (id),
   user_id int(11) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  start_ts DATETIME default NULL,
-  end_ts DATETIME default NULL
+  session_id varchar(128) default NULL,
+  start_ts TIMESTAMP NULL default NULL,
+  end_ts TIMESTAMP NULL default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 
@@ -63,12 +59,12 @@ CREATE TABLE IF NOT EXISTS st_location (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),
   name varchar(100) default NULL,
-  info varchar(200) default NULL,
-  latitude DECIMAL(10,7) default NULL,
-  longitude DECIMAL(10,7) default NULL,
+  info varchar(200) default NULL, 
   plz varchar(5) default NULL,
   city varchar(127) default NULL,
   country VARCHAR(100) default 'Deutschland',
+  latitude DECIMAL(10,7) default NULL,
+  longitude DECIMAL(10,7) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -80,10 +76,10 @@ CREATE TABLE IF NOT EXISTS st_readiness (
   PRIMARY KEY (id),
   user_id int(11) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  location_id int(11) NOT NULL,
+  location_id int(11) DEFAULT NULL,
   FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  start_ts DATETIME default NULL,
-  end_ts DATETIME default NULL,
+  start_ts TIMESTAMP NULL default NULL,
+  end_ts TIMESTAMP NULL default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 /**************************************** */
@@ -154,33 +150,36 @@ CREATE TABLE IF NOT EXISTS log_empty_bucket (
 /*** VIEWS
 /**************************************** */
 
-
 /**************************************** */
-/*** VIEW: USER
+/*** UI-VIEW: USER
 /**************************************** */
 CREATE OR REPLACE VIEW ui_user AS
-	SELECT u.id AS 'user_id', firstname, lastname,mail,
+	SELECT u.id AS 'user_id', firstname, lastname, birthday, mail, plz, city, role AS 'role',
 		MAX(
-			CASE WHEN end_ts IS NULL
-				THEN 'online'
-	        	ELSE 'offline'
+			CASE WHEN start_ts IS NULL AND end_ts IS NULL
+					THEN 'false'
+				 WHEN end_ts IS NULL
+					THEN 'online'
+	        	 ELSE 'offline'
 	    	END
 	    ) AS status,
 	   MAX(
-			CASE WHEN end_ts IS NULL
-				THEN start_ts
+			CASE WHEN start_ts IS NULL AND end_ts IS NULL
+					THEN 'not logged in yet'				 
+				 WHEN end_ts IS NULL
+					THEN start_ts
 	        	ELSE end_ts
 	    	END
 	    ) AS last_activity
-	FROM log_session s
-	JOIN st_user u
+	FROM st_user u
+	LEFT JOIN log_session s
 	ON s.user_id = u.id
 	GROUP BY u.id;
 
 SELECT * FROM ui_user;
 
 /**************************************** */
-/*** VIEW: LOCATION
+/*** UI-VIEW: LOCATION
 /**************************************** */
 CREATE OR REPLACE VIEW ui_location AS
 	SELECT l.id, l.name AS 'location_name', l.city,l.country, SUM(b.toads_count) AS 'toads_count', COUNT(*) AS 'bucket_count'
@@ -192,19 +191,19 @@ CREATE OR REPLACE VIEW ui_location AS
 SELECT * FROM ui_location;
 
 /**************************************** */
-/*** VIEW: BUCKET
+/*** UI-VIEW: BUCKET
 /**************************************** */
 CREATE OR REPLACE VIEW ui_bucket AS
-	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count, s.mac
+	SELECT l.name AS 'location_name', l.city, b.name AS 'bucket_name', b.toads_count
 	FROM st_bucket b
 	JOIN st_location l
-	ON b.location_id = l.id
-	JOIN st_sensor s
-	ON s.bucket_id = b.id;
+	ON b.location_id = l.id;
 
 SELECT * FROM ui_bucket;
 
-/* SENSOR */
+/**************************************** */
+/*** SYS-VIEW: SENSOR
+/**************************************** */
 CREATE OR REPLACE VIEW sys_sensor AS
 	SELECT s.mac AS 'sensor_mac', b.id AS 'bucket_id',b.name AS 'bucket_name'
 	FROM st_sensor s
@@ -213,20 +212,44 @@ CREATE OR REPLACE VIEW sys_sensor AS
 
 SELECT * FROM sys_sensor;
 
-/* USER-READINESS */
+/**************************************** */
+/*** UI-VIEW: READINESS
+/**************************************** */
 CREATE OR REPLACE VIEW ui_readiness AS
-	SELECT l.name AS 'location_name', l.city, u.firstname, u.lastname, r.start_ts, r.end_ts
-	FROM st_location l
-	JOIN st_readiness r
-	ON r.location_id = l.id
+	SELECT u.id AS 'user_id', u.firstname, u.lastname, r.start_ts, r.end_ts, IF(ISNULL(l.id), 'false', l.name) AS 'is_assigned'
+	FROM st_readiness r	
 	JOIN st_user u
 	ON r.user_id = u.id
-	ORDER BY location_name;
+	LEFT JOIN st_location l
+	ON r.location_id = l.id;
 
 SELECT * FROM ui_readiness;
 
+/**************************************** */
+/*** UI-VIEW: STATISTICS
+/**************************************** */
+CREATE OR REPLACE VIEW ui_statistics AS
+	SELECT user_id, u.firstname, u.lastname, b.id AS 'bucket_id', b.name AS 'bucket_name', e.toads_count, e.created_at
+	FROM log_empty_bucket e
+	JOIN st_bucket b
+	ON e.bucket_id = b.id
+	JOIN st_user u
+	ON e.user_id = u.id;
 
+SELECT * FROM ui_statistics;
+
+/**************************************** */
+/*** UI-VIEW: LOG
+/**************************************** */
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
-	
-/*-i sample_data.sql;*/
+
+/**************************************** */
+/*** USER: SERVER
+/**************************************** */
+DROP USER IF EXISTS server;
+CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
+GRANT SELECT, EXECUTE ON dehabewe.* TO server WITH max_user_connections 5;
+flush PRIVILEGES;
+
+/*select * from mysql.user;*/

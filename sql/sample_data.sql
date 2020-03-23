@@ -9,26 +9,30 @@
 * 
 /**********************************************************************/
 
-INSERT INTO st_location(name, latitude, longitude) VALUES('Buchenwald', 19.311143, 1.582031);
-
-INSERT INTO st_bucket(name, location_id) VALUES('Eimer 23', (SELECT id FROM st_location LIMIT 1));
-INSERT INTO st_readiness(location_id, user_id, start_ts, end_ts) VALUES((SELECT id FROM st_location LIMIT 1),(SELECT id FROM st_location LIMIT 1), NOW(), (NOW() + INTERVAL 1 DAY));
-
-INSERT INTO st_sensor(mac, bucket_id) VALUES('AA:CC:DD:EE:FF:GG',(SELECT id FROM st_bucket LIMIT 1));
-
 
 CALL fn_register('Max','Mustermann','2002-06-03','88400','Biberach an der Riﬂ','max@mustermann.de','<<hash>>');
 
 CALL fn_login('max@mustermann.de', '<<hash>>');
 CALL fn_logout('max@mustermann.de');
 
-CALL fn_add_readiness(1,'2020-03-21 16:00:00','2020-03-21 18:30:00');
+CALL fn_add_readiness(1 /*USER-ID*/,'2020-03-21 16:00:00','2020-03-21 18:30:00');
+CALL fn_add_location('Buchenwald', 'Der Buchenwald neben der Kirche', '88400', 'Biberach an der Riﬂ', 'Germany', 19.311143, 1.582031);
+CALL fn_add_bucket('Eimer 1', 50 /*MAX-TOADS*/, 1/*LOCATION-ID*/);
+
+INSERT INTO st_sensor(mac, bucket_id) VALUES('AA:CC:DD:EE:FF:GG',(SELECT id FROM st_bucket LIMIT 1));
+
 
 CALL fn_inc_toads('AA:CC:DD:EE:FF:GG', 10);
+CALL fn_empty_bucket(1 /*BUCKET-ID*/,1 /*USER-ID*/);
 
-CALL fn_empty_bucket(1,1);
+UPDATE st_user SET lastname = 'Musetfrau',/* ,... */ WHERE id = 1;
+UPDATE st_location SET name = 'Neuer Name' WHERE id = 1;
+UPDATE st_bucket SET name = 'Neuer Name' WHERE id = 1;
 
-INSERT INTO rt_sensor(mac, toads_count) VALUES('AA:CC:DD:EE:FF:GG',5);
+DELETE FROM st_user WHERE id = 1;
+DELETE FROM st_location WHERE id = 1;
+DELETE FROM st_bucket WHERE id = 2;
+DELETE FROM st_sensor WHERE id = 1;
 
 SELECT * FROM ui_location;
 
@@ -37,3 +41,5 @@ SELECT * FROM ui_bucket;
 SELECT * FROM ui_user;
 
 SELECT * FROM ui_readiness;
+
+SELECT * FROM ui_statistics;
