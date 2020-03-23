@@ -10,6 +10,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -23,6 +24,7 @@ import {MatButtonModule} from '@angular/material/button';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule,

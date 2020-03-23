@@ -6,6 +6,7 @@ import {AgbComponent} from './components/agb/agb.component';
 import {DataProtectionComponent} from './components/data-protection/data-protection.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {MapComponent} from './components/map/map.component';
+import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/map', pathMatch: 'full'},
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
   {path: 'settings', component: SettingsComponent},
-  {path: 'map', component: MapComponent}
+  {path: 'map', component: MapComponent},
+  {path: 'updatePassword', component: UpdatePasswordComponent}
 ];
 
 @NgModule({
