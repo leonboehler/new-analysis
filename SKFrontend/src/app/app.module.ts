@@ -10,6 +10,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AppRoutingModule } from './app-routing.module';
     DataProtectionComponent,
     ToolbarComponent,
     MapComponent,
-    SettingsComponent
+    SettingsComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule,

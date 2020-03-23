@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { userData } from 'src/app/models/userData';
+import {OrchestratorService} from '../../services/orchestrator.service';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-settings',
@@ -10,65 +12,54 @@ export class SettingsComponent implements OnInit {
 
   data: userData[];
 
-  constructor() {}
+  constructor(private s: OrchestratorService) {}
 
-  // NICHT BEACHTEN
-  /*@ViewChild("sss")
-  inp: HTMLInputElement;
-  */
-
-  /*saveNewInput(): void{
-    console.log("Saving...");
-  }*/
+  getAddress(): string {
+    return this.data[6].value;
+  }
 
   ngOnInit(): void {
     this.data = [
       {
-        name: 'Name',
+        name: 'Vorname',
         type: 'text',
-        value: 'Keine Ahnung',
+        value: 'Keine',
         changeable: true
       },
       {
-        name: 'Passwort',
-        type: 'password',
-        value: 'KeineAhnung',
+        name: 'Nachname',
+        type: 'text',
+        value: 'Ahnung',
+        changeable: true
+      },
+      {
+        name: 'Geburtstag',
+        type: 'date',
+        value: '04.02.1969',
         changeable: true
       },
       {
         name: 'Email',
         type: 'text',
-        value: 'testmail@web.de',
-        changeable: false
-      },
-      {
-        name: 'Geburtstag',
-        type: 'text',
-        value: '04.02.1969',
+        value: 'keineahnung@web.de',
         changeable: true
       },
       {
         name: 'Telefonnummer',
         type: 'text',
-        value: '01718337498',
+        value: '01736488282',
         changeable: true
       },
       {
-        name: 'PLZ',
-        type: 'text',
-        value: '88045',
-        changeable: true
+        name: 'Passwort',
+        type: 'password',
+        value: '123456',
+        changeable: false
       },
       {
-        name: 'Wohnort',
+        name: 'Adresse',
         type: 'text',
-        value: 'Friedrichshafen',
-        changeable: true
-      },
-      {
-        name: 'Bundesland',
-        type: 'text',
-        value: 'Baden-Würtemberg',
+        value: 'leer',
         changeable: true
       }
     ];
