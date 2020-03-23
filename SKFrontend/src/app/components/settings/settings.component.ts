@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { userData } from 'src/app/models/userData';
 import {OrchestratorService} from '../../services/orchestrator.service';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import {formatDate} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-settings',
@@ -12,55 +14,63 @@ export class SettingsComponent implements OnInit {
 
   data: userData[];
 
-  constructor(private s: OrchestratorService) {}
+  constructor(private s: OrchestratorService, private router: Router) {}
 
-  getAddress(): string {
-    return this.data[6].value;
+  getAddress(): string[] {
+    const contentAddress: string[] = [];
+    const data = this.s.getCurrentUser();
+    contentAddress.push(data.address.street + data.address.streetNumber);
+    contentAddress.push(data.address.postCode + ' ' + data.address.city);
+    contentAddress.push(data.address.country + ', ' + data.address.state);
+
+    console.log(contentAddress);
+    return contentAddress;
+  }
+
+  updatePassword(): void {
+    //this.router.navigate(['.']);
   }
 
   ngOnInit(): void {
+    const data = this.s.getCurrentUser();
+    let birthday = data.birthdate.toString();
+    birthday = birthday.substr(4, 4) + '-' + birthday.substr(2, 2) + '-' + birthday.substr(0, 2);
     this.data = [
       {
         name: 'Vorname',
         type: 'text',
-        value: 'Keine',
+        value: data.firstName,
         changeable: true
       },
       {
         name: 'Nachname',
         type: 'text',
-        value: 'Ahnung',
+        value: data.lastName,
         changeable: true
       },
       {
         name: 'Geburtstag',
         type: 'date',
-        value: '04.02.1969',
+        value: birthday,
         changeable: true
       },
       {
         name: 'Email',
         type: 'text',
-        value: 'keineahnung@web.de',
+        value: data.mail,
         changeable: true
       },
       {
         name: 'Telefonnummer',
         type: 'text',
-        value: '01736488282',
+        value: data.phoneNumber,
         changeable: true
       },
       {
         name: 'Passwort',
         type: 'password',
-        value: '123456',
+        value: data.password,
         changeable: false
-      },
-      {
-        name: 'Adresse',
-        type: 'text',
-        value: 'leer',
-        changeable: true
       }
     ];
   }

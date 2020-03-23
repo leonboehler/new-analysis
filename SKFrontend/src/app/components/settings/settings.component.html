@@ -1,22 +1,23 @@
 <div>
   <div class="options">
     <div id="data" *ngFor="let element of data">
-      <div *ngIf="element.name != 'Adresse'">
+      <!--<div *ngIf="element.name != 'Adresse'">-->
         <p>{{ element.name }}</p>
         <div *ngIf="element.changeable; else notDirectlyChangeable">
           <input type="{{ element.type }}" value="{{ element.value }}" />
         </div>
         <ng-template #notDirectlyChangeable>
-          <input type="button" value="&Auml;ndern" />
+          <input type="button" value="&Auml;ndern" (click)="updatePassword()" />
         </ng-template>
-      </div>
+      <!--</div>-->
     </div>
   </div>
-
-      <br /><br />
-      <p class="options">Adresse</p>
-      <input type="text" value="{{ getAddress() }}"/>
-
+  <br /><br />
+  <p class="optionsAddress">Adresse</p>
+  <div *ngFor="let element of getAddress()">
+    <input type="text" value="{{ element }}"/>
+    <br />
+  </div>
   <br />
   <input class="saveButton" type="button" value="Speichern" />
 </div>

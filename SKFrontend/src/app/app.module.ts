@@ -12,7 +12,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
+//import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,8 @@ import {MatButtonModule} from '@angular/material/button';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MatButtonModule
+    BrowserAnimationsModule
+    //MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
