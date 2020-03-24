@@ -1,24 +1,27 @@
 <div>
   <div class="options">
     <div id="data" *ngFor="let element of data">
-      <!--<div *ngIf="element.name != 'Adresse'">-->
-        <p>{{ element.name }}</p>
-        <div *ngIf="element.changeable; else notDirectlyChangeable">
-          <input type="{{ element.type }}" value="{{ element.value }}" />
-        </div>
-        <ng-template #notDirectlyChangeable>
-          <input type="button" value="&Auml;ndern" (click)="updatePassword()" />
-        </ng-template>
-      <!--</div>-->
+      <p>{{ element.name }}</p>
+      <div *ngIf="element.changeable; else notDirectlyChangeable">
+        <input id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />
+      </div>
+      <ng-template #notDirectlyChangeable>
+        <input type="button" value="&Auml;ndern" (click)="updatePassword()" />
+      </ng-template>
     </div>
   </div>
   <br /><br />
   <p class="optionsAddress">Adresse</p>
-  <div *ngFor="let element of getAddress()">
-    <input type="text" value="{{ element }}"/>
+  <div *ngFor="let element of getAddress(); let i = index">
+    <input id="idAddress{{ i }}" type="text" value="{{ element }}"/>
+    <br />
+  </div>
+  <p class="optionsAddress">Verf&uuml;gbare Zeiten</p>
+  <div *ngFor="let element of getAvailableTime(); let i = index">
+    <input id="idTime{{ i }}" type="text" value="{{ element }}"/>
     <br />
   </div>
   <br />
-  <input class="saveButton" type="button" value="Speichern" />
+  <input class="saveButton" type="button" value="Speichern" (click)="checkInput()" />
 </div>
 

@@ -21,12 +21,10 @@ import { AppRoutingModule } from './app-routing.module';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
-    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
     //MatButtonModule
   ],
   providers: [],
