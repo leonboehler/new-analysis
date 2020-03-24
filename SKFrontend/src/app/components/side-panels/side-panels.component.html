@@ -10,8 +10,8 @@
       <p matLine>
         <span> Standort: {{bucket.position.latitude}},{{bucket.position.longitude}}</span>
       </p>
+      <mat-divider></mat-divider>
     </mat-list-item>
-    <mat-divider></mat-divider>
     <h2 class="allBuckets" matSubheader>Alle Eimer</h2>
     <mat-list-item *ngFor="let bucket of buckets">
       <mat-icon matListIcon>warning</mat-icon>
@@ -19,7 +19,7 @@
       <p matLine>
         <span> Standort: {{bucket.position.latitude}},{{bucket.position.longitude}}</span>
       </p>
+      <mat-divider></mat-divider>
     </mat-list-item>
-    <mat-divider></mat-divider>
   </mat-action-list>
 </div>
