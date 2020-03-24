@@ -2,9 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\SKFrontend",
-    "\\SKFrontend\\e2e",
-    "\\SKFrontend\\src"
+    "\\SKFrontend\\src",
+    "\\SKFrontend\\src\\app",
+    "\\SKFrontend\\src\\app\\components",
+    "\\SKFrontend\\src\\app\\components\\footer",
+    "\\SKFrontend\\src\\app\\components\\toolbar"
   ],
-  "SelectedNode": "\\SKFrontend",
+  "SelectedNode": "\\SKFrontend\\src\\polyfills.ts",
   "PreviewInSolutionExplorer": false
 }
