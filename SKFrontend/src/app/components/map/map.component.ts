@@ -25,12 +25,6 @@ import Point from 'ol/geom/Point';
 })
 export class MapComponent implements OnInit {
 
-    //Instance of the OL Map
-    map: Map;
-    //Vector Source containing the buckets
-    source: VectorSource;
-    //Subscription to obtain the Buckets from the CommunicationService
-    subscription: Subscription;
     selectedBucket: number;
 
     constructor(private communicationService: CommunicationService,
@@ -39,59 +33,52 @@ export class MapComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.subscription = this.communicationService.buckets().subscribe(buckets => {
-            this.populateMarkers(buckets);
-        });
-
-        //TODO: subscribe to selectedBucket
-
-        this.source = new VectorSource();
-
+        //Style Function to give the markers a dynamic Icon that changes base on bucket values
         let styleFunction = function(feature) {
+            //Default values
             let scale = 0.2;
-            let opacity = 0.75;
             let color = 'white';
+
+            //Make the marker larger if it is selected
             if(this.selectedBucket == feature.get('bucketID')){
                 scale = 0.25;
-                opacity = 1;
             }
-            let src = '';
-            switch(feature.get('category')){
-            case 'own_empty':
-                src = '/assets/minecraft_bucket.png';
-                color = 'green';
-                break;
-            case 'own_full':
-                src = '/assets/minecraft_bucket.png';
-                color = 'red';
-                break;
-            case 'empty':
-                src = '/assets/minecraft_bucket.png';
-                color = 'yellow';
-                break;
-            case 'full':
-                src = '/assets/minecraft_bucket.png';
-                color = 'orange';
-                break;
+
+            //Color the bucket based on fill status
+            if(feature.get('currentFrogs') == 0){
+                color = 'lime'; //empty
+            } else if(feature.get('currentFrogs') < feature.get('maxFrogs')/2) {
+                color = 'yellow'; //less than 50% full
+            } else if(feature.get('currentFrogs') < feature.get('maxFrogs')){
+                color = 'orange'; //more than 50% full
+            } else {
+                color = 'red'; //full
             }
+
+            //Create final Icon
             let style = new Style({
                 image: new Icon({
-                    src: src,
+                    src: '/assets/minecraft_bucket.png',
                     imgSize: [160, 160],
                     scale: scale,
-                    opacity: opacity,
                     color: color
                 })
             });
+
             return style;
         }.bind(this)
 
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let source = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using markerLayer.changed()
         let markerLayer = new VectorLayer({
-            source: this.source,
+            source: source,
             style: styleFunction
         })
 
-        this.map = new Map({
+        //Create map
+        let map = new Map({
             target: 'map',
             layers: [
                 new TileLayer({
@@ -105,34 +92,41 @@ export class MapComponent implements OnInit {
             })
         });
 
-        this.map.on('click', function(e){
-            this.orchestratorService.bucketSelected(null)
-            this.map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                this.orchestratorService.bucketSelected(feature.get('bucketID'))
+        //Register a click event to be able to select markers
+        map.on('click', function(e){
+            let selected = null;
+            map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                selected = feature.get('bucketID');
             }.bind(this));
-            markerLayer.changed();
+            this.orchestratorService.bucketSelected(selected);
         }.bind(this));
 
-    }
 
+        //Subscribe to buckets
+        let subscription = this.communicationService.buckets().subscribe(buckets => {
+            //Instantly unsubscribe after recieving the buckets once
+            subscription.unsubscribe();
 
-    populateMarkers(buckets) {
+            let features = [];
+            buckets.forEach(bucket => {
 
-        this.subscription.unsubscribe();
-        let features = [];
+                //Create a feature that holds important information about a bucket for every bucket in the list
+                const coords = fromLonLat([bucket.longitude, bucket.latitude]);
+                features.push(new Feature({
+                    bucketID: bucket.id,
+                    maxFrogs: bucket.maxFrogs,
+                    currentFrogs: bucket.currentFrogs,
+                    geometry: new Point(coords)
+                }));
 
-        buckets.forEach(bucket => {
+            });
 
-            const coords = fromLonLat([bucket.longitude, bucket.latitude]);
-            features.push(new Feature({
-                bucketID: bucket.id,
-                category: 'own_empty',
-                geometry: new Point(coords)
-            }));
-
+            //Add all new features to the VectorSource
+            source.addFeatures(features);
         });
 
-        this.source.addFeatures(features);
+        //TODO: subscribe to selectedBucket
+        //has to include markerLayer.changed();
 
     }
 
