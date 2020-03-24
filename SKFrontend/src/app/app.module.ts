@@ -24,6 +24,8 @@ import { LocSelectionComponent } from './components/loc-selection/loc-selection.
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidePanelsComponent } from './components/side-panels/side-panels.component';
 import {MatListModule} from "@angular/material/list";
+import { HomeComponent } from './components/home/home.component';
+import { RightPanelComponent } from './components/side-panels/right-panel/right-panel.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import {MatListModule} from "@angular/material/list";
     LoginComponent,
     LocSelectionComponent,
     UpdatePasswordComponent,
-    SidePanelsComponent
+    SidePanelsComponent,
+    HomeComponent,
+    RightPanelComponent
   ],
   imports: [
     BrowserModule,

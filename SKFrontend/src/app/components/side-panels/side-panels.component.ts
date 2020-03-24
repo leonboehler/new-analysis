@@ -14,7 +14,9 @@ import {Bucket} from '../../models/Bucket';
 export class SidePanelsComponent implements OnInit {
   buckets: Bucket[];
 
-  constructor(private communicationService: CommunicationService) { }
+  constructor(
+    private communicationService: CommunicationService
+  ) { }
 
   ngOnInit(): void {
     this.communicationService.buckets().subscribe(buckets => {

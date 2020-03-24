@@ -1,0 +1,13 @@
+.panel {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+.content {
+    padding: 15px;
+}
+#close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

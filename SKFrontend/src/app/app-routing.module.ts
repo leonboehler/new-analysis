@@ -11,6 +11,7 @@ import { LoginComponent } from './components/login/login.component';
 import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
 import {SidePanelsComponent} from './components/side-panels/side-panels.component';
 import { RegisterComponent} from "./components/register/register.component";
+import { HomeComponent } from './components/home/home.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,8 @@ const routes: Routes = [
   {path: 'updatePassword', component: UpdatePasswordComponent},
   {path: 'locSelection', component: LocSelectionComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'home', component: HomeComponent}
 ];
 
 @NgModule({
