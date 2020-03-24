@@ -7,7 +7,18 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="MySql.Data" Version="8.0.19" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FroggyRestServer.EMailClient\FroggyRestServer.EMailClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FroggyRestServer.EMailClient">
+      <HintPath>..\FroggyRestServer.EMailClient\bin\Release\FroggyRestServer.EMailClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 
