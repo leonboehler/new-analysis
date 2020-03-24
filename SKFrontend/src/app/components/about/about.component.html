@@ -19,7 +19,7 @@
     <tr *ngFor="let admin of adminList">
       <td>{{ admin.firstName }}</td>
       <td>{{ admin.lastName }}</td>
-      <td>{{ admin.mail }}</td>
+      <td><a href="mailto:{{ admin.mail }}?subject=Fragen bez&uuml;glich der Webseite!">{{ admin.mail }}</a></td>
     </tr>
   </table>
   <br/>
