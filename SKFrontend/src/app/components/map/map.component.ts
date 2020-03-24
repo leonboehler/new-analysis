@@ -72,16 +72,18 @@ export class MapComponent implements OnInit {
             let bucket = feature.get('bucket');
 
             //Default values
-            let scale = 0.2;
+            let scale = 0.07;
             let color = 'white';
 
             //Make the marker larger if it is selected
             if(this.selectedBucket == feature.get('bucket')){
-                scale = 0.25;
+                scale = 0.1;
             }
 
             //Color the bucket based on fill status
-            if(bucket.currentFrogs == 0){
+            if(bucket.reserved){
+              color = 'cyan';
+            } else if(bucket.currentFrogs == 0){
                 color = 'lime'; //empty
             } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
                 color = 'yellow'; //less than 50% full
@@ -94,8 +96,8 @@ export class MapComponent implements OnInit {
             //Create final Icon
             let style = new Style({
                 image: new Icon({
-                    src: '/assets/minecraft_bucket.png',
-                    imgSize: [160, 160],
+                    src: '/assets/bucket.png',
+                    imgSize: [512, 512],
                     scale: scale,
                     color: color
                 })
