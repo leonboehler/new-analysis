@@ -1,27 +1,52 @@
 <div>
   <div class="options">
     <div id="data" *ngFor="let element of data">
-      <p>{{ element.name }}</p>
+      <!--<p>{{ element.name }}</p>-->
       <div *ngIf="element.changeable; else notDirectlyChangeable">
-        <input id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />
+        <mat-form-field>
+          <mat-label>{{ element.name }}</mat-label>
+          <input matInput id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />
+        </mat-form-field>
+        <!--<input id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />-->
       </div>
       <ng-template #notDirectlyChangeable>
-        <input type="button" value="&Auml;ndern" (click)="updatePassword()" />
+        <mat-label>Passwort</mat-label>
+        <br />
+        <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
+        <!--<input type="button" value="&Auml;ndern" (click)="updatePassword()" />-->
       </ng-template>
     </div>
   </div>
   <br /><br />
-  <p class="optionsAddress">Adresse</p>
-  <div *ngFor="let element of getAddress(); let i = index">
-    <input id="idAddress{{ i }}" type="text" value="{{ element }}"/>
-    <br />
+  <!--<p class="optionsAddress">Adresse</p>-->
+  <div class="options">
+    <div id="data">
+    <div *ngFor="let element of getAddress(); let i = index">
+      <mat-form-field>
+        <mat-label>{{ element }}</mat-label>
+        <input matInput id="idAddress{{ i }}" type="text" value="{{ element }}" />
+      </mat-form-field>
+      <!--<input id="idAddress{{ i }}" type="text" value="{{ element }}" />-->
+      <br />
+    </div></div>
   </div>
   <p class="optionsAddress">Verf&uuml;gbare Zeiten</p>
+  <div class="options">
   <div *ngFor="let element of getAvailableTime(); let i = index">
-    <input id="idTime{{ i }}" type="text" value="{{ element }}"/>
+    <mat-form-field>
+      <mat-label>{{ element }}</mat-label>
+      <input matInput id="idTime{{ i }}" type="text" value="{{ element }}" />
+    </mat-form-field>
+    <!--<input id="idTime{{ i }}" type="text" value="{{ element }}"/>-->
     <br />
-  </div>
+  </div></div>
   <br />
-  <input class="saveButton" type="button" value="Speichern" (click)="checkInput()" />
+  <mat-form-field>
+    <mat-label>Vorname</mat-label>
+    <input matInput />
+  </mat-form-field>
+  <div id="errorInput"></div>
+  <button mat-raised-button class="saveButton" (click)="checkInput()">Speichern</button>
+  <!--<input class="saveButton" type="button" value="Speichern" (click)="checkInput()" />-->
 </div>
 

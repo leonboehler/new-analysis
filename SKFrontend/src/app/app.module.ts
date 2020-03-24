@@ -10,6 +10,15 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +30,20 @@ import { AppRoutingModule } from './app-routing.module';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
+    UpdatePasswordComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    //MatButtonModule
-  ],
+    imports: [
+      BrowserModule,
+      AppRoutingModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatRadioModule,
+      MatCheckboxModule,
+      BrowserAnimationsModule,
+      MatIconModule,
+      MatToolbarModule,
+      MatButtonModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

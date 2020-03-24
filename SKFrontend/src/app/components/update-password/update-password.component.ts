@@ -17,7 +17,7 @@ export class UpdatePasswordComponent implements OnInit {
   }
 
   checkOldPassword(): void{
-    const oldPassword = document.getElementById('oldPassword').value;
+    const oldPassword = (<HTMLInputElement> document.getElementById('oldPassword')).value;
     const currentPassword = this.oservice.getCurrentUser().password;
     this.checkNewPassword();
     if(oldPassword != currentPassword) {
@@ -33,8 +33,8 @@ export class UpdatePasswordComponent implements OnInit {
   }
 
   checkNewPassword(): void{
-    const newPassword = document.getElementById('newPassword').value;
-    const newPasswordRepeat = document.getElementById('newPasswordRepeat').value;
+    const newPassword = (<HTMLInputElement> document.getElementById('newPassword')).value;
+    const newPasswordRepeat = (<HTMLInputElement> document.getElementById('newPasswordRepeat')).value;
     if(newPassword != newPasswordRepeat){
       this.valid = false;
       document.getElementById('errorNewPassword').innerHTML = 'Die Passw&ouml;rter m&uuml;ssen &uuml;bereinstimmen';
