@@ -1,52 +1,24 @@
 <!-- start login page-->
 
-<form id="login_form" style="display: block" (submit)="loginUser($event)">
+<form id="login_form" style="display: block">
 <div class="login_wrapper">
-    <div class="login_username_wrapper"><input type="email" placeholder="Email" id="login_username"></div>
-    <div class="login_password_wrapper"><input type="password" placeholder="Password" id="login_password"></div>
-  <div class="login_btn_wrapper"><button mat-raised-button color="accent" id="login_button">Login</button></div>
-  <div class="register_btn_wrapper"><button mat-raised-button color="accent" (click)="onClickMe()">Registrieren</button></div>
+    <div class="login_username_wrapper">
+      <input type="email" placeholder="Email" id="login_username">
+    </div>
+    <div class="login_password_wrapper">
+      <input type="password" placeholder="Password" id="login_password">
+    </div>
+</div>
+<div class="button_wrapper">
+  <div class="login_btn_wrapper">
+    <button mat-raised-button color="accent" id="login_button" (click)="onClickLogin()">Login</button>
+  </div>
+  <div class="register_btn_wrapper">
+    <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister()">Registrieren</button>
+  </div>
 </div>
 </form>
 
-<!--start register page-->
 
-<form id="register_form" style="display: none" (submit)="registerUser($event)">
-  <div class="register_wrapper">
-    <div class="register_firstname_wrapper">
-      <p id="text_firstname">Vorname</p>
-      <input type="text" placeholder="Vorname" id="register_firstname">
-    </div>
-
-    <div class="register_name_wrapper">
-      <p id="text_name">Nachname</p>
-      <input type="text" placeholder="Nachname" id="register_name">
-    </div>
-    <div class="register_email_wrapper">
-      <p id="text_email">E-Mail</p>
-      <input type="email" placeholder="max.m@example.com" id="register_email">
-    </div>
-    <div class="register_birthday_wrapper">
-      <p id="text_birthday">Geburtsdatum</p>
-      <input type="date"  id="register_birthday">
-    </div>
-    <div class="register_telnumber_wrapper">
-      <p id="text_telnumber">Telefonnummer</p>
-      <input type="tel" value="+49 " id="register_telnumber">
-    </div>
-    <div class="register_password_wrapper">
-      <p id="text_password">Passwort</p>
-      <input type="password" placeholder="Passwort" id="register_password">
-    </div>
-    <div class="register_password_confirm_wrapper">
-      <p id="text_password_confirm">Wiederholen</p>
-      <input type="password" placeholder="Passwort bestätigen" id="register_password_confirm">
-    </div>
-    <div class="register_agb_wrapper">
-      <input type="checkbox" id="register_checkbox_agb">
-      <p id="text_agb"><a href="/agb">AGB's</a> akzeptieren</p>
-    </div>
-  </div>
-</form>
 
 

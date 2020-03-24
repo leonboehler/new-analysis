@@ -16,13 +16,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClickMe(){
+  onClickRegister(){
 
-    var login_form = document.getElementById('login_form')
-    login_form.style.display = 'none'
-
-    var register_form = document.getElementById('register_form')
-    register_form.style.display = 'block'
+    this.router.navigate(['/register'])
   }
 
   registerUser(event){
@@ -30,15 +26,13 @@ export class LoginComponent implements OnInit {
   }
 
 
-  loginUser(event){
-    event.preventDefault()
+  onClickLogin(){
 
-
-    const username = event.target.querySelector('#login_username').value
-    const password = event.target.querySelector('#login_password').value
+    const username = (<HTMLInputElement> document.getElementById('login_username')).value;
+    const password = (<HTMLInputElement> document.getElementById('login_password')).value;
 
     if(!this.orchestratorService.validEmail(username)){
-      alert("Entered wrong e-mail.")
+
 
     }
     else if(!this.orchestratorService.validString(password)){

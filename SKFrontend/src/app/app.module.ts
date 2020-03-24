@@ -15,6 +15,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { LoginComponent } from './components/login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MatIconModule } from '@angular/material/icon';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
