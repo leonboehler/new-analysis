@@ -16,6 +16,7 @@ import {fromLonLat} from 'ol/proj';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import LineString from 'ol/geom/LineString';
 
 
 @Component({
@@ -68,14 +69,24 @@ export class MapComponent implements OnInit {
             return style;
         }.bind(this)
 
-        //Create VectorSource outside the Layer to be able to add Features to it later on
-        let source = new VectorSource();
 
-        //Create VectorLayer outside the map to be able to refresh it using markerLayer.changed()
-        let markerLayer = new VectorLayer({
-            source: source,
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let fenceSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        let fenceLayer = new VectorLayer({
+            source: fenceSource,
+        })
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let bucketSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
+        let bucketLayer = new VectorLayer({
+            source: bucketSource,
             style: styleFunction
         })
+
 
         //Create map
         let map = new Map({
@@ -84,7 +95,8 @@ export class MapComponent implements OnInit {
                 new TileLayer({
                     source: new OsmSource()
                 }),
-                markerLayer
+                fenceLayer,
+                bucketLayer
             ],
             view: new View({
                 center: fromLonLat([10.4515, 51.1657]),
@@ -101,6 +113,21 @@ export class MapComponent implements OnInit {
             this.orchestratorService.bucketSelected(selected);
         }.bind(this));
 
+
+        //TODO load fences dynamically, make them thicker and color them green
+        let fenceFeatures = [];
+
+        let fenceCoords = [];
+        fenceCoords.push(fromLonLat([13.34545, 34.12313]));
+        fenceCoords.push(fromLonLat([14.34545, 35.12313]));
+        fenceCoords.push(fromLonLat([16.34545, 31.124513]));
+
+        fenceFeatures.push(new Feature(({
+            geometry: new LineString(fenceCoords)
+        })));
+
+        fenceSource.addFeatures(fenceFeatures);
+        fenceLayer.changed();
 
         //Subscribe to buckets
         this.communicationService.buckets().subscribe(buckets => {
@@ -120,14 +147,14 @@ export class MapComponent implements OnInit {
             });
 
             //Update VectorSource
-            source.clear();
-            source.addFeatures(features);
+            bucketSource.clear();
+            bucketSource.addFeatures(features);
         });
 
         //Subscription to update the selected bucket
         this.orchestratorService.selectedBucket.subscribe(selectedBucket => {
             this.selectedBucket = selectedBucket;
-            markerLayer.changed();
+            bucketLayer.changed();
         });
 
     }
