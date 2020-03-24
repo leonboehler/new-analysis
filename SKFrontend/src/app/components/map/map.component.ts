@@ -113,6 +113,11 @@ export class MapComponent implements OnInit {
             style: bucketStyleFunction
         })
 
+        let view = new View({
+            center: fromLonLat([10.4515, 51.1657]),
+            zoom: 6.3
+        })
+
 
         //Create map
         let map = new Map({
@@ -124,10 +129,7 @@ export class MapComponent implements OnInit {
                 locationLayer,
                 bucketLayer
             ],
-            view: new View({
-                center: fromLonLat([10.4515, 51.1657]),
-                zoom: 6.3
-            })
+            view: view
         });
 
         //Register a click event to be able to select markers
@@ -183,6 +185,20 @@ export class MapComponent implements OnInit {
         this.orchestratorService.selectedLocation.subscribe(selectedLocation => {
             this.selectedLocation = selectedLocation;
             locationLayer.changed();
+
+            //Jump to the currently selected location
+            if(selectedLocation != null){
+
+                let locationCoords = [];
+                selectedLocation.routePoints.forEach(point =>
+                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                );
+
+                let geometry = new LineString(locationCoords);
+
+                view.fit(geometry);
+                view.adjustZoom(-1);
+            }
         });
 
 
@@ -210,6 +226,12 @@ export class MapComponent implements OnInit {
         this.orchestratorService.selectedBucket.subscribe(selectedBucket => {
             this.selectedBucket = selectedBucket;
             bucketLayer.changed();
+
+            //Jump to the currently selected bucket
+            if(selectedBucket != null){
+                view.setCenter(fromLonLat([selectedBucket.position.longitude, selectedBucket.position.latitude]));
+                view.setZoom(14);
+            }
         });
 
     }
