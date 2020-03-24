@@ -19,7 +19,19 @@
 }
 
 #errorInput{
-  margin-left: 15%;
+  margin-left: 45.5%;
+  font-size: 0.85em;
+  color: #d40000;
+}
+
+#errorInputUserData{
+  margin-left: 11.9%;
+  font-size: 0.85em;
+  color: #d40000;
+}
+
+#errorInputAddressData{
+  margin-left: 40.5%;
   font-size: 0.85em;
   color: #d40000;
 }

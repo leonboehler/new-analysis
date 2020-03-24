@@ -1,4 +1,7 @@
 <div>
+  <br />
+  <div id="errorInputUserData"></div>
+  <br />
   <div class="options">
     <div id="data" *ngFor="let element of data">
       <div *ngIf="element.changeable; else notDirectlyChangeable">
@@ -19,7 +22,9 @@
   <div class="optionsHeadline">
     Adressdaten
   </div>
-  <br /><br />
+  <br />
+  <div id="errorInputAddressData"></div>
+  <br />
   <div class="options">
     <div id="data">
     <mat-form-field>
