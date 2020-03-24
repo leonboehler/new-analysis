@@ -4,6 +4,7 @@ import {OrchestratorService} from '../../services/orchestrator.service';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import {formatDate} from '@angular/common';
 import {Router} from '@angular/router';
+import { ConstantPool } from '@angular/compiler';
 
 @Component({
   selector: 'app-settings',
@@ -18,27 +19,29 @@ export class SettingsComponent implements OnInit {
   constructor(private oservice: OrchestratorService, private router: Router) {}
 
   checkInput(): void{
-    const content1 = document.getElementById('idVorname').value;
-    const content2 = document.getElementById('idNachname').value;
-    const content3 = document.getElementById('idGeburtstag').value;
-    const content4 = document.getElementById('idEmail').value;
-    const content5 = document.getElementById('idTelefonnummer').value;
-    const address1 = document.getElementById('idAddress0').value;
-    const address2 = document.getElementById('id1Address').value;
-    const address3 = document.getElementById('idAddress2').value;
+    const content1 = (<HTMLInputElement> document.getElementById('idVorname')).value;
+    const content2 = (<HTMLInputElement> document.getElementById('idNachname')).value;
+    const content3 = (<HTMLInputElement> document.getElementById('idGeburtstag')).value;
+    const content4 = (<HTMLInputElement> document.getElementById('idEmail')).value;
+    const content5 = (<HTMLInputElement> document.getElementById('idTelefonnummer')).value;
+    const address1 = (<HTMLInputElement> document.getElementById('idAddress0')).value;
+    const address2 = (<HTMLInputElement> document.getElementById('idAddress1')).value;
+    const address3 = (<HTMLInputElement> document.getElementById('idAddress2')).value;
+    console.log(content1);
+    document.getElementById('idVorname').innerHTML = ' ass';
     if(content1 == '' || content2 == '' || content3 == '' || content4 == '' || content5 == '' ||
       address1 == '' || address2 == '' || address3 == ''){
-      window.alert('Bitte lassen Sie die Felder nicht leer');
+      document.getElementById('errorInput').innerHTML = 'Bitte lassen Sie keine Felder leer';
       let birthday = this.currentUserData.birthdate.toString();
       birthday = birthday.substr(4, 4) + '-' + birthday.substr(2, 2) + '-' + birthday.substr(0, 2);
-      document.getElementById('idVorname').value = this.currentUserData.firstName;
-      document.getElementById('idNachname').value = this.currentUserData.lastName;
-      document.getElementById('idGeburtstag').value = birthday;
-      document.getElementById('idEmail').value = this.currentUserData.mail;
-      document.getElementById('idTelefonnummer').value = this.currentUserData.phoneNumber;
-      document.getElementById('idAddress0').value = this.currentUserData.address.street + ' ' + this.currentUserData.address.streetNumber;
-      document.getElementById('idAddress1').value = this.currentUserData.address.postCode + ' ' + this.currentUserData.address.city;
-      document.getElementById('idAddress2').value = this.currentUserData.address.country + ', ' + this.currentUserData.address.state;
+      document.getElementById('idVorname').innerHTML = this.currentUserData.firstName;
+      document.getElementById('idNachname').innerHTML = this.currentUserData.lastName;
+      document.getElementById('idGeburtstag').innerHTML = birthday;
+      document.getElementById('idEmail').innerHTML = this.currentUserData.mail;
+      document.getElementById('idTelefonnummer').innerHTML = this.currentUserData.phoneNumber;
+      document.getElementById('idAddress0').innerHTML = this.currentUserData.address.street + ' ' + this.currentUserData.address.streetNumber;
+      document.getElementById('idAddress1').innerHTML = this.currentUserData.address.postCode + ' ' + this.currentUserData.address.city;
+      document.getElementById('idAddress2').innerHTML = this.currentUserData.address.country + ', ' + this.currentUserData.address.state;
     }else{
       console.log('Save');
     }

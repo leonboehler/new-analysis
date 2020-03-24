@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-input{
+/*input{
   width: 75%;
   padding: 12px 20px;
   margin-left: 15%;
@@ -25,11 +25,11 @@ input:focus{
 input:hover{
   color: #337ab7;
   background-color: #fff;
-}
+}*/
 
 .options{
   display: flex;
-  font-size: 2em;
+  font-size: 1.5em;
   text-align: center;
   width: 80%;
   margin-left: 10%;
@@ -50,6 +50,12 @@ input:hover{
 
 #data{
   width: 100%;
+}
+
+#errorInput{
+  margin-left: 15%;
+  font-size: 0.85em;
+  color: #d40000;
 }
 
 p{
