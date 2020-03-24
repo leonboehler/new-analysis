@@ -36,7 +36,7 @@ import {MatListModule} from "@angular/material/list";
     MapComponent,
     SettingsComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
     LoginComponent,
     LocSelectionComponent,
     UpdatePasswordComponent,
@@ -51,7 +51,7 @@ import {MatListModule} from "@angular/material/list";
     MatIconModule,
     MatInputModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
     MatIconModule,
     FlexLayoutModule,
     MatListModule
