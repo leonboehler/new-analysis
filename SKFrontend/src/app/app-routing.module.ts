@@ -8,6 +8,8 @@ import {SettingsComponent} from './components/settings/settings.component';
 import {MapComponent} from './components/map/map.component';
 import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 import { LoginComponent } from './components/login/login.component';
+import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
+
 
 const routes: Routes = [
   {path: '', redirectTo: '/map', pathMatch: 'full'},
@@ -17,8 +19,8 @@ const routes: Routes = [
   {path: 'settings', component: SettingsComponent},
   {path: 'map', component: MapComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'map', component: MapComponent},
-  {path: 'updatePassword', component: UpdatePasswordComponent}
+  {path: 'updatePassword', component: UpdatePasswordComponent},
+  {path: 'locSelection', component: LocSelectionComponent}
 ];
 
 @NgModule({

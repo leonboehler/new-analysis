@@ -1,7 +1,9 @@
+import {Position} from './Position';
+
 export class Bucket {
   id: string;
-  latitude: string;
-  longitude: string;
+  locationId: string;
+  position: Position;
   street: string;
   maxFrogs: number;
   currentFrogs: number;
