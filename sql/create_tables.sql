@@ -11,8 +11,8 @@
 CREATE DATABASE IF NOT EXISTS dehabewe;
 USE dehabewe;
 
+DROP TABLE IF EXISTS rt_station;
 DROP TABLE IF EXISTS rt_bucket;
-DROP TABLE IF EXISTS log_empty_bucket;
 DROP TABLE IF EXISTS st_station;
 DROP TABLE IF EXISTS st_bucket;
 DROP TABLE IF EXISTS st_readiness;
@@ -21,10 +21,21 @@ DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS log_session;
 DROP TABLE IF EXISTS st_user;
 
+DROP TABLE IF EXISTS sys_config;
 /**************************************** */
 /*** USER
+/**************************************** */	
+CREATE TABLE IF NOT EXISTS sys_config (		/* USER-TABLE like mentioned in SM05 */
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),  
+  key varchar(100),
+  value varchar(256),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
 /**************************************** */
-	
+/*** USER
+/**************************************** */	
 CREATE TABLE IF NOT EXISTS st_user (		/* USER-TABLE like mentioned in SM05 */
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
@@ -39,7 +50,7 @@ CREATE TABLE IF NOT EXISTS st_user (		/* USER-TABLE like mentioned in SM05 */
   state varchar(100) default NULL,
   country varchar(100) default NULL,
   role ENUM('USER', 'ADMIN') DEFAULT 'USER',
-  password varchar(128) default NULL,
+  password varchar(256) default NULL,
   mail varchar(127) default NULL,
   UNIQUE KEY(mail),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -115,10 +126,13 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   location_id int(11) NOT NULL,
   FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
   name varchar(100) default NULL, 
-  mac varchar(100) default NULL, 
-  UNIQUE KEY(mac), 
-  max_toads int(11) default NULL,
-  toads_count int(11) DEFAULT 0,
+  chip_id int(11) NOT NULL, 
+  UNIQUE KEY(chip_id), 
+  latitude DECIMAL(10,7) default NULL,
+  longitude DECIMAL(10,7) default NULL,
+  toads_count int(11) default 0,
+  max_toads int(11) default NULL,  
+  battery_level decimal(2,1) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -130,10 +144,11 @@ CREATE TABLE IF NOT EXISTS st_station (
   PRIMARY KEY (id),
   location_id int(11) NOT NULL,
   FOREIGN KEY (location_id) REFERENCES st_location(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  mac varchar(100) default NULL, 
+  chip_id int(11) NOT NULL, 
+  UNIQUE KEY(chip_id), 
   latitude DECIMAL(10,7) default NULL,
-  longitude DECIMAL(10,7) default NULL,
-  UNIQUE KEY(mac), 
+  longitude DECIMAL(10,7) default NULL,  
+  battery_level decimal(2,1) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -150,27 +165,25 @@ CREATE TABLE IF NOT EXISTS log (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
-/*** RUNTIME-TABLE: SENSOR
+/*** RUNTIME-TABLE: STATION
 /**************************************** */
-CREATE TABLE IF NOT EXISTS rt_bucket (
+CREATE TABLE IF NOT EXISTS rt_station (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
-  mac varchar(17) NOT NULL,
-  toads_count int(11) NOT NULL,
+  chip_id int(11) NOT NULL,   
+  battery_level decimal(2,1) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 /**************************************** */
-/*** LOG-EMPTY-BUCKET
+/*** RUNTIME-TABLE: BUCKET
 /**************************************** */
-CREATE TABLE IF NOT EXISTS log_empty_bucket (
+CREATE TABLE IF NOT EXISTS rt_bucket (
   id int(11) NOT NULL auto_increment,
-  PRIMARY KEY (id),
-  user_id int(11) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bucket_id int(11) NOT NULL,
-  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (id),  
+  chip_id int(11) NOT NULL,
   toads_count int(11) NOT NULL,
+  battery_level decimal(2,1) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 

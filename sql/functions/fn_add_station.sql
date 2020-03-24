@@ -14,7 +14,7 @@ delimiter //
 DROP PROCEDURE IF EXISTS fn_add_station//
 
 CREATE PROCEDURE fn_add_station (
-	IN pMac varchar(17),
+	IN pChipID varchar(17),
 	IN pLocationID int(11), 
 	IN pLatitude decimal(10,7),
 	IN pLongitude decimal(10,7)
@@ -24,7 +24,7 @@ BEGIN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';
 	END IF;	 
 	
-	INSERT INTO st_station(mac, location_id, latitude, longitude) VALUES(pMac, pLocationID, pLatitude, pLongitude);
+	INSERT INTO st_station(chip_id, location_id, latitude, longitude) VALUES(pChipID, pLocationID, pLatitude, pLongitude);
   	IF (ROW_COUNT() != 1) THEN
   		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';
   	END IF;

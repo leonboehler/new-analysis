@@ -21,8 +21,12 @@ BEGIN
 	
 	SELECT session_id INTO _sessionID FROM log_session WHERE end_ts IS NULL AND session_id = pSessionID;	
 
-	IF (ROW_COUNT() != 1) THEN		
-		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 303, MESSAGE_TEXT = 'session id is wrong';	
+	IF (ROW_COUNT() != 1) THEN	
+	
+		SELECT value INTO _sessionID FROM sys_config WHERE value = pSessionID;
+		IF (ROW_COUNT() != 1) THEN
+			SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 303, MESSAGE_TEXT = 'session id is wrong';	
+		END IF;
 	END IF;	  	
 END //
 delimiter ;

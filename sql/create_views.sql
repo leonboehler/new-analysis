@@ -5,7 +5,7 @@
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Create all tables
+* Purpose           : Create all views for system and ui
 * 
 /**********************************************************************/
 /**************************************** */
@@ -37,6 +37,25 @@ CREATE OR REPLACE VIEW sys_user AS
 
 SELECT * FROM sys_user;
 
+### BUCKET 
+CREATE OR REPLACE VIEW sys_bucket AS
+	SELECT  l.id AS 'location_id', l.name AS 'location_name', b.id AS 'bucket_id', b.chip_id AS 'bucket_chip_id', b.name AS 'bucket_name', b.max_toads AS 'bucket_max_toads', toads_count AS 'bucket_toads_count'
+	FROM st_bucket b	
+	JOIN st_location l
+	ON b.location_id = l.id;
+	
+SELECT * FROM sys_bucket;
+
+### LOCATION
+CREATE OR REPLACE VIEW sys_location AS
+	SELECT l.id AS 'location_id', l.name AS 'location_name', l.city AS 'location_city',l.country AS 'location_country', IF(ISNULL(SUM(b.bucket_toads_count)),0,SUM(b.bucket_toads_count)) AS 'location_toads_count', COUNT(b.bucket_id) AS 'location_bucket_count'
+	FROM st_location l
+	LEFT JOIN sys_bucket b
+	ON b.location_id = l.id
+	GROUP BY l.id;
+
+SELECT * FROM sys_location;
+
 ### READINESS
 CREATE OR REPLACE VIEW sys_readiness AS
 	SELECT u.mail AS 'user_mail', r.start_ts AS 'readiness_start', r.end_ts AS 'readiness_end', IF(ISNULL(l.location_id), 'false', l.location_name) AS 'is_assigned'
@@ -59,19 +78,9 @@ CREATE OR REPLACE VIEW sys_assignment AS
 		
 SELECT * FROM sys_assignment;
 
-### LOCATION
-CREATE OR REPLACE VIEW sys_location AS
-	SELECT l.id AS 'location_id', l.name AS 'location_name', l.city AS 'location_city',l.country AS 'location_country', IF(ISNULL(SUM(b.bucket_toads_count)),0,SUM(b.bucket_toads_count)) AS 'location_toads_count', COUNT(b.bucket_id) AS 'location_bucket_count'
-	FROM st_location l
-	LEFT JOIN sys_bucket b
-	ON b.location_id = l.id
-	GROUP BY l.id;
-
-SELECT * FROM sys_location;
-
 ### STATION 
 CREATE OR REPLACE VIEW sys_station AS
-	SELECT s.mac AS 'station_mac', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.location_name, bucket_mac
+	SELECT s.chip_id AS 'station_chip_id', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.location_name, bucket_chip_id
 	FROM st_station s
 	LEFT JOIN sys_location l
 	ON s.location_id = l.location_id
@@ -80,16 +89,7 @@ CREATE OR REPLACE VIEW sys_station AS
 	
 SELECT * FROM sys_station;
 
-### BUCKET 
-CREATE OR REPLACE VIEW sys_bucket AS
-	SELECT  l.id AS 'location_id', l.name AS 'location_name', b.id AS 'bucket_id', b.mac AS 'bucket_mac', b.id AS 'bucket_id',b.name AS 'bucket_name', SUM(rb.toads_count) AS 'bucket_toads_count'
-	FROM st_bucket b
-	JOIN rt_bucket rb
-	ON b.mac = rb.mac
-	JOIN st_location l
-	ON b.location_id = l.id;
-	
-SELECT * FROM sys_bucket;
+
 
 /**************************************** */
 /*** UI-VIEWS

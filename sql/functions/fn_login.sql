@@ -15,11 +15,11 @@ DROP PROCEDURE IF EXISTS fn_login//
 
 CREATE PROCEDURE fn_login (
 	IN pMail varchar(127), 
-	IN pPassword varchar(128),
+	IN pPassword varchar(256),
 	IN pSessionID varchar(128)
 )  
 BEGIN	
-	DECLARE _password varchar(128);
+	DECLARE _password varchar(256);
 	DECLARE _userID int(11);
 	DECLARE _userStatus varchar(10);
 
