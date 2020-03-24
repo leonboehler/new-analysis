@@ -15,16 +15,19 @@ DROP PROCEDURE IF EXISTS fn_add_assignment//
 
 
 CREATE PROCEDURE fn_add_assignment (
-	IN pUserID int(11),
+	IN pMail varchar(100),
 	IN pLocationID int(11)
 )    
 BEGIN
-	IF (pUserID < 0) THEN
-		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 401, MESSAGE_TEXT = 'user id wrong';
-	END IF;	 
-	
+	DECLARE _userID int(11);
 
-	INSERT INTO st_assignment(user_id, location_id) VALUES(pUserID, pLocationID);
+	SELECT id INTO _userID FROM st_user WHERE mail = pMail;
+
+	IF(ROW_COUNT() != 1) THEN
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 401, MESSAGE_TEXT = 'mail is wrong';
+	ELSE
+		INSERT INTO st_assignment(user_id, location_id) VALUES(_userID, pLocationID);
+	END IF;
   
 END //
 

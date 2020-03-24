@@ -20,7 +20,6 @@ BEGIN
 	DECLARE _sessionID varchar(128);
 	
 	SELECT session_id INTO _sessionID FROM log_session WHERE end_ts IS NULL AND session_id = pSessionID;	
-
 	IF (ROW_COUNT() != 1) THEN	
 	
 		SELECT value INTO _sessionID FROM sys_config WHERE value = pSessionID;

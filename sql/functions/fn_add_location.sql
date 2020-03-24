@@ -20,11 +20,15 @@ CREATE PROCEDURE fn_add_location (
 	IN pCity varchar(50),
 	IN pCountry varchar(50),
 	IN pLatitude decimal(10,7),
-	IN pLongitude decimal(10,7)
+	IN pLongitude decimal(10,7),
+	IN pStartLatitude decimal(10,7),
+	IN pStartLongitude decimal(10,7),
+	IN pEndLatitude decimal(10,7),
+	IN pEndLongitude decimal(10,7)
 )    
 BEGIN
 	
-	INSERT INTO st_location(name, info, plz, city, country, latitude, longitude) VALUES (pName, pInfo, pPLZ, pCity, pCountry, pLatitude, pLongitude);
+	INSERT INTO st_location(name, info, plz, city, country, latitude, longitude, start_latitude, start_longitude, end_latitude, end_longitude) VALUES (pName, pInfo, pPLZ, pCity, pCountry, pLatitude, pLongitude, pStartLatitude, pStartLongitude, pEndLatitude, pEndLongitude);
 
   	IF (ROW_COUNT() != 1) THEN
   		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';

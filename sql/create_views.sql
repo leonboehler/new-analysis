@@ -39,7 +39,7 @@ SELECT * FROM sys_user;
 
 ### BUCKET 
 CREATE OR REPLACE VIEW sys_bucket AS
-	SELECT  l.id AS 'location_id', l.name AS 'location_name', b.id AS 'bucket_id', b.chip_id AS 'bucket_chip_id', b.name AS 'bucket_name', b.max_toads AS 'bucket_max_toads', toads_count AS 'bucket_toads_count'
+	SELECT b.id AS 'bucket_id', b.chip_id AS 'bucket_chip_id', b.name AS 'bucket_name', b.max_toads AS 'bucket_max_toads', b.toads_count AS 'bucket_toads_count', b.battery_level AS 'bucket_battery_level', b.latitude AS 'bucket_latitude', b.longitude AS 'bucket_longitude', l.id AS 'location_id', l.name AS 'location_name'
 	FROM st_bucket b	
 	JOIN st_location l
 	ON b.location_id = l.id;
@@ -48,7 +48,19 @@ SELECT * FROM sys_bucket;
 
 ### LOCATION
 CREATE OR REPLACE VIEW sys_location AS
-	SELECT l.id AS 'location_id', l.name AS 'location_name', l.city AS 'location_city',l.country AS 'location_country', IF(ISNULL(SUM(b.bucket_toads_count)),0,SUM(b.bucket_toads_count)) AS 'location_toads_count', COUNT(b.bucket_id) AS 'location_bucket_count'
+	SELECT 
+		l.id AS 'location_id', 
+		l.name AS 'location_name', 
+		l.city AS 'location_city',
+		l.country AS 'location_country', 		
+		l.latitude AS 'location_latitude',
+		l.longitude AS 'location_longitude',
+		l.start_latitude AS 'location_start_latitude',
+		l.start_longitude AS 'location_start_longitude',
+		l.end_latitude AS 'location_end_latitude',
+		l.end_longitude AS 'location_end_longitude',
+		SUM(b.bucket_toads_count) AS 'location_toads_count', 
+		COUNT(b.bucket_id) AS 'location_bucket_count'
 	FROM st_location l
 	LEFT JOIN sys_bucket b
 	ON b.location_id = l.id
