@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 import { LocSelectionComponent } from './components/loc-selection/loc-selection.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SidePanelsComponent } from './components/side-panels/side-panels.component';
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     SettingsComponent,
     LoginComponent,
     LocSelectionComponent,
-    UpdatePasswordComponent
+    UpdatePasswordComponent,
+    SidePanelsComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
