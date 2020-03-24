@@ -94,7 +94,7 @@ export class MapComponent implements OnInit {
 
         //Register a click event to be able to select markers
         map.on('click', function(e){
-            let selected = null;
+            let selected = -1;
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
                 selected = feature.get('bucketID');
             }.bind(this));
@@ -103,9 +103,7 @@ export class MapComponent implements OnInit {
 
 
         //Subscribe to buckets
-        let subscription = this.communicationService.buckets().subscribe(buckets => {
-            //Instantly unsubscribe after recieving the buckets once
-            subscription.unsubscribe();
+        this.communicationService.buckets().subscribe(buckets => {
 
             let features = [];
             buckets.forEach(bucket => {
@@ -121,12 +119,16 @@ export class MapComponent implements OnInit {
 
             });
 
-            //Add all new features to the VectorSource
+            //Update VectorSource
+            source.clear();
             source.addFeatures(features);
         });
 
-        //TODO: subscribe to selectedBucket
-        //has to include markerLayer.changed();
+        //Subscription to update the selected bucket
+        this.orchestratorService.selectedBucket.subscribe(selectedBucket => {
+            this.selectedBucket = selectedBucket;
+            markerLayer.changed();
+        });
 
     }
 
