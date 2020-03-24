@@ -10,6 +10,7 @@ import {UpdatePasswordComponent} from './components/update-password/update-passw
 import { LoginComponent } from './components/login/login.component';
 import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
 import {SidePanelsComponent} from './components/side-panels/side-panels.component';
+import { RegisterComponent} from "./components/register/register.component";
 
 
 const routes: Routes = [
@@ -22,7 +23,9 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'leftpanel', component: SidePanelsComponent},
   {path: 'updatePassword', component: UpdatePasswordComponent},
-  {path: 'locSelection', component: LocSelectionComponent}
+  {path: 'locSelection', component: LocSelectionComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent}
 ];
 
 @NgModule({

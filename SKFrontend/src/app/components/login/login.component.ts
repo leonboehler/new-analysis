@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommunicationService } from '../../services/communication.service'
-import { OrchestratorService } from '../../services/orchestrator.service'
+import { CommunicationService } from '../../services/communication.service';
+import { OrchestratorService } from '../../services/orchestrator.service';
 import { Router } from '@angular/router';
 
 
@@ -11,22 +11,28 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+
   constructor(private communicationService:CommunicationService, private orchestratorService:OrchestratorService, private router:Router) { }
-
-
   ngOnInit(): void {
   }
 
+  onClickRegister(){
 
-  loginUser(event){
-    event.preventDefault()
+    this.router.navigate(['/register'])
+  }
+
+  registerUser(event){
+
+  }
 
 
-    const username = event.target.querySelector('#username').value
-    const password = event.target.querySelector('#password').value
+  onClickLogin(){
+
+    const username = (<HTMLInputElement> document.getElementById('login_username')).value;
+    const password = (<HTMLInputElement> document.getElementById('login_password')).value;
 
     if(!this.orchestratorService.validEmail(username)){
-      alert("Entered wrong e-mail.")
+
 
     }
     else if(!this.orchestratorService.validString(password)){
@@ -43,8 +49,6 @@ export class LoginComponent implements OnInit {
         }
       })
     }
-
-    console.log(username, +' '+ password)
 
   }
 

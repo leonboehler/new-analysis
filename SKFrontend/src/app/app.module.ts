@@ -15,6 +15,10 @@ import {MatButtonModule} from '@angular/material/button';
 import { LoginComponent } from './components/login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { RegisterComponent } from './components/register/register.component';
+import {MatInputModule} from "@angular/material/input";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 import { LocSelectionComponent } from './components/loc-selection/loc-selection.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -32,6 +36,8 @@ import {MatListModule} from "@angular/material/list";
     MapComponent,
     SettingsComponent,
     LoginComponent,
+    RegisterComponent
+    LoginComponent,
     LocSelectionComponent,
     UpdatePasswordComponent,
     SidePanelsComponent
@@ -42,6 +48,10 @@ import {MatListModule} from "@angular/material/list";
     BrowserAnimationsModule,
     MatButtonModule,
     MatToolbarModule,
+    MatIconModule,
+    MatInputModule,
+    MatRadioModule,
+    MatCheckboxModule
     MatIconModule,
     FlexLayoutModule,
     MatListModule
