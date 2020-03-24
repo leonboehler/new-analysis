@@ -91,6 +91,15 @@ export class MapComponent implements OnInit {
             return style;
         }.bind(this)
 
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let fenceSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        let fenceLayer = new VectorLayer({
+            source: fenceSource,
+        })
+
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let bucketSource = new VectorSource();
 
