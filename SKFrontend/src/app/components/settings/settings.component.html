@@ -1,52 +1,90 @@
 <div>
   <div class="options">
     <div id="data" *ngFor="let element of data">
-      <!--<p>{{ element.name }}</p>-->
       <div *ngIf="element.changeable; else notDirectlyChangeable">
         <mat-form-field>
           <mat-label>{{ element.name }}</mat-label>
           <input matInput id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />
         </mat-form-field>
-        <!--<input id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />-->
       </div>
       <ng-template #notDirectlyChangeable>
-        <mat-label>Passwort</mat-label>
-        <br />
-        <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
-        <!--<input type="button" value="&Auml;ndern" (click)="updatePassword()" />-->
+        <mat-form-field>
+          <mat-label>{{ element.name }}</mat-label>
+          <input matInput id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" readonly />
+        </mat-form-field>
       </ng-template>
     </div>
   </div>
   <br /><br />
-  <!--<p class="optionsAddress">Adresse</p>-->
+  <div class="optionsHeadline">
+    Adressdaten
+  </div>
+  <br /><br />
   <div class="options">
     <div id="data">
-    <div *ngFor="let element of getAddress(); let i = index">
-      <mat-form-field>
-        <mat-label>{{ element }}</mat-label>
-        <input matInput id="idAddress{{ i }}" type="text" value="{{ element }}" />
-      </mat-form-field>
-      <!--<input id="idAddress{{ i }}" type="text" value="{{ element }}" />-->
-      <br />
-    </div></div>
-  </div>
-  <p class="optionsAddress">Verf&uuml;gbare Zeiten</p>
-  <div class="options">
-  <div *ngFor="let element of getAvailableTime(); let i = index">
     <mat-form-field>
-      <mat-label>{{ element }}</mat-label>
-      <input matInput id="idTime{{ i }}" type="text" value="{{ element }}" />
+      <mat-label>{{ getStreetAndNumber().name1 }}</mat-label>
+      <input matInput id="idAddressStreet" type="text" value="{{ getStreetAndNumber().value1 }}" />
     </mat-form-field>
-    <!--<input id="idTime{{ i }}" type="text" value="{{ element }}"/>-->
-    <br />
-  </div></div>
+    <mat-form-field>
+      <mat-label>{{ getStreetAndNumber().name2 }}</mat-label>
+      <input matInput id="idAddressStreetNumber" type="text" value="{{ getStreetAndNumber().value2 }}" />
+    </mat-form-field>
+  </div><br />
+  </div>
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getPostCodeAndCity().name1 }}</mat-label>
+        <input matInput id="idAddressPostCode" type="text" value="{{ getPostCodeAndCity().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getPostCodeAndCity().name2 }}</mat-label>
+        <input matInput id="idAddressCity" type="text" value="{{ getPostCodeAndCity().value2 }}" />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getCountryAndState().name1 }}</mat-label>
+        <input matInput id="idAddressCountry" type="text" value="{{ getCountryAndState().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getCountryAndState().name2 }}</mat-label>
+        <input matInput id="idAddressState" type="text" value="{{ getCountryAndState().value2 }}" />
+      </mat-form-field>
+    </div>
+  </div>
+  <br /><br />
+  <div class="optionsHeadline">
+    Verf&uuml;gbare Zeiten
+  </div>
+  <br /><br />
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getAvailableTime().name1 }}</mat-label>
+        <input matInput id="idTimeFrom" type="text" value="{{ getAvailableTime().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getAvailableTime().name2 }}</mat-label>
+        <input matInput id="idTimeTo" type="text" value="{{ getAvailableTime().value2 }}" />
+      </mat-form-field>
+    </div>
+  </div>
   <br />
-  <mat-form-field>
-    <mat-label>Vorname</mat-label>
-    <input matInput />
-  </mat-form-field>
+  <div class="options">
+    <div id="data">
+      <mat-label>Passwort</mat-label>
+      <br /><br />
+      <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
+    </div>
+  </div>
+  <br /><br /><br />
   <div id="errorInput"></div>
-  <button mat-raised-button class="saveButton" (click)="checkInput()">Speichern</button>
-  <!--<input class="saveButton" type="button" value="Speichern" (click)="checkInput()" />-->
+  <div align="center">
+    <button mat-raised-button color="accent" (click)="checkInput()">Speichern</button>
+  </div>
 </div>
 

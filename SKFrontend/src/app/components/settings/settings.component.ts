@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { userData } from 'src/app/models/userData';
 import {OrchestratorService} from '../../services/orchestrator.service';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import {formatDate} from '@angular/common';
 import {Router} from '@angular/router';
-import { ConstantPool } from '@angular/compiler';
 
 @Component({
   selector: 'app-settings',
@@ -27,8 +24,6 @@ export class SettingsComponent implements OnInit {
     const address1 = (<HTMLInputElement> document.getElementById('idAddress0')).value;
     const address2 = (<HTMLInputElement> document.getElementById('idAddress1')).value;
     const address3 = (<HTMLInputElement> document.getElementById('idAddress2')).value;
-    console.log(content1);
-    document.getElementById('idVorname').innerHTML = ' ass';
     if(content1 == '' || content2 == '' || content3 == '' || content4 == '' || content5 == '' ||
       address1 == '' || address2 == '' || address3 == ''){
       document.getElementById('errorInput').innerHTML = 'Bitte lassen Sie keine Felder leer';
@@ -47,17 +42,44 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  getAvailableTime(): string[]{
-    return [ "2020-03-23 17:18:11", "2020-03-23 18:00:00" ];
+  getAvailableTime(): {name1: string; name2: string; value1: any; value2: any} {
+    const time = {
+      name1: 'Von',
+      name2: 'Bis',
+      value1: this.currentUserData.operationalReadiness.startTime,
+      value2: this.currentUserData.operationalReadiness.endTime
+    };
+    return time;
   }
 
-  getAddress(): string[] {
-    const contentAddress: string[] = [];
-    contentAddress.push(this.currentUserData.address.street + ' ' + this.currentUserData.address.streetNumber);
-    contentAddress.push(this.currentUserData.address.postCode + ' ' + this.currentUserData.address.city);
-    contentAddress.push(this.currentUserData.address.country + ', ' + this.currentUserData.address.state);
+  getStreetAndNumber(): {name1: string; name2: string; value1: any; value2: any}{
+    const address = {
+          name1: 'Straße',
+          name2: 'Nummer',
+          value1: this.currentUserData.address.street,
+          value2: this.currentUserData.address.streetNumber
+        };
+    return address;
+  }
 
-    return contentAddress;
+  getPostCodeAndCity(): {name1: string; name2: string; value1: any; value2: any}{
+    const address = {
+      name1: 'PLZ',
+      name2: 'Stadt',
+      value1: this.currentUserData.address.postCode,
+      value2: this.currentUserData.address.city
+    };
+    return address;
+  }
+
+  getCountryAndState(): {name1: string; name2: string; value1: any; value2: any}{
+    const address = {
+      name1: 'Land',
+      name2: 'Bundesland',
+      value1: this.currentUserData.address.country,
+      value2: this.currentUserData.address.state
+    };
+    return address;
   }
 
   updatePassword(): void {
@@ -90,7 +112,7 @@ export class SettingsComponent implements OnInit {
         name: 'Email',
         type: 'text',
         value: this.currentUserData.mail,
-        changeable: true
+        changeable: false
       },
       {
         name: 'Telefonnummer',
