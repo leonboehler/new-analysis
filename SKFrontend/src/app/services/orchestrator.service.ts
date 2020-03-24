@@ -3,12 +3,16 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {User} from '../models/User';
 import {CommunicationService} from './communication.service';
 import { Validators } from '@angular/forms';
+import {Bucket} from '../models/Bucket';
+import {Location} from '../models/Location';
 @Injectable({
   providedIn: 'root'
 })
 export class OrchestratorService {
 
-  selectedBucket: BehaviorSubject<number> = new BehaviorSubject<number>(-1)
+  selectedBucket: BehaviorSubject<Bucket> = new BehaviorSubject<Bucket>(null)
+  selectedLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null)
+
   currentUser: User
   constructor(private communicationService: CommunicationService) {
     this.communicationService.user().subscribe(user => {
@@ -16,8 +20,12 @@ export class OrchestratorService {
     });
   }
 
-  bucketSelected(id: number) {
-    this.selectedBucket.next(id);
+  bucketSelected(bucket: Bucket) {
+    this.selectedBucket.next(bucket);
+  }
+
+  locationSelected(location: Location) {
+    this.selectedLocation.next(location);
   }
   validEmail(email) {
 

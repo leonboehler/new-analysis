@@ -15,6 +15,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { LoginComponent } from './components/login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
+import { LocSelectionComponent } from './components/loc-selection/loc-selection.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { MatIconModule } from '@angular/material/icon';
     ToolbarComponent,
     MapComponent,
     SettingsComponent,
-    LoginComponent
+    LoginComponent,
+    LocSelectionComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,8 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserAnimationsModule,
     MatButtonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

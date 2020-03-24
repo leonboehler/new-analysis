@@ -17,7 +17,5 @@ export class User {
     state: string;
     country: string;
   };
-  assignedLocations: [
-      {locationId: number}
-  ];
+  assignedLocations: Array<{locationId: number}>;
 }
