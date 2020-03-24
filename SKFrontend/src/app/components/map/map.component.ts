@@ -10,8 +10,7 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import OsmSource from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
-import Style from 'ol/style/Style';
-import Icon from 'ol/style/Icon';
+import {Icon, Stroke, Style} from 'ol/style';
 import {fromLonLat} from 'ol/proj';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
@@ -26,6 +25,7 @@ import LineString from 'ol/geom/LineString';
 })
 export class MapComponent implements OnInit {
 
+    selectedFence: number;
     selectedBucket: number;
 
     constructor(private communicationService: CommunicationService,
@@ -34,8 +34,30 @@ export class MapComponent implements OnInit {
 
     ngOnInit(): void {
 
+        let fenceStyleFunction = function(feature) {
+            let style = new Style({
+                stroke: new Stroke({
+                    color: 'green',
+                    width: 7
+                })
+            })
+
+            return style;
+        }.bind(this)
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let fenceSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        let fenceLayer = new VectorLayer({
+            source: fenceSource,
+            style: fenceStyleFunction
+        })
+
+
+
         //Style Function to give the markers a dynamic Icon that changes base on bucket values
-        let styleFunction = function(feature) {
+        let bucketStyleFunction = function(feature) {
             //Default values
             let scale = 0.2;
             let color = 'white';
@@ -69,22 +91,13 @@ export class MapComponent implements OnInit {
             return style;
         }.bind(this)
 
-
-        //Create VectorSource outside the Layer to be able to add Features to it later on
-        let fenceSource = new VectorSource();
-
-        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-        let fenceLayer = new VectorLayer({
-            source: fenceSource,
-        })
-
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let bucketSource = new VectorSource();
 
         //Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
         let bucketLayer = new VectorLayer({
             source: bucketSource,
-            style: styleFunction
+            style: bucketStyleFunction
         })
 
 
@@ -107,9 +120,21 @@ export class MapComponent implements OnInit {
         //Register a click event to be able to select markers
         map.on('click', function(e){
             let selected = -1;
+
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                selected = feature.get('bucketID');
+                if(layer == fenceLayer){
+                    console.log('Fence clicked');
+                    selected = feature.get('bucketID');
+                }
             }.bind(this));
+
+            map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                if(layer == bucketLayer){
+                    console.log('Bucket clicked');
+                    selected = feature.get('bucketID');
+                }
+            }.bind(this));
+
             this.orchestratorService.bucketSelected(selected);
         }.bind(this));
 
