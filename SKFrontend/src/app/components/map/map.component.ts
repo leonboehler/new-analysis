@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {Bucket} from '../../models/Bucket';
+import {Location} from '../../models/Location';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
 import {Subscription} from 'rxjs';
@@ -25,8 +26,8 @@ import LineString from 'ol/geom/LineString';
 })
 export class MapComponent implements OnInit {
 
-    selectedFence: number;
-    selectedBucket: number;
+    selectedLocation: Location;
+    selectedBucket: Bucket;
 
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService) { }
@@ -34,10 +35,19 @@ export class MapComponent implements OnInit {
 
     ngOnInit(): void {
 
-        let fenceStyleFunction = function(feature) {
+        //Style Function to give that colors the locations dynamically
+        let locationStyleFunction = function(feature) {
+
+            //default value
+            let color = 'green';
+
+            if(feature.get('location') == this.selectedLocation){
+                color = 'blue';
+            }
+
             let style = new Style({
                 stroke: new Stroke({
-                    color: 'green',
+                    color: color,
                     width: 7
                 })
             })
@@ -46,33 +56,36 @@ export class MapComponent implements OnInit {
         }.bind(this)
 
         //Create VectorSource outside the Layer to be able to add Features to it later on
-        let fenceSource = new VectorSource();
+        let locationSource = new VectorSource();
 
         //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-        let fenceLayer = new VectorLayer({
-            source: fenceSource,
-            style: fenceStyleFunction
+        let locationLayer = new VectorLayer({
+            source: locationSource,
+            style: locationStyleFunction
         })
 
 
 
         //Style Function to give the markers a dynamic Icon that changes base on bucket values
         let bucketStyleFunction = function(feature) {
+
+            let bucket = feature.get('bucket');
+
             //Default values
             let scale = 0.2;
             let color = 'white';
 
             //Make the marker larger if it is selected
-            if(this.selectedBucket == feature.get('bucketID')){
+            if(this.selectedBucket == feature.get('bucket')){
                 scale = 0.25;
             }
 
             //Color the bucket based on fill status
-            if(feature.get('currentFrogs') == 0){
+            if(bucket.currentFrogs == 0){
                 color = 'lime'; //empty
-            } else if(feature.get('currentFrogs') < feature.get('maxFrogs')/2) {
+            } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
                 color = 'yellow'; //less than 50% full
-            } else if(feature.get('currentFrogs') < feature.get('maxFrogs')){
+            } else if(bucket.currentFrogs < bucket.maxFrogs){
                 color = 'orange'; //more than 50% full
             } else {
                 color = 'red'; //full
@@ -91,15 +104,6 @@ export class MapComponent implements OnInit {
             return style;
         }.bind(this)
 
-
-        //Create VectorSource outside the Layer to be able to add Features to it later on
-        let fenceSource = new VectorSource();
-
-        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-        let fenceLayer = new VectorLayer({
-            source: fenceSource,
-        })
-
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let bucketSource = new VectorSource();
 
@@ -117,7 +121,7 @@ export class MapComponent implements OnInit {
                 new TileLayer({
                     source: new OsmSource()
                 }),
-                fenceLayer,
+                locationLayer,
                 bucketLayer
             ],
             view: new View({
@@ -128,40 +132,59 @@ export class MapComponent implements OnInit {
 
         //Register a click event to be able to select markers
         map.on('click', function(e){
-            let selected = -1;
+            let selectedLocation = null;
+            let selectedBucket = null;
 
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                if(layer == fenceLayer){
-                    console.log('Fence clicked');
-                    selected = feature.get('bucketID');
+                if(layer == locationLayer){
+                    selectedLocation = feature.get('location');
                 }
-            }.bind(this));
-
-            map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
                 if(layer == bucketLayer){
-                    console.log('Bucket clicked');
-                    selected = feature.get('bucketID');
+                    selectedBucket = feature.get('bucket');
                 }
             }.bind(this));
 
-            this.orchestratorService.bucketSelected(selected);
+            //If a bucket is selected, don't select the location below it
+            if(selectedBucket != null){
+                selectedLocation = null;
+            }
+
+            this.orchestratorService.locationSelected(selectedLocation);
+            this.orchestratorService.bucketSelected(selectedBucket);
         }.bind(this));
 
 
-        //TODO load fences dynamically, make them thicker and color them green
-        let fenceFeatures = [];
+        //Subscribe to locations
+        this.communicationService.locations().subscribe(locations => {
 
-        let fenceCoords = [];
-        fenceCoords.push(fromLonLat([13.34545, 34.12313]));
-        fenceCoords.push(fromLonLat([14.34545, 35.12313]));
-        fenceCoords.push(fromLonLat([16.34545, 31.124513]));
+            let features = [];
+            locations.forEach(location => {
 
-        fenceFeatures.push(new Feature(({
-            geometry: new LineString(fenceCoords)
-        })));
+                let locationCoords = [];
 
-        fenceSource.addFeatures(fenceFeatures);
-        fenceLayer.changed();
+                location.routePoints.forEach(point =>
+                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                );
+
+                features.push(new Feature(({
+                    location: location,
+                    geometry: new LineString(locationCoords)
+                })));
+
+            });
+
+            locationSource.addFeatures(features);
+            locationLayer.changed();
+
+        });
+
+
+        //Subscription to update the selected location
+        this.orchestratorService.selectedLocation.subscribe(selectedLocation => {
+            this.selectedLocation = selectedLocation;
+            locationLayer.changed();
+        });
+
 
         //Subscribe to buckets
         this.communicationService.buckets().subscribe(buckets => {
@@ -170,11 +193,9 @@ export class MapComponent implements OnInit {
             buckets.forEach(bucket => {
 
                 //Create a feature that holds important information about a bucket for every bucket in the list
-                const coords = fromLonLat([bucket.longitude, bucket.latitude]);
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
-                    bucketID: bucket.id,
-                    maxFrogs: bucket.maxFrogs,
-                    currentFrogs: bucket.currentFrogs,
+                    bucket: bucket,
                     geometry: new Point(coords)
                 }));
 
