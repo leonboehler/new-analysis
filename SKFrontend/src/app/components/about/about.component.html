@@ -1,4 +1,4 @@
-<div>
+<div style="padding: 30px">
   <h2>
     Unsere Ziele:
   </h2>
@@ -12,16 +12,17 @@
   <p>Sollten sie Probleme oder Verbesserungen haben treten sie einfach mit uns in Kontakt!</p>
   <table>
     <tr>
-      <th>Name</th>
+      <th>Vorname</th>
+      <th>Nachname</th>
       <th>Email</th>
-      <th>Information</th>
     </tr>
     <tr *ngFor="let admin of adminList">
-      <td>{{ admin.name }}</td>
-      <td>{{ admin.email }}</td>
-      <td>{{ admin.info }}</td>
+      <td>{{ admin.firstName }}</td>
+      <td>{{ admin.lastName }}</td>
+      <td>{{ admin.mail }}</td>
     </tr>
   </table>
+  <br/>
 
   <h2>Impressum</h2>
   <!-- Muster Impressum von https://www.abmahnung.de/muster-impressum-eingetragener-verein-e-v -->
