@@ -21,8 +21,8 @@ export class CommunicationService {
           id: '3in31D',
           locationId: 'ErsteLoc',
           position: {
-            latitude: '48,262698',
-            longitude: '9,33563'
+            latitude: '48.262698',
+            longitude: '9.33563'
           },
           street: 'B27',
           maxFrogs: 10,
@@ -33,8 +33,8 @@ export class CommunicationService {
           id: '3in31D1',
           locationId: 'ErsteLoc',
           position: {
-            latitude: '48,264994',
-            longitude: '9,33563'
+            latitude: '48.264994',
+            longitude: '9.33563'
           },
           street: 'B27',
           maxFrogs: 10,
@@ -45,8 +45,8 @@ export class CommunicationService {
           id: '3in31D2',
           locationId: 'ErsteLoc',
           position: {
-            latitude: '48,272160',
-            longitude: '9,35259'
+            latitude: '48.272160',
+            longitude: '9.35259'
           },
           street: 'B27',
           maxFrogs: 10,
@@ -57,8 +57,8 @@ export class CommunicationService {
           id: '3in31D3',
           locationId: 'ErsteLoc',
           position: {
-            latitude: '48,274351',
-            longitude: '9,34842'
+            latitude: '48.274351',
+            longitude: '9.34842'
           },
           street: 'B27',
           maxFrogs: 10,
@@ -69,8 +69,8 @@ export class CommunicationService {
           id: 'Zw3it31D',
           locationId: 'ZweiteLoc',
           position: {
-            latitude: '47,393209',
-            longitude: '9,27823'
+            latitude: '47.393209',
+            longitude: '9.27823'
           },
           street: 'Glärnischstraße',
           maxFrogs: 20,
@@ -81,8 +81,8 @@ export class CommunicationService {
           id: 'Zw3it31D1',
           locationId: 'ZweiteLoc',
           position: {
-            latitude: '47,394144',
-            longitude: '9,265832'
+            latitude: '47.394144',
+            longitude: '9.265832'
           },
           street: 'Glärnischstraße',
           maxFrogs: 20,
@@ -93,8 +93,8 @@ export class CommunicationService {
           id: 'Zw3it31D2',
           locationId: 'ZweiteLoc',
           position: {
-            latitude: '47,395078',
-            longitude: '9,264842'
+            latitude: '47.395078',
+            longitude: '9.264842'
           },
           street: 'Glärnischstraße',
           maxFrogs: 20,
