@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router:Router) { }
   onClickRegister(){
 
-    this.router.navigate(['/login'])
+    this.router.navigate(['/map'])
   }
 
   emailFormControl = new FormControl('', [
