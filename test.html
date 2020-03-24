@@ -1,0 +1,17 @@
+<html>
+    <button onclick="test()">Click me</button> 
+    <script>
+        function  test(){
+            console.log("Hallo ahall");
+            const Http = new XMLHttpRequest();
+            const url='https://froggyrestserver20200324160726.azurewebsites.net/user/getAll';
+            console.log(url);
+            Http.open("GET", url);
+            Http.send();
+
+            Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+            }  
+        };  
+    </script>
+</html>
