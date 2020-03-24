@@ -7,6 +7,7 @@ import { DataProtectionComponent} from './components/data-protection/data-protec
 import { SettingsComponent} from './components/settings/settings.component';
 import { MapComponent} from './components/map/map.component';
 import { LoginComponent } from './components/login/login.component';
+import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path: 'privacy', component: DataProtectionComponent},
   {path: 'settings', component: SettingsComponent},
   {path: 'map', component: MapComponent},
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'locSelection', component: LocSelectionComponent}
 ];
 
 @NgModule({

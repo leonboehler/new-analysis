@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Bucket} from '../models/Bucket';
-import { Observable } from 'rxjs';
+import {observable, Observable} from 'rxjs';
 import { interval } from 'rxjs';
 import {AdminInfo} from '../models/adminInfo';
 import {User} from '../models/User';
+import {Location} from '../models/Location';
+import {Station} from '../models/Station';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +19,47 @@ export class CommunicationService {
       const list: Bucket[] = [
         {
           id: '3in31D',
-          latitude: '34.12313',
-          longitude: '12.34545',
+          locationId: 'ErsteLoc',
+          position: {
+            latitude: '48,262698',
+            longitude: '9,33563'
+          },
+          street: 'B27',
+          maxFrogs: 10,
+          currentFrogs: 0,
+          reserved: false
+        },
+        {
+          id: '3in31D1',
+          locationId: 'ErsteLoc',
+          position: {
+            latitude: '48,264994',
+            longitude: '9,33563'
+          },
+          street: 'B27',
+          maxFrogs: 10,
+          currentFrogs: 0,
+          reserved: false
+        },
+        {
+          id: '3in31D2',
+          locationId: 'ErsteLoc',
+          position: {
+            latitude: '48,272160',
+            longitude: '9,35259'
+          },
+          street: 'B27',
+          maxFrogs: 10,
+          currentFrogs: 0,
+          reserved: false
+        },
+        {
+          id: '3in31D3',
+          locationId: 'ErsteLoc',
+          position: {
+            latitude: '48,274351',
+            longitude: '9,34842'
+          },
           street: 'B27',
           maxFrogs: 10,
           currentFrogs: 0,
@@ -26,9 +67,36 @@ export class CommunicationService {
         },
         {
           id: 'Zw3it31D',
-          latitude: '31.124513',
-          longitude: '17.34545',
-          street: 'B28',
+          locationId: 'ZweiteLoc',
+          position: {
+            latitude: '47,393209',
+            longitude: '9,27823'
+          },
+          street: 'Glärnischstraße',
+          maxFrogs: 20,
+          currentFrogs: 2,
+          reserved: false
+        },
+        {
+          id: 'Zw3it31D1',
+          locationId: 'ZweiteLoc',
+          position: {
+            latitude: '47,394144',
+            longitude: '9,265832'
+          },
+          street: 'Glärnischstraße',
+          maxFrogs: 20,
+          currentFrogs: 2,
+          reserved: false
+        },
+        {
+          id: 'Zw3it31D2',
+          locationId: 'ZweiteLoc',
+          position: {
+            latitude: '47,395078',
+            longitude: '9,264842'
+          },
+          street: 'Glärnischstraße',
           maxFrogs: 20,
           currentFrogs: 2,
           reserved: false
@@ -44,6 +112,86 @@ export class CommunicationService {
       });
     });
   }
+
+  locations(): Observable<Location[]> {
+    const list: Location[] = [{
+      uuid: 'ErsteLoc',
+      stationId: 'ErsteStation',
+      street: 'B27',
+      state: 'BW',
+      battery: '60',
+      routeLength: '3000',
+      routePoints: [
+        {
+          latitude: '48.262698',
+          longitude: '9.33563'
+        },
+        {
+          latitude: '48.264994',
+          longitude: '9.33563'
+        },
+        {
+          latitude: '48.272160',
+          longitude: '9.35259'
+        },
+        {
+          latitude: '48.274351',
+          longitude: '9.34842'
+        }
+      ],
+      bucketAmount: 4
+    },
+      {
+        uuid: 'ZweiteLoc',
+        stationId: 'ZweiteStation',
+        street: 'Glärnischstraße',
+        state: 'BW',
+        battery: '20',
+        routeLength: '1000',
+        routePoints: [
+          {
+            latitude: '47.393209',
+            longitude: '9.27823'
+          },
+          {
+            latitude: '47.394144',
+            longitude: '9.265832'
+          },
+          {
+            latitude: '47.395078',
+            longitude: '9.264842'
+          }
+        ],
+        bucketAmount: 3
+      }];
+    return new Observable<Location[]>((observer) => {
+      observer.next(list);
+    });
+  }
+
+  stations(): Observable<Station[]> {
+    const list = [{
+        uuid: 'ErsteStation',
+        position: {
+          latitude: '48.27758',
+          longitude: '9.32284'
+        },
+        bucketAmount: 4
+      },
+      {
+        uuid: 'ZweiteStation',
+        position: {
+          latitude: '47.395673',
+          longitude: '9.264929'
+        },
+        bucketAmount: 3
+      }];
+
+    return new Observable<Station[]>((observer) =>{
+      observer.next(list);
+    });
+  }
+
 
   getAdmins(): Observable<AdminInfo[]> {
     return new Observable<AdminInfo[]>((observer) => {
