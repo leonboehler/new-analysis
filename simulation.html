@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bucket & Station Simulation</title>
+    <style>
+        .station
+        {
+            border: 3px dashed green;
+            padding: 5px;
+            margin: 10px;
+            display: inline-block;
+        }
+        .bucket
+        {
+            border: 3px dashed grey;
+            padding: 5px;
+            margin: 10px;
+            float: left;
+            width: auto;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Bucket & Station Simulation</h1>
+
+    <div id="station">
+        <h2>Station</h2>
+        <div id="station_text" class="station"></div>
+        <br>
+        <input type="text" id="send_interval_sta" placeholder="Sende Intervall (sek)">
+        <input type="text" id="id_sta" placeholder="Station ID">
+        <button onclick="changeStation()">Change Station</button>
+    </div>
+
+    <div id="bucket">
+        <h2>Buckets</h2>
+        <input type="text" id="send_interval_txt" placeholder="Sende Intervall (sek)">
+        <button onclick="newBucket()">Neuer Bucket</button>
+        <div id="buckets">
+        </div>
+    </div>
+
+    <script>
+        class Station 
+        {
+            constructor(station_id) 
+            {
+                this.station_id = station_id;
+                this.color = "green";
+                this.battery = 4.2;
+                this.send_interval = 15;
+                this.status = "aktiv";
+                var bucketData = [];
+                this.bucketData = bucketData;
+            }
+            display()
+            {
+                var htmlText;
+                htmlText = "Station ID: "+this.station_id+"<br>";
+                htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
+                htmlText += "Sende Intervall: "+this.send_interval+"<br>";
+                htmlText += "Status: "+this.status+"<br>";
+                document.getElementById("station_text").innerHTML = htmlText;
+
+                document.getElementById("station_text").style.borderColor = this.color;
+            }
+            send()
+            {
+                if(this.battery >= 3.3)
+                {
+                    this.battery-= 0.005*Math.floor(Math.random() * 4); 
+                    var reqest_txt = '{ "Id": '+this.station_id+', "Battery": '+this.battery.toPrecision(3)+', "Buckets": [';
+                    var first = true;
+                    this.bucketData.forEach(element => {
+                        if(!first)
+                        {
+                            reqest_txt+=",";
+                        }
+                        first = false;
+                        reqest_txt+=element;
+                    });
+                    reqest_txt+= "]}";
+                    console.log(reqest_txt);
+                    this.bucketData = [];
+
+                    sendRequest(reqest_txt);
+                }
+                else
+                {
+                    this.color = "red";
+                    this.status = "Batterie leer!";
+                }
+                this.display();
+            }
+        }
+
+        class Bucket 
+        {
+            constructor(bucket_id, station, send_interval) 
+            {
+                this.bucket_id = bucket_id;
+                this.color = "yellow";
+                this.station = station;
+                this.battery = 4.2;
+                this.frogs_amount = 0;
+                this.send_interval = send_interval;
+                this.status = "kalibrieren";
+                this.active = true;
+                var sender = setInterval(function() {bucketSend(bucket_id)}, this.send_interval*1000);
+            }
+            display()
+            {
+                if(this.active)
+                {
+                    var htmlText;
+                    htmlText = "Bucket ID: "+this.bucket_id+"<br>";
+                    htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
+                    htmlText += "Anzahl Kröten: "+this.frogs_amount+"<br>";
+                    htmlText += "Sende Intervall: "+this.send_interval+"<br>";
+                    htmlText += "Status: "+this.status+"<br>";
+                    htmlText += "<button onclick='emptyBucket(this)' value='"+this.bucket_id+"'>Bucket leeren</button><br>";
+                    htmlText += "<button onclick='deleteBucket(this)' value='"+this.bucket_id+"'>Bucket löschen</button>";
+
+                    if (!document.getElementById(this.bucket_id)) 
+                    {
+                        htmlText = "<div id='"+this.bucket_id+"' class='bucket'>"+htmlText+"</div>";
+                        document.getElementById("buckets").innerHTML += htmlText;
+                    }
+                    else
+                    {
+                        document.getElementById(this.bucket_id).innerHTML = htmlText;
+                    }
+                    document.getElementById(this.bucket_id).style.borderColor = this.color;
+                }
+                else
+                {
+                    clearInterval(this.sender);
+                }
+            }
+            send()
+            {
+                if(this.battery >= 3.3 && this.active)
+                {
+                    this.color = "green";
+                    var id = "-"+this.bucket_id+"-";
+                    console.log("send "+id);
+
+                    this.battery-= 0.005*Math.floor(Math.random() * 4); 
+                    this.frogs_amount+= Math.floor(Math.random() * 3); 
+                    this.status = "aktiv";
+
+                    this.station.bucketData.push(' {"ForgAmount": '+this.frogs_amount+', "Id": '+this.bucket_id+', "Battery": '+this.battery.toPrecision(3)+'}');
+                }
+                else
+                {
+                    this.color = "red";
+                    this.status = "Batterie leer!";
+                }
+                this.display();
+            }
+        }
+
+        var minBucketId = 1000000;
+
+        var station = new Station(123456789);
+        station.display();
+
+        var sender_station = setInterval(stationSend, station.send_interval*1000);
+
+        var buckets = [];
+
+        function changeStation()
+        {
+            if(document.getElementById("send_interval_sta").value != "")
+            {
+                station.send_interval = document.getElementById("send_interval_sta").value;
+            }
+            if(document.getElementById("id_sta").value != "")
+            {
+                station.station_id = document.getElementById("id_sta").value;
+            }
+            station.display();
+            clearInterval(sender_station);
+            sender_station = setInterval(stationSend, station.send_interval*1000);
+        }
+
+        function newBucket()
+        {
+            if(document.getElementById("send_interval_txt").value != "")
+            {
+                var newBucket = new Bucket(minBucketId++, station, document.getElementById("send_interval_txt").value);
+                buckets.push(newBucket);
+            }
+            updateBucketsVisualization();
+        }
+
+        function updateBucketsVisualization()
+        {
+            document.getElementById("buckets").innerHTML = "";
+
+            buckets.forEach(element => {
+                element.display();
+            });
+        }
+
+        function bucketSend(bucket_id)
+        {
+            buckets.forEach(element => {
+                if(element.bucket_id == bucket_id)
+                {
+                    element.send();
+                }
+            });
+        }
+
+
+        function setBucketStatus(bucket_id, status)
+        {
+            buckets.forEach(element => {
+                if(element.bucket_id == bucket_id)
+                {
+                    element.status = status;
+                    element.display();
+                }
+            });
+        }
+
+        function stationSend()
+        {
+            station.send();
+        }
+
+        function sendRequest(request_json)
+        {
+            // https://froggyrestserver20200324160726.azurewebsites.net/station/update
+            // https://webhook.site/a40e63e4-2a2e-4513-8a69-07a6210791a7
+            //request_json = '{"Id": 222222222,"Battery": 2.5,"Buckets":	[{"Id": 1111111,"Battery":0.4,"FrogAmount":0}	]}';
+            fetch('https://froggyrestserver20200324160726.azurewebsites.net/station/update', {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(request_json),
+            }).then((response) => {
+                console.log(response);
+            }).then((data) => {
+                console.log(data);
+                if(data)
+                {
+                    json = JSON.parse(data);
+                    if(json.action_station == 1)
+                    {
+                        station.color = "yellow";
+                        station.status = "neustarten";
+                        station.display();
+                    }
+                    json.action_bucket.forEach(element => {
+                        setBucketStatus(element.action_bucket, element.action);
+                    });
+                }
+            });
+        }
+
+        function setBucketStatus(bucket_id, action)
+        {
+            console.log("1");
+            buckets.forEach(element => {
+                if(element.bucket_id == bucket_id)
+                {
+                    switch (action)
+                    {
+                        case 1:
+                            element.color = "yellow";
+                            element.status = "neustarten";
+                            break;
+                        case 2:
+                            element.color = "yellow";
+                            element.status = "neu kalibrieren";
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    console.log("2");
+                    element.display();
+                }
+            });
+        }
+
+        function deleteBucket(ele) 
+        {
+            buckets.forEach(element => {
+                if(element.bucket_id == ele.value)
+                {
+                    element.active = false;
+                    updateBucketsVisualization();
+                }
+            });
+        }
+
+        function emptyBucket(ele) 
+        {
+            buckets.forEach(element => {
+                if(element.bucket_id == ele.value)
+                {
+                    element.frogs_amount = 0;
+                    element.display();
+                }
+            });
+        }
+
+    </script>
+  </body>
+</html>
