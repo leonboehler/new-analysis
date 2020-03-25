@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {OrchestratorService} from '../../services/orchestrator.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor() { }
+  isAdmin = false
+  constructor(private orchestratorService: OrchestratorService) { }
 
   ngOnInit(): void {
+    if (this.orchestratorService.getCurrentUser().role === 'admin'){
+      this.isAdmin = true;
+    }
+
   }
 
 }

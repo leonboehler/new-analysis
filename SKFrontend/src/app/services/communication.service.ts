@@ -250,6 +250,7 @@ export class CommunicationService {
   }
 
   register(user: User): Observable<boolean> {
+    console.log(user)
     return new Observable((observer) => {
       observer.next(true);
     });
@@ -264,6 +265,7 @@ export class CommunicationService {
         mail: 'paul.riedlingen@gmail.com',
         phoneNumber: '015782442045',
         password: 'password123',
+        role: 'user',
         operationalReadiness: {
           startTime: 900,
           endTime: 1800
@@ -277,7 +279,6 @@ export class CommunicationService {
           country: 'Deutschelande',
         },
         assignedLocations: [
-          {locationId: 4}
         ],
       };
 

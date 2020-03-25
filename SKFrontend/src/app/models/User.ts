@@ -5,6 +5,7 @@ export class User {
    mail: string;
    phoneNumber: string;
    password: string;
+   role: string;
    operationalReadiness: {
      startTime: number
      endTime: number
@@ -17,5 +18,5 @@ export class User {
     state: string;
     country: string;
   };
-  assignedLocations: Array<{locationId: number}>;
+  assignedLocations = new Array<string>();
 }
