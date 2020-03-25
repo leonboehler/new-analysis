@@ -26,6 +26,8 @@ import { SidePanelsComponent } from './components/side-panels/side-panels.compon
 import {MatListModule} from "@angular/material/list";
 import { HomeComponent } from './components/home/home.component';
 import { RightPanelComponent } from './components/side-panels/right-panel/right-panel.component';
+import {MatSelectModule} from '@angular/material/select';
+import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { RightPanelComponent } from './components/side-panels/right-panel/right-
     UpdatePasswordComponent,
     SidePanelsComponent,
     HomeComponent,
-    RightPanelComponent
+    RightPanelComponent,
+    TimeSelectionComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +61,8 @@ import { RightPanelComponent } from './components/side-panels/right-panel/right-
     MatCheckboxModule,
     MatIconModule,
     FlexLayoutModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

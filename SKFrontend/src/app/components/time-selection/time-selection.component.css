@@ -1,0 +1,8 @@
+.main{
+  width: min-content;
+  border: 1px solid black;
+}
+
+mat-form-field{
+  width: 18vw;
+}

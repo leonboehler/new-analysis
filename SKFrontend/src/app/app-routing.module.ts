@@ -12,6 +12,7 @@ import {LocSelectionComponent} from './components/loc-selection/loc-selection.co
 import {SidePanelsComponent} from './components/side-panels/side-panels.component';
 import { RegisterComponent} from "./components/register/register.component";
 import { HomeComponent } from './components/home/home.component';
+import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
 
 
 const routes: Routes = [
@@ -24,7 +25,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'leftpanel', component: SidePanelsComponent},
   {path: 'updatePassword', component: UpdatePasswordComponent},
-  {path: 'locSelection', component: LocSelectionComponent},
+  {path: 'locSelection', component: TimeSelectionComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'home', component: HomeComponent}
