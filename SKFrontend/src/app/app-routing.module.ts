@@ -13,10 +13,11 @@ import {LeftPanelComponent} from './components/side-panels/left-panel/left-panel
 import { RegisterComponent} from "./components/register/register.component";
 import { HomeComponent } from './components/home/home.component';
 import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
+import {CreateLocationComponent} from './components/create-location/create-location.component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/map', pathMatch: 'full'},
+  {path: '', redirectTo: '/locCreate', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
@@ -28,7 +29,8 @@ const routes: Routes = [
   {path: 'locSelection', component: TimeSelectionComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'home', component: HomeComponent}
+  {path: 'home', component: HomeComponent},
+  {path: 'locCreate', component: CreateLocationComponent}
 ];
 
 @NgModule({

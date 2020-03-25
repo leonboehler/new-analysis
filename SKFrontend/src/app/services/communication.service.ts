@@ -23,14 +23,15 @@ export class CommunicationService {
     if (this.mockUp) {
       return new Observable<Bucket[]>((observer) => {
 
-        interval(1000).subscribe(() => {
+       /* interval(1000).subscribe(() => {
           bucketList[0].currentFrogs = bucketList[0].currentFrogs + 1;
 
           if (bucketList[0].currentFrogs === 6) {
             bucketList[0].currentFrogs = 0;
           }
           observer.next(bucketList);
-        });
+        });*/
+        observer.next(bucketList);
       });
     }
 

@@ -1,0 +1,28 @@
+<div fxLayout="row">
+
+  <div fxLayout="column" class="panel">
+    <mat-accordion>
+
+      <mat-expansion-panel *ngFor="let location of locations">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ }}
+          </mat-panel-title>
+          <mat-panel-description>
+            Type your name and age
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field>
+          <mat-label>First name</mat-label>
+          <input matInput>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+
+  <div class="map-wrapper">
+    <app-map></app-map>
+  </div>
+</div>

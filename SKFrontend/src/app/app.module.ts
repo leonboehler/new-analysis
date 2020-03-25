@@ -29,6 +29,8 @@ import { RightPanelComponent } from './components/side-panels/right-panel/right-
 import {MatSelectModule} from '@angular/material/select';
 import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
 import {HttpClientModule} from '@angular/common/http';
+import { CreateLocationComponent } from './components/create-location/create-location.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import {HttpClientModule} from '@angular/common/http';
     HomeComponent,
     RightPanelComponent,
     TimeSelectionComponent,
+    CreateLocationComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import {HttpClientModule} from '@angular/common/http';
     FlexLayoutModule,
     MatListModule,
     MatSelectModule,
-    HttpClientModule
+    HttpClientModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
