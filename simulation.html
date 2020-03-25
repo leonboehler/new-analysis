@@ -54,6 +54,7 @@
                 this.status = "aktiv";
                 var bucketData = [];
                 this.bucketData = bucketData;
+                this.last_send = "nie";
             }
             display()
             {
@@ -61,6 +62,7 @@
                 htmlText = "Station ID: "+this.station_id+"<br>";
                 htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
                 htmlText += "Sende Intervall: "+this.send_interval+"<br>";
+                htmlText += "Zuletzt gesendet: "+this.last_send+"<br>";
                 htmlText += "Status: "+this.status+"<br>";
                 document.getElementById("station_text").innerHTML = htmlText;
 
@@ -82,8 +84,9 @@
                         reqest_txt+=element;
                     });
                     reqest_txt+= "]}";
-                    console.log(reqest_txt);
+                    //console.log(reqest_txt);
                     this.bucketData = [];
+                    this.last_send = new Date().toLocaleTimeString();
 
                     sendRequest(reqest_txt);
                 }
@@ -108,6 +111,7 @@
                 this.send_interval = send_interval;
                 this.status = "kalibrieren";
                 this.active = true;
+                this.last_send = "nie";
                 var sender = setInterval(function() {bucketSend(bucket_id)}, this.send_interval*1000);
             }
             display()
@@ -119,6 +123,7 @@
                     htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
                     htmlText += "Anzahl Kröten: "+this.frogs_amount+"<br>";
                     htmlText += "Sende Intervall: "+this.send_interval+"<br>";
+                    htmlText += "Zuletzt gesendet: "+this.last_send+"<br>";
                     htmlText += "Status: "+this.status+"<br>";
                     htmlText += "<button onclick='emptyBucket(this)' value='"+this.bucket_id+"'>Bucket leeren</button><br>";
                     htmlText += "<button onclick='deleteBucket(this)' value='"+this.bucket_id+"'>Bucket löschen</button>";
@@ -145,11 +150,12 @@
                 {
                     this.color = "green";
                     var id = "-"+this.bucket_id+"-";
-                    console.log("send "+id);
+                    //console.log("send "+id);
 
                     this.battery-= 0.005*Math.floor(Math.random() * 4); 
                     this.frogs_amount+= Math.floor(Math.random() * 3); 
                     this.status = "aktiv";
+                    this.last_send = new Date().toLocaleTimeString();
 
                     this.station.bucketData.push(' {"ForgAmount": '+this.frogs_amount+', "Id": '+this.bucket_id+', "Battery": '+this.battery.toPrecision(3)+'}');
                 }
@@ -234,57 +240,23 @@
 
         function sendRequest(request_json)
         {
-            //var url = "https://froggyrestserver20200324160726.azurewebsites.net/station/update"
-            // // var url = "https://webhook.site/a40e63e4-2a2e-4513-8a69-07a6210791a7"
-            // //request_json = '{"Id": 222222222,"Battery": 2.5,"Buckets":	[{"Id": 1111111,"Battery":0.4,"FrogAmount":0}	]}';
-            // fetch(url, {
-            // method: 'POST',
-            // mode: 'no-cors',
-            // cache: 'no-cache',
-            // headers: {
-            //     "Content-Type": "application/json"
-            // },
-            // body: request_json,
-            // }).then((response) => {
-            //     console.log(response);
-            // }).then((data) => {
-            //     console.log(data);
-            //     if(data)
-            //     {
-            //         json = JSON.parse(data);
-            //         if(json.action_station == 1)
-            //         {
-            //             station.color = "yellow";
-            //             station.status = "neustarten";
-            //             station.display();
-            //         }
-            //         json.action_bucket.forEach(element => {
-            //             setBucketStatus(element.action_bucket, element.action);
-            //         });
-            //     }
-            // });
-
-
-
-
-
-            var url = "https://froggyrestserver20200324160726.azurewebsites.net/user/getAll"
-            // var url = "https://webhook.site/a40e63e4-2a2e-4513-8a69-07a6210791a7"
-            //request_json = '{"Id": 222222222,"Battery": 2.5,"Buckets":	[{"Id": 1111111,"Battery":0.4,"FrogAmount":0}	]}';
+            var url = "https://froggyrestserver20200324160726.azurewebsites.net/station/update"
             fetch(url, {
-            method: 'GET',
+            method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
             },
+            body: request_json,
             }).then((response) => {
-                console.log(response);
-            }).then((data) => {
-                console.log(data);
-                if(data)
+                //console.log(response);
+            }).then((body) => {
+                //console.log(body);
+                if(body)
                 {
-                    json = JSON.parse(data);
+                    json = JSON.parse(body);
                     if(json.action_station == 1)
                     {
                         station.color = "yellow";
@@ -296,12 +268,10 @@
                     });
                 }
             });
-
         }
 
         function setBucketStatus(bucket_id, action)
         {
-            console.log("1");
             buckets.forEach(element => {
                 if(element.bucket_id == bucket_id)
                 {
@@ -319,7 +289,6 @@
                         default:
                             break;
                     }
-                    console.log("2");
                     element.display();
                 }
             });
