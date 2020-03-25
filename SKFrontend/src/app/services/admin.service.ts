@@ -19,4 +19,15 @@ export class AdminService {
    this.currentBucketData.position = position;
    this.currentBucket.next(this.currentBucketData);
   }
+
+  addBucket(bucket: Bucket) {
+    this.createdBucketsData.push(bucket)
+    this.createdBuckets.next(this.createdBucketsData)
+  }
+
+  removeBucket(bucket: Bucket) {
+    const index = this.createdBucketsData.indexOf(bucket)
+    this.createdBucketsData.splice(index, 1)
+    this.createdBuckets.next(this.createdBucketsData)
+  }
 }

@@ -15,7 +15,7 @@ export class CreateLocationComponent implements OnInit {
   ngOnInit(): void {
     this.communicationService.locations().subscribe(locations => {
       this.locations = locations;
-    })
+    });
   }
 
 }
