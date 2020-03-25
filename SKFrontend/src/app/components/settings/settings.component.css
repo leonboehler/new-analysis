@@ -10,7 +10,7 @@
   display: flex;
   font-size: 2em;
   width: 100%;
-  margin-left: 40.5%;
+  margin-left: 20.5%;
   color: red;
 }
 
@@ -25,13 +25,13 @@
 }
 
 #errorInputUserData{
-  margin-left: 11.9%;
+  margin-left: 20.5%;
   font-size: 0.85em;
   color: #d40000;
 }
 
 #errorInputAddressData{
-  margin-left: 40.5%;
+  margin-left: 20.5%;
   font-size: 0.85em;
   color: #d40000;
 }
