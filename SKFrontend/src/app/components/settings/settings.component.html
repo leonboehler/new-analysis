@@ -2,21 +2,48 @@
   <br />
   <div id="errorInputUserData"></div>
   <br />
+  <div class="optionsHeadline">
+    Nutzerdaten
+  </div>
+  <br />
+  <div id="errorInputUserData"></div>
+  <br />
   <div class="options">
-    <div id="data" *ngFor="let element of data">
-      <div *ngIf="element.changeable; else notDirectlyChangeable">
-        <mat-form-field>
-          <mat-label>{{ element.name }}</mat-label>
-          <input matInput id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" />
-        </mat-form-field>
-      </div>
-      <ng-template #notDirectlyChangeable>
-        <mat-form-field>
-          <mat-label>{{ element.name }}</mat-label>
-          <input matInput id="id{{ element.name }}" type="{{ element.type }}" value="{{ element.value }}" readonly />
-        </mat-form-field>
-      </ng-template>
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getName().name1 }}</mat-label>
+        <input matInput id="idFirstName" type="text" value="{{ getName().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getName().name2 }}</mat-label>
+        <input matInput id="idLastName" type="text" value="{{ getName().value2 }}" />
+      </mat-form-field>
     </div>
+    <div id="data">
+      <mat-label>Passwort</mat-label>
+      <br /><br />
+      <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
+    </div>
+    <br />
+  </div>
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getBirthday().name }}</mat-label>
+        <input matInput id="idBirthday" type="date" value="{{ getBirthday().value }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getPhoneNumber().name }}</mat-label>
+        <input matInput id="idPhoneNumber" type="text" value="{{ getPhoneNumber().value }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier Buttons einfügen.
+        Die stehen dann neben dem Geburtstag und der Telefonnummer, also unter dem Passwort Button.
+      -->
+    </div>
+    <br />
   </div>
   <br /><br />
   <div class="optionsHeadline">
@@ -27,15 +54,21 @@
   <br />
   <div class="options">
     <div id="data">
-    <mat-form-field>
-      <mat-label>{{ getStreetAndNumber().name1 }}</mat-label>
-      <input matInput id="idAddressStreet" type="text" value="{{ getStreetAndNumber().value1 }}" />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{ getStreetAndNumber().name2 }}</mat-label>
-      <input matInput id="idAddressStreetNumber" type="text" value="{{ getStreetAndNumber().value2 }}" />
-    </mat-form-field>
-  </div><br />
+      <mat-form-field>
+        <mat-label>{{ getStreetAndNumber().name1 }}</mat-label>
+        <input matInput id="idAddressStreet" type="text" value="{{ getStreetAndNumber().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getStreetAndNumber().name2 }}</mat-label>
+        <input matInput id="idAddressStreetNumber" type="text" value="{{ getStreetAndNumber().value2 }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
+    </div>
+    <br />
   </div>
   <div class="options">
     <div id="data">
@@ -47,6 +80,11 @@
         <mat-label>{{ getPostCodeAndCity().name2 }}</mat-label>
         <input matInput id="idAddressCity" type="text" value="{{ getPostCodeAndCity().value2 }}" />
       </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
     </div>
   </div>
   <div class="options">
@@ -60,9 +98,14 @@
         <input matInput id="idAddressState" type="text" value="{{ getCountryAndState().value2 }}" />
       </mat-form-field>
     </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
+    </div>
   </div>
   <br /><br />
-  <div class="optionsHeadline">
+  <!--<div class="optionsHeadline">
     Verf&uuml;gbare Zeiten
   </div>
   <br /><br />
@@ -78,14 +121,7 @@
       </mat-form-field>
     </div>
   </div>
-  <br />
-  <div class="options">
-    <div id="data">
-      <mat-label>Passwort</mat-label>
-      <br /><br />
-      <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
-    </div>
-  </div>
+  <br />-->
   <br /><br /><br />
   <div id="errorInput"></div>
   <div align="center">

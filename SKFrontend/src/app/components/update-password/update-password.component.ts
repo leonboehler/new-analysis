@@ -16,23 +16,26 @@ export class UpdatePasswordComponent implements OnInit {
     this.router.navigate(['settings']);
   }
 
-  checkOldPassword(): void{
-    const oldPassword = (<HTMLInputElement> document.getElementById('oldPassword')).value;
+  checkPassword(): void {
+    const oldPassword = (<HTMLInputElement>document.getElementById('oldPassword')).value;
     const currentPassword = this.oservice.getCurrentUser().password;
-    this.checkNewPassword();
+    this.checkNewPassword(oldPassword);
+
     if(oldPassword != currentPassword) {
       document.getElementById('errorOldPassword').innerHTML = '* Das Passwort muss mit Ihrem aktuellen Passwort übereinstimmen';
       this.valid = false;
     }else{
-      this.valid = true;
+      document.getElementById('errorOldPassword').innerHTML = '';
     }
+
     if(this.valid){
-      console.log('Everything is fine!');
+      // Save password to databse
+      console.log('Password saved!');
       document.getElementById('errorOldPassword').innerHTML = '';
     }
   }
 
-  checkNewPassword(): void {
+  checkNewPassword(oldPassword): void {
     const newPassword = (<HTMLInputElement>document.getElementById('newPassword')).value;
     const newPasswordRepeat = (<HTMLInputElement>document.getElementById('newPasswordRepeat')).value;
 
@@ -42,15 +45,19 @@ export class UpdatePasswordComponent implements OnInit {
     } else if (newPassword == '' || newPasswordRepeat == '') {
       this.valid = false;
       document.getElementById('errorNewPassword').innerHTML = '* Passw&ouml;rter d&uuml;rfen nicht leer sein';
-    }else if (newPassword.length < 8){
+    } else if (newPassword.length < 8) {
       this.valid = false;
       document.getElementById('errorNewPassword').innerHTML = '* Passwort muss mindestens 8 Zeichen lang sein, große und kleine Buchstaben und mindestens eine Zahl enthalten';
-    } else if(!(/([a-z][A-Z])/.test(newPassword)) && !(/([A-Z][a-z])/.test(newPassword))){
+    } else if (!(/^(?=.{8})(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])/.test(newPasswordRepeat))) {
       this.valid = false;
       document.getElementById('errorNewPassword').innerHTML = '* Passwort muss mindestens 8 Zeichen lang sein, große und kleine Buchstaben und mindestens eine Zahl enthalten';
+    }else if(newPasswordRepeat == oldPassword){
+      this.valid = false;
+      document.getElementById('errorNewPassword').innerHTML = '* Passwort darf nicht dem alten Passwort entsprechen';
     }else {
       this.valid = true;
       document.getElementById('errorNewPassword').innerHTML = '';
+      console.log('B');
     }
   }
 
