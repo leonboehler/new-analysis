@@ -11,61 +11,80 @@ import {Router} from '@angular/router';
 export class SettingsComponent implements OnInit {
 
   data: userData[];
+  showLocSelection = false;
   currentUserData = this.oservice.getCurrentUser();
 
-  constructor(private oservice: OrchestratorService, private router: Router) {}
+  constructor(private oservice: OrchestratorService, private router: Router) {console.log(this.currentUserData)}
 
   checkInput(): void {
-    const content1 = (<HTMLInputElement>document.getElementById('idVorname')).value;
-    const content2 = (<HTMLInputElement>document.getElementById('idNachname')).value;
-    const content3 = (<HTMLInputElement>document.getElementById('idGeburtstag')).value;
-    const content4 = (<HTMLInputElement>document.getElementById('idTelefonnummer')).value;
+    let valid = true;
+    const content1 = (<HTMLInputElement>document.getElementById('idFirstName')).value;
+    const content2 = (<HTMLInputElement>document.getElementById('idLastName')).value;
+    const content3 = (<HTMLInputElement>document.getElementById('idBirthday')).value;
+    const content4 = (<HTMLInputElement>document.getElementById('idPhoneNumber')).value;
     const addressStreet = (<HTMLInputElement>document.getElementById('idAddressStreet')).value;
     const addressStreetNumber = (<HTMLInputElement>document.getElementById('idAddressStreetNumber')).value;
     const addressPostCode = (<HTMLInputElement>document.getElementById('idAddressPostCode')).value;
     const addressCity = (<HTMLInputElement>document.getElementById('idAddressCity')).value;
     const addressCountry = (<HTMLInputElement>document.getElementById('idAddressCountry')).value;
     const addressState = (<HTMLInputElement>document.getElementById('idAddressState')).value;
-    const time1 = (<HTMLInputElement>document.getElementById('idTimeFrom')).value;
-    const time2 = (<HTMLInputElement>document.getElementById('idTimeTo')).value;
+    /*const time1 = (<HTMLInputElement>document.getElementById('idTimeFrom')).value;
+    const time2 = (<HTMLInputElement>document.getElementById('idTimeTo')).value;*/
     if (content1 == '' || content2 == '' || content3 == '' || content4 == ''
       || addressStreet == '' || addressStreetNumber == '' || addressPostCode == '' || addressCity == '' || addressCountry == '' || addressState == ''
-      || time1 == '' || time2 == '') {
+      /*|| time1 == '' || time2 == ''*/) {
       document.getElementById('errorInput').innerHTML = '* Bitte lassen Sie keine Felder leer';
       let birthday = this.currentUserData.birthdate.toString();
       birthday = birthday.substr(4, 4) + '-' + birthday.substr(2, 2) + '-' + birthday.substr(0, 2);
-      document.getElementById('idVorname').innerHTML = this.currentUserData.firstName;
-      document.getElementById('idNachname').innerHTML = this.currentUserData.lastName;
-      document.getElementById('idGeburtstag').innerHTML = birthday;
-      document.getElementById('idTelefonnummer').innerHTML = this.currentUserData.phoneNumber;
+      document.getElementById('idFirstName').innerHTML = this.currentUserData.firstName;
+      document.getElementById('idLastName').innerHTML = this.currentUserData.lastName;
+      document.getElementById('idBirthday').innerHTML = birthday;
+      document.getElementById('idPhoneNumber').innerHTML = this.currentUserData.phoneNumber;
       document.getElementById('idAddressStreet').innerHTML = this.currentUserData.address.street;
       document.getElementById('idAddressStreetNumber').innerHTML = this.currentUserData.address.streetNumber.toString();
       document.getElementById('idAddressPostCode').innerHTML = this.currentUserData.address.postCode.toString();
       document.getElementById('idAddressCity').innerHTML = this.currentUserData.address.city;
       document.getElementById('idAddressCountry').innerHTML = this.currentUserData.address.country;
       document.getElementById('idAddressState').innerHTML = this.currentUserData.address.state;
+      valid = false;
     } else if (/([0-9])/.test(content1) || /([0-9])/.test(content2)) {
       document.getElementById('errorInputUserData').innerHTML = '* Bitte keine Zahlen im Namen';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     } else if (/([a-z])/.test(content4) || /([A-Z])/.test(content4)) {
       document.getElementById('errorInputUserData').innerHTML = '* Bitte keine Zeichen in der Telefonnummer';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
-    } else if (/([0-9])/.test(addressStreet)) {
+      valid = false;
+    }else{
+      document.getElementById('errorInputUserData').innerHTML = '';
+    }
+
+    if (/([0-9])/.test(addressStreet)) {
       document.getElementById('errorInputAddressData').innerHTML = '* Bitte keine Zahlen in der Straße';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     } else if (addressPostCode.length != 5 || /([a-z])/.test(addressPostCode) || /([A-Z])/.test(addressPostCode)) {
       document.getElementById('errorInputAddressData').innerHTML = '* Überprüfen Sie Ihre Postleitzahl';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     }else if(/([0-9])/.test(addressCity)){
       document.getElementById('errorInputAddressData').innerHTML = '* Bitte keine Zahlen in der Stadt';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     }else if(/([0-9])/.test(addressCountry)){
       document.getElementById('errorInputAddressData').innerHTML = '* Bitte keine Zahlen im Land';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     }else if(/([0-9])/.test(addressState)){
       document.getElementById('errorInputAddressData').innerHTML = '* Bitte keine Zahlen im Bundesland';
       document.getElementById('errorInput').innerHTML = '* Bitte überprüfen Sie Ihre Eingabe';
+      valid = false;
     }else{
+      document.getElementById('errorInputAddressData').innerHTML = '';
+    }
+
+    if(valid) {
+      // Save data to database
       console.log('Save')
       document.getElementById('errorInputUserData').innerHTML = '';
       document.getElementById('errorInputAddressData').innerHTML = '';
@@ -73,7 +92,7 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  getAvailableTime(): {name1: string; name2: string; value1: any; value2: any} {
+  /*getAvailableTime(): {name1: string; name2: string; value1: any; value2: any} {
     const time = {
       name1: 'Von',
       name2: 'Bis',
@@ -81,6 +100,33 @@ export class SettingsComponent implements OnInit {
       value2: this.currentUserData.operationalReadiness.endTime
     };
     return time;
+  }*/
+
+  getName(): {name1: string; name2: string; value1: any; value2: any}{
+    const name = {
+      name1: 'Vorname',
+      name2: 'Nachname',
+      value1: this.currentUserData.firstName,
+      value2: this.currentUserData.lastName
+    };
+    return name;
+  }
+
+  getPhoneNumber(): {name: string; value: string}{
+    return {
+      name: 'Telefonnummer',
+      value: this.currentUserData.phoneNumber
+    };
+  }
+
+
+  getBirthday(): {name: string; value: string}{
+    let birthday = this.currentUserData.birthdate.toString();
+    birthday = birthday.substr(4, 4) + '-' + birthday.substr(2, 2) + '-' + birthday.substr(0, 2);
+    return {
+      name: 'Geburtstag',
+      value: birthday
+    };
   }
 
   getStreetAndNumber(): {name1: string; name2: string; value1: any; value2: any}{
@@ -113,12 +159,26 @@ export class SettingsComponent implements OnInit {
     return address;
   }
 
+  onTimesSelected(times: Array<string>) {
+    console.log(times)
+  }
+
+  onLocSelectionClick() {
+
+    this.showLocSelection = true;
+  }
+
+  onLocSelectionValueChanged(locations: Array<string>) {
+    this.showLocSelection = false;
+    console.log(locations)
+  }
+
   updatePassword(): void {
     this.router.navigate(['updatePassword']);
   }
 
   ngOnInit(): void {
-    let birthday = this.currentUserData.birthdate.toString();
+    /*let birthday = this.currentUserData.birthdate.toString();
     birthday = birthday.substr(4, 4) + '-' + birthday.substr(2, 2) + '-' + birthday.substr(0, 2);
     this.data = [
       {
@@ -157,7 +217,7 @@ export class SettingsComponent implements OnInit {
         value: this.currentUserData.password,
         changeable: false
       }
-    ];
+    ];*/
   }
 
 }

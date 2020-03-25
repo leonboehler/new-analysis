@@ -11,13 +11,20 @@ import {CommunicationService} from '../../services/communication.service';
 })
 export class LocSelectionComponent implements OnInit {
 
+  @Input() assignedIds: Array<string>;
   selectedLocations = new Array<Location>();
-  selectedLocationIds = new Array<string>();
 
-  @Output() assignedLocations = new EventEmitter()
+  @Output() valueChanged = new EventEmitter()
   constructor(private orchestratorService: OrchestratorService, private communicationService: CommunicationService) {}
 
   ngOnInit(): void {
+    this.assignedIds.forEach(id => {
+      const location = this.orchestratorService.getLocationFromId(id)
+      if (location !== null) {
+        this.selectedLocations.push(location);
+      }
+    });
+
     this.orchestratorService.selectedLocation.subscribe(location => {
       const index = this.selectedLocations.indexOf(location)
       if (location != null && index === -1) {
@@ -32,9 +39,6 @@ export class LocSelectionComponent implements OnInit {
   }
 
   onSaveButtonClick() {
-    this.selectedLocations.forEach(location => {
-      this.selectedLocationIds.push(location.uuid);
-    })
-    this.assignedLocations.emit(this.selectedLocationIds);
+    this.valueChanged.emit(this.selectedLocations);
   }
 }

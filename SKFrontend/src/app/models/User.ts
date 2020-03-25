@@ -6,10 +6,7 @@ export class User {
    phoneNumber: string;
    password: string;
    role: string;
-   operationalReadiness: {
-     startTime: number
-     endTime: number
-  };
+   operationalReadiness = new Array<string>();
   address: {
     street: string;
     streetNumber: number;
