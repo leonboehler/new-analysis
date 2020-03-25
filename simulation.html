@@ -49,7 +49,7 @@
             {
                 this.station_id = station_id;
                 this.color = "green";
-                this.battery = 4.2;
+                this.battery = 100.0;
                 this.send_interval = 60;
                 this.status = "aktiv";
                 var bucketData = [];
@@ -60,7 +60,7 @@
             {
                 var htmlText;
                 htmlText = "Station ID: "+this.station_id+"<br>";
-                htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
+                htmlText += "Batterie: "+this.battery.toPrecision(3)+"%<br>";
                 htmlText += "Sende Intervall: "+this.send_interval+"<br>";
                 htmlText += "Zuletzt gesendet: "+this.last_send+"<br>";
                 htmlText += "Status: "+this.status+"<br>";
@@ -70,9 +70,9 @@
             }
             send()
             {
-                if(this.battery >= 3.3)
+                if(this.battery >= 1.0)
                 {
-                    this.battery-= 0.005*Math.floor(Math.random() * 4); 
+                    this.battery-= 0.1*Math.floor(Math.random() * 4); 
                     var reqest_txt = '{ "Id": '+this.station_id+', "Battery": '+this.battery.toPrecision(3)+', "Buckets": [';
                     var first = true;
                     this.bucketData.forEach(element => {
@@ -106,7 +106,7 @@
                 this.bucket_id = bucket_id;
                 this.color = "yellow";
                 this.station = station;
-                this.battery = 4.2;
+                this.battery = 100.0;
                 this.frogs_amount = 0;
                 this.send_interval = send_interval;
                 this.status = "kalibrieren";
@@ -120,7 +120,7 @@
                 {
                     var htmlText;
                     htmlText = "Bucket ID: "+this.bucket_id+"<br>";
-                    htmlText += "Batterie: "+this.battery.toPrecision(3)+"<br>";
+                    htmlText += "Batterie: "+this.battery.toPrecision(3)+"%<br>";
                     htmlText += "Anzahl Kröten: "+this.frogs_amount+"<br>";
                     htmlText += "Sende Intervall: "+this.send_interval+"<br>";
                     htmlText += "Zuletzt gesendet: "+this.last_send+"<br>";
@@ -146,13 +146,13 @@
             }
             send()
             {
-                if(this.battery >= 3.3 && this.active)
+                if(this.battery >= 1.0 && this.active)
                 {
                     this.color = "green";
                     var id = "-"+this.bucket_id+"-";
                     //console.log("send "+id);
 
-                    this.battery-= 0.005*Math.floor(Math.random() * 4); 
+                    this.battery-= 0.1*Math.floor(Math.random() * 4); 
                     this.frogs_amount+= Math.floor(Math.random() * 3); 
                     this.status = "aktiv";
                     this.last_send = new Date().toLocaleTimeString();
