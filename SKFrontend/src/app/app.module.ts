@@ -28,6 +28,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RightPanelComponent } from './components/side-panels/right-panel/right-panel.component';
 import {MatSelectModule} from '@angular/material/select';
 import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
     SidePanelsComponent,
     HomeComponent,
     RightPanelComponent,
-    TimeSelectionComponent
+    TimeSelectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +63,8 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
     MatIconModule,
     FlexLayoutModule,
     MatListModule,
-    MatSelectModule
+    MatSelectModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

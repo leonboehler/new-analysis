@@ -15,7 +15,7 @@ export class OrchestratorService {
 
   currentUser: User
   constructor(private communicationService: CommunicationService) {
-    this.communicationService.user().subscribe(user => {
+    this.communicationService.currentUser().subscribe(user => {
       this.currentUser = user;
     });
   }
