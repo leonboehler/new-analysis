@@ -32,6 +32,13 @@ td {
 
   padding-right: 0em;
 }
+@media all and (max-width: 900px) {
+  .test_center {
+    padding-left: 40%;
+    padding-right: 23%;
+  }
+
+}
 
 
 
