@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import {Bucket} from '../../models/Bucket';
-import {Location} from '../../models/Location';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
+import {AdminService} from '../../services/admin.service'
 import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';
@@ -27,7 +26,8 @@ import LineString from 'ol/geom/LineString';
 export class AdminMapComponent implements OnInit {
 
     constructor(private communicationService: CommunicationService,
-                private orchestratorService: OrchestratorService) { }
+                private orchestratorService: OrchestratorService,
+                private adminService: AdminService) { }
 
 
     ngOnInit(): void {
@@ -123,7 +123,7 @@ export class AdminMapComponent implements OnInit {
         let selectInactiveSource = new VectorSource();
 
         let selectInactiveLayer = new VectorLayer({
-            source: selectInactiveSource
+            source: selectInactiveSource,
             style: new Style({
                 image: new Icon({
                     src: '/assets/bucket.png',
@@ -162,20 +162,19 @@ export class AdminMapComponent implements OnInit {
         map.on('click', function(e){
 
             if(drawMode == 'bucket'){
-                const coord = map.getCoordinateFromPixel(e.pixel);
+                const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
-                selectSource.clear()
-                selectSource.addFeature(new Feature({
-                    geometry: new Point(coord)
-                }));
-
-                this.selectedPosition.emit(toLonLat(coord));
-                console.log(toLonLat(coord));
+                this.adminService.setBucketPosition({
+                    longitude: coord[0],
+                    latitude: coord[1]
+                });
+                console.log(coord);
             } else
             if(drawMode == 'location'){
 
 
             }
+
         }.bind(this));
 
 
@@ -222,6 +221,44 @@ export class AdminMapComponent implements OnInit {
             //Update VectorSource
             bucketSource.clear();
             bucketSource.addFeatures(features);
+        });
+
+
+        //Subscribe to the bucket that is currently being created
+        this.adminService.currentBucket.subscribe(bucket => {
+
+            selectInactiveSource.clear();
+
+            if(bucket != null){
+              //Update VectorSource
+              selectInactiveSource.addFeature(new Feature({
+                  bucket: bucket,
+                  geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
+              }));
+            }
+
+
+        });
+
+
+        //Subscribe to inactive buckets
+        this.adminService.createdBuckets.subscribe(buckets => {
+
+            let features = [];
+            buckets.forEach(bucket => {
+
+                //Create a feature that holds important information about a bucket for every bucket in the list
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                features.push(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(coords)
+                }));
+
+            });
+
+            //Update VectorSource
+            selectInactiveSource.clear();
+            selectInactiveSource.addFeatures(features);
         });
 
     }
