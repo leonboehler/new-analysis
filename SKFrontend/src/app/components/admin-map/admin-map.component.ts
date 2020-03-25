@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {Bucket} from '../../models/Bucket';
 import {Location} from '../../models/Location';
@@ -28,8 +28,6 @@ export class AdminMapComponent implements OnInit {
 
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService) { }
-
-    @Output() selectedPosition = new EventEmitter();
 
 
     ngOnInit(): void {
@@ -118,7 +116,22 @@ export class AdminMapComponent implements OnInit {
         let selectSource = new VectorSource();
 
         let selectLayer = new VectorLayer({
-            source: selectSource
+            source: selectSource,
+            style: selectBucketStyle
+        })
+
+        let selectInactiveSource = new VectorSource();
+
+        let selectInactiveLayer = new VectorLayer({
+            source: selectInactiveSource
+            style: new Style({
+                image: new Icon({
+                    src: '/assets/bucket.png',
+                    imgSize: [512, 512],
+                    scale: 0.07,
+                    color: 'gray'
+                })
+            })
         })
 
 
@@ -137,6 +150,7 @@ export class AdminMapComponent implements OnInit {
                 }),
                 locationLayer,
                 bucketLayer,
+                selectInactiveLayer,
                 selectLayer
             ],
             view: view
