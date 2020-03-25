@@ -4,6 +4,7 @@ import {CommunicationService} from '../../../services/communication.service';
 import { OrchestratorService } from '../../../services/orchestrator.service';
 import {Bucket} from '../../../models/Bucket';
 
+
 /**
  * @title SidePanels as a List
  */
@@ -27,7 +28,9 @@ export class LeftPanelComponent implements OnInit {
     });
     this.orchestratorService.selectedBucket.subscribe(bucket => {
       this.selectedBucket = bucket;
-      console.log(bucket);
+      if (this.selectedBucket != null) {
+        // selectItem(this.selectedBucket.id);
+      }
     });
   }
 
