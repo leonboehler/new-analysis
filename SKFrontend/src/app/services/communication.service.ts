@@ -66,6 +66,7 @@ export class CommunicationService {
     //TODO: Server Request
   }
 
+
   login(mail: string, password: string): Observable<boolean> {
     if (this.mockUp) {
       let isUser = false;
@@ -82,6 +83,13 @@ export class CommunicationService {
     //TODO: Server Request
   }
 
+  logout(): Observable<boolean> {
+    if (this.mockUp) {
+      return new Observable((observer) => {
+        observer.next(true);
+      });
+    }
+  }
   register(user: User): Observable<boolean> {
     if (this.mockUp) {
       return new Observable((observer) => {
@@ -302,10 +310,7 @@ const currentUser: User = {
   phoneNumber: '015782442045',
   password: 'password123',
   role: 'user',
-  operationalReadiness: {
-    startTime: 900,
-    endTime: 1800
-  },
+  operationalReadiness: ['12:00'],
   address: {
     street: 'TheStreet',
     streetNumber: 12,
@@ -314,7 +319,7 @@ const currentUser: User = {
     state: 'BW',
     country: 'Deutschelande',
   },
-  assignedLocations: [
+  assignedLocations: ['ErsteLoc'
   ],
 };
 

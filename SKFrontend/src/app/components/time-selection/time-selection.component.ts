@@ -10,7 +10,7 @@ export class TimeSelectionComponent implements OnInit {
 
   times = new Array<string>()
   selectedTime = '00:00';
-  @Input() selectedTimes = new Array<string>()
+  @Input() selectedTimes: Array<string>
   @Output() valueChanged = new EventEmitter();
 
   constructor() {
@@ -28,6 +28,10 @@ export class TimeSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.selectedTimes)
+    if (this.selectedTimes == null) {
+      this.selectedTimes = new Array<string>()
+    }
   }
 
   timeToLabel(time: number) {
@@ -37,7 +41,7 @@ export class TimeSelectionComponent implements OnInit {
   onAddButtonClick() {
     if (this.selectedTimes.indexOf(this.selectedTime) === -1) {
       this.selectedTimes.push(this.selectedTime);
-      this.valueChanged.emit(this.selectedTimes)
+      this.valueChanged.emit(this.selectedTimes);
     }
   }
 

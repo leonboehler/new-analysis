@@ -13,11 +13,26 @@ export class OrchestratorService {
   selectedBucket: BehaviorSubject<Bucket> = new BehaviorSubject<Bucket>(null)
   selectedLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null)
 
+  loadedLocations = new Array<Location>()
+
   currentUser: User
   constructor(private communicationService: CommunicationService) {
     this.communicationService.currentUser().subscribe(user => {
       this.currentUser = user;
     });
+
+    this.communicationService.locations().subscribe(locations => {
+      this.loadedLocations = locations;
+    });
+  }
+
+  getLocationFromId(id: string): Location {
+    for (const location of this.loadedLocations) {
+      if (location.uuid === id) {
+        return location;
+      }
+    }
+    return null;
   }
 
   bucketSelected(bucket: Bucket) {

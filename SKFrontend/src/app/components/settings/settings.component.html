@@ -1,4 +1,5 @@
-<div>
+<app-loc-selection *ngIf="showLocSelection" [assignedIds]="currentUserData.assignedLocations" (valueChanged)="onLocSelectionValueChanged($event)"></app-loc-selection>
+<div *ngIf="!showLocSelection">
   <br />
   <div id="errorInputUserData"></div>
   <br />
@@ -38,10 +39,9 @@
       </mat-form-field>
     </div>
     <div id="data">
-      <!--
-        Hier Buttons einfügen.
-        Die stehen dann neben dem Geburtstag und der Telefonnummer, also unter dem Passwort Button.
-      -->
+      <app-time-selection [selectedTimes]="currentUserData.operationalReadiness" (valueChanged)="onTimesSelected($event)"></app-time-selection>
+      <h3>Meine Standorte</h3>
+      <button mat-raised button color="primary" (click)="onLocSelectionClick()">Ansehen und Ändern</button>
     </div>
     <br />
   </div>

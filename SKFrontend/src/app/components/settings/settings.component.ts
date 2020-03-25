@@ -11,9 +11,10 @@ import {Router} from '@angular/router';
 export class SettingsComponent implements OnInit {
 
   data: userData[];
+  showLocSelection = false;
   currentUserData = this.oservice.getCurrentUser();
 
-  constructor(private oservice: OrchestratorService, private router: Router) {}
+  constructor(private oservice: OrchestratorService, private router: Router) {console.log(this.currentUserData)}
 
   checkInput(): void {
     let valid = true;
@@ -156,6 +157,20 @@ export class SettingsComponent implements OnInit {
       value2: this.currentUserData.address.state
     };
     return address;
+  }
+
+  onTimesSelected(times: Array<string>) {
+    console.log(times)
+  }
+
+  onLocSelectionClick() {
+
+    this.showLocSelection = true;
+  }
+
+  onLocSelectionValueChanged(locations: Array<string>) {
+    this.showLocSelection = false;
+    console.log(locations)
   }
 
   updatePassword(): void {
