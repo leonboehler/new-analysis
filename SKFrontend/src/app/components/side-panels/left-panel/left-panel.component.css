@@ -1,0 +1,5 @@
+.bucketHeadline{
+  display: flex;
+  color: red;
+  margin-left: 0.75em;
+}

@@ -10,18 +10,28 @@ import {AdminMapComponent} from './components/admin-map/admin-map.component';
 import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 import { LoginComponent } from './components/login/login.component';
 import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
+import {LeftPanelComponent} from './components/side-panels/left-panel/left-panel.component';
+import { RegisterComponent} from "./components/register/register.component";
+import { HomeComponent } from './components/home/home.component';
+import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
+import {CreateLocationComponent} from './components/create-location/create-location.component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/map', pathMatch: 'full'},
+  {path: '', redirectTo: '/locCreate', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
   {path: 'settings', component: SettingsComponent},
   {path: 'map', component: AdminMapComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'leftpanel', component: LeftPanelComponent},
   {path: 'updatePassword', component: UpdatePasswordComponent},
-  {path: 'locSelection', component: LocSelectionComponent}
+  {path: 'locSelection', component: TimeSelectionComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'home', component: HomeComponent},
+  {path: 'locCreate', component: CreateLocationComponent}
 ];
 
 @NgModule({

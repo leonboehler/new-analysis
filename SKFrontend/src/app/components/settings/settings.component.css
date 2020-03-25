@@ -1,49 +1,37 @@
-.inputNotChangeable{
-  width: 75%;
-  padding: 12px 20px;
-  margin-left: 15%;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-input{
-  width: 75%;
-  padding: 12px 20px;
-  margin-left: 15%;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-input:focus{
-  border-color: #204d74;
-}
-
-input:hover{
-  color: #337ab7;
-  background-color: #fff;
-}
-
 .options{
   display: flex;
-  font-size: 2em;
+  font-size: 1.5em;
   text-align: center;
-  margin-left: 15%;
+  width: 80%;
+  margin-left: 10%;
 }
 
-.saveButton{
-  width: 20%;
-  margin-left: 40%;
+.optionsHeadline{
+  display: flex;
+  font-size: 2em;
+  width: 100%;
+  margin-left: 20.5%;
+  color: red;
 }
 
 #data{
   width: 100%;
 }
 
-p{
-  background-color: lightcoral;
-  flex: 1;
+#errorInput{
+  margin-left: 45.5%;
+  font-size: 0.85em;
+  color: #d40000;
+}
+
+#errorInputUserData{
+  margin-left: 20.5%;
+  font-size: 0.85em;
+  color: #d40000;
+}
+
+#errorInputAddressData{
+  margin-left: 20.5%;
+  font-size: 0.85em;
+  color: #d40000;
 }

@@ -1,22 +1,131 @@
-<div>
+<app-loc-selection *ngIf="showLocSelection" [assignedIds]="currentUserData.assignedLocations" (valueChanged)="onLocSelectionValueChanged($event)"></app-loc-selection>
+<div *ngIf="!showLocSelection">
+  <br />
+  <div id="errorInputUserData"></div>
+  <br />
+  <div class="optionsHeadline">
+    Nutzerdaten
+  </div>
+  <br />
+  <div id="errorInputUserData"></div>
+  <br />
   <div class="options">
-    <div id="data" *ngFor="let element of data">
-      <div *ngIf="element.name != 'Adresse'">
-        <p>{{ element.name }}</p>
-        <div *ngIf="element.changeable; else notDirectlyChangeable">
-          <input type="{{ element.type }}" value="{{ element.value }}" />
-        </div>
-        <ng-template #notDirectlyChangeable>
-          <input type="button" value="&Auml;ndern" />
-        </ng-template>
-      </div>
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getName().name1 }}</mat-label>
+        <input matInput id="idFirstName" type="text" value="{{ getName().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getName().name2 }}</mat-label>
+        <input matInput id="idLastName" type="text" value="{{ getName().value2 }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <mat-label>Passwort</mat-label>
+      <br /><br />
+      <button mat-raised-button (click)="updatePassword()">&Auml;ndern</button>
+    </div>
+    <br />
+  </div>
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getBirthday().name }}</mat-label>
+        <input matInput id="idBirthday" type="date" value="{{ getBirthday().value }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getPhoneNumber().name }}</mat-label>
+        <input matInput id="idPhoneNumber" type="text" value="{{ getPhoneNumber().value }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <app-time-selection [selectedTimes]="currentUserData.operationalReadiness" (valueChanged)="onTimesSelected($event)"></app-time-selection>
+      <h3>Meine Standorte</h3>
+      <button mat-raised button color="primary" (click)="onLocSelectionClick()">Ansehen und Ändern</button>
+    </div>
+    <br />
+  </div>
+  <br /><br />
+  <div class="optionsHeadline">
+    Adressdaten
+  </div>
+  <br />
+  <div id="errorInputAddressData"></div>
+  <br />
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getStreetAndNumber().name1 }}</mat-label>
+        <input matInput id="idAddressStreet" type="text" value="{{ getStreetAndNumber().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getStreetAndNumber().name2 }}</mat-label>
+        <input matInput id="idAddressStreetNumber" type="text" value="{{ getStreetAndNumber().value2 }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
+    </div>
+    <br />
+  </div>
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getPostCodeAndCity().name1 }}</mat-label>
+        <input matInput id="idAddressPostCode" type="text" value="{{ getPostCodeAndCity().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getPostCodeAndCity().name2 }}</mat-label>
+        <input matInput id="idAddressCity" type="text" value="{{ getPostCodeAndCity().value2 }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
     </div>
   </div>
-
-      <br /><br />
-      <p class="options">Adresse</p>
-      <input type="text" value="{{ getAddress() }}"/>
-
-  <br />
-  <input class="saveButton" type="button" value="Speichern" />
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getCountryAndState().name1 }}</mat-label>
+        <input matInput id="idAddressCountry" type="text" value="{{ getCountryAndState().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getCountryAndState().name2 }}</mat-label>
+        <input matInput id="idAddressState" type="text" value="{{ getCountryAndState().value2 }}" />
+      </mat-form-field>
+    </div>
+    <div id="data">
+      <!--
+        Hier weitere Buttons hinzufügen.
+      -->
+    </div>
+  </div>
+  <br /><br />
+  <!--<div class="optionsHeadline">
+    Verf&uuml;gbare Zeiten
+  </div>
+  <br /><br />
+  <div class="options">
+    <div id="data">
+      <mat-form-field>
+        <mat-label>{{ getAvailableTime().name1 }}</mat-label>
+        <input matInput id="idTimeFrom" type="text" value="{{ getAvailableTime().value1 }}" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ getAvailableTime().name2 }}</mat-label>
+        <input matInput id="idTimeTo" type="text" value="{{ getAvailableTime().value2 }}" />
+      </mat-form-field>
+    </div>
+  </div>
+  <br />-->
+  <br /><br /><br />
+  <div id="errorInput"></div>
+  <div align="center">
+    <button mat-raised-button color="accent" (click)="checkInput()">Speichern</button>
+  </div>
 </div>
+

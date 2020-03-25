@@ -1,0 +1,27 @@
+<div fxLayout="column" class="main">
+    <h4>Wähle die Zeiten aus, zu denen du über den aktuellen Stand deiner ausgewählten Eimer benachrichtigt werden willst.</h4>
+
+    <div fxLayout="row">
+    <mat-form-field>
+      <mat-label>Zeit</mat-label>
+      <mat-select [(value)]="selectedTime">
+      <mat-option *ngFor="let time of times" [value]="time">
+        {{time}}
+      </mat-option>
+    </mat-select>
+    </mat-form-field>
+    <button mat-icon-button (click)="onAddButtonClick()">
+      <mat-icon>add</mat-icon>
+    </button>
+    </div>
+    <mat-list role="contentinfo">
+      <h2 class="myBuckets" matSubheader>Selektierte Zeiten</h2>
+      <mat-list-item *ngFor="let time of selectedTimes; index as i;">
+        <h4 matLine> {{time}}</h4>
+        <button mat-icon-button (click)="onDeleteButtonClick(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </div>
+

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {OrchestratorService} from '../../services/orchestrator.service';
+import {CommunicationService} from '../../services/communication.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor() { }
+  isAdmin = false
+  constructor(private orchestratorService: OrchestratorService, private communicationService: CommunicationService, private router: Router) { }
 
   ngOnInit(): void {
+    if (this.orchestratorService.getCurrentUser().role === 'admin'){
+      this.isAdmin = true;
+    }
   }
-
+  onLogout() {
+    this.communicationService.logout().subscribe(result => {
+      if (result) {
+        this.router.navigate(['/login'])
+      }
+    });
+  }
 }

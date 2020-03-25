@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -9,18 +10,20 @@ export class FooterComponent implements OnInit {
 
   constructor() { }
 
+  router: Router;
+
   footerLinkList = [
     {
       text: 'Impressum',
-      link: ''
+      link: 'about'
     },
     {
       text: 'AGB',
-      link: ''
+      link: 'agb'
     },
     {
       text: 'Datenschutzerklärung',
-      link: ''
+      link: 'privacy'
     }];
 
   ngOnInit(): void {
