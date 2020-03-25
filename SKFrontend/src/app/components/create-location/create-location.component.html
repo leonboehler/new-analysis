@@ -1,25 +1,37 @@
 <div fxLayout="row">
 
   <div fxLayout="column" class="panel">
-    <mat-accordion>
 
-      <mat-expansion-panel *ngFor="let location of locations">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ }}
-          </mat-panel-title>
-          <mat-panel-description>
-            Type your name and age
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+        <mat-accordion>
 
-        <mat-form-field>
-          <mat-label>First name</mat-label>
-          <input matInput>
-        </mat-form-field>
-      </mat-expansion-panel>
-    </mat-accordion>
+        <mat-expansion-panel *ngFor="let location of locations;">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{location.uuid}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ location.street}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
+          <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Straße</mat-label>
+            <input matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>State</mat-label>
+            <input matInput>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Länge</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
   </div>
 
   <div class="map-wrapper">

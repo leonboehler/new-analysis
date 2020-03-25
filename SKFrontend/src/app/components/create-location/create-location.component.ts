@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CommunicationService} from '../../services/communication.service';
+import {Location} from '../../models/Location';
 
 @Component({
   selector: 'app-create-location',
@@ -8,10 +9,13 @@ import {CommunicationService} from '../../services/communication.service';
 })
 export class CreateLocationComponent implements OnInit {
 
-  constructor() {private communicationService: CommunicationService}
-  locName = 'Location1'
+  locations: Array<Location>
+  constructor(private communicationService: CommunicationService) {}
+
   ngOnInit(): void {
-    this.
+    this.communicationService.locations().subscribe(locations => {
+      this.locations = locations;
+    })
   }
 
 }
