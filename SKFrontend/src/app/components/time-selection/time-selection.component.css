@@ -1,6 +1,7 @@
 .main{
   width: min-content;
   border: 1px solid black;
+  padding-left: 8px;
 }
 
 mat-form-field{
