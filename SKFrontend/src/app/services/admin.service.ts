@@ -12,8 +12,13 @@ export class AdminService {
   createdBuckets = new BehaviorSubject<Bucket[]>(this.createdBucketsData)
 
   currentBucketData = new Bucket()
-  currentBucket = new BehaviorSubject<Bucket>(this.currentBucketData)
+  currentBucket = new BehaviorSubject<Bucket>(null)
   constructor() { }
+
+  setCurrentBucket(bucket: Bucket) {
+    this.currentBucketData = bucket;
+    this.currentBucket.next(this.currentBucketData);
+  }
 
   setBucketPosition(position: Position) {
    this.currentBucketData.position = position;
@@ -29,5 +34,10 @@ export class AdminService {
     const index = this.createdBucketsData.indexOf(bucket)
     this.createdBucketsData.splice(index, 1)
     this.createdBuckets.next(this.createdBucketsData)
+  }
+
+  setBuckets(buckets: Bucket[]) {
+    this.createdBucketsData = buckets;
+    this.createdBuckets.next(this.createdBucketsData);
   }
 }

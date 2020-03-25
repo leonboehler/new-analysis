@@ -7,10 +7,10 @@
         <mat-expansion-panel *ngFor="let location of locations;">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{location.uuid}}
+              {{location.locationInfo.uuid}}
             </mat-panel-title>
             <mat-panel-description>
-              {{ location.street}}
+              {{ location.locationInfo.street}}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
@@ -30,6 +30,31 @@
             <mat-label>Länge</mat-label>
             <input matInput>
           </mat-form-field>
+          <button mat-button color="primary" (click)="onEditBucketsClick(location)">Bearbeiten</button>
+          <mat-list>
+            <mat-list-item *ngFor="let bucket of location.buckets;">
+              <h1>{{bucket.id}}</h1>
+              <button mat-button color="primary" (click)="onEditBucketClick(bucket)">Bearbeiten</button>
+              <div *ngIf="currentBucket!=null && bucket.id == currentBucket.id">
+                <mat-form-field matLine>
+                  <mat-label>ID</mat-label>
+                  <input matInput>
+                </mat-form-field>
+                <mat-form-field matLine>
+                  <mat-label>maximale Froschanzahl</mat-label>
+                  <input matInput>
+                </mat-form-field>
+                <mat-form-field matLine>
+                  <mat-label>Latitude</mat-label>
+                  <input matInput>
+                </mat-form-field>
+                <mat-form-field matLine>
+                  <mat-label>Longitude</mat-label>
+                  <input matInput>
+                </mat-form-field>
+              </div>
+            </mat-list-item>
+          </mat-list>
         </mat-expansion-panel>
       </mat-accordion>
   </div>
