@@ -20,12 +20,19 @@
   flex-direction: column;
   justify-content: center;
 }
-#login_button{
-  margin-top: 1.5em;
+.full-width {
+  width: 100%;
 }
-#register_button{
-  margin-top: 0.5em;
+
+td {
+  padding-right: 8px;
 }
+#table_register_button{
+  align-content: center;
+
+  padding-right: 0em;
+}
+
 
 
 

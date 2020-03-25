@@ -12,13 +12,16 @@
       </mat-form-field>
     </div>
     <div class="button_wrapper">
-      <div class="login_btn_wrapper">
-        <button mat-raised-button color="accent" id="login_button" (click)="onClickLogin()">Login</button>
-      </div>
-      <div class="register_btn_wrapper">
-        <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister()">Registrieren</button>
-      </div>
+      <table class="full-width" cellspacing="0"><tr>
+        <td>
+          <button mat-raised-button color="accent" id="login_button" (click)="onClickLogin()">Login</button>
+        </td>
+        <td id="table_register_button" align="right">
+          <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister()">Registrieren</button>
+        </td>
+      </tr></table>
     </div>
+
   </form>
 </div>
 
