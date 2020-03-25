@@ -22,7 +22,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 import { LocSelectionComponent } from './components/loc-selection/loc-selection.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SidePanelsComponent } from './components/side-panels/side-panels.component';
+import { LeftPanelComponent } from './components/side-panels/left-panel/left-panel.component';
 import {MatListModule} from "@angular/material/list";
 import { HomeComponent } from './components/home/home.component';
 import { RightPanelComponent } from './components/side-panels/right-panel/right-panel.component';
@@ -44,7 +44,7 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
     LoginComponent,
     LocSelectionComponent,
     UpdatePasswordComponent,
-    SidePanelsComponent,
+    LeftPanelComponent,
     HomeComponent,
     RightPanelComponent,
     TimeSelectionComponent

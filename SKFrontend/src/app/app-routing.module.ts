@@ -9,7 +9,7 @@ import {MapComponent} from './components/map/map.component';
 import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 import { LoginComponent } from './components/login/login.component';
 import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
-import {SidePanelsComponent} from './components/side-panels/side-panels.component';
+import {LeftPanelComponent} from './components/side-panels/left-panel/left-panel.component';
 import { RegisterComponent} from "./components/register/register.component";
 import { HomeComponent } from './components/home/home.component';
 import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
   {path: 'settings', component: SettingsComponent},
   {path: 'map', component: MapComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'leftpanel', component: SidePanelsComponent},
+  {path: 'leftpanel', component: LeftPanelComponent},
   {path: 'updatePassword', component: UpdatePasswordComponent},
   {path: 'locSelection', component: TimeSelectionComponent},
   {path: 'login', component: LoginComponent},
