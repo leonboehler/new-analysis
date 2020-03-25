@@ -8,6 +8,7 @@ import { AgbComponent } from './components/agb/agb.component';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
+import { AdminMapComponent } from './components/admin-map/admin-map.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
