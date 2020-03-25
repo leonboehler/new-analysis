@@ -323,4 +323,3 @@ const currentUser: User = {
   assignedLocations: ['ErsteLoc'
   ],
 };
-

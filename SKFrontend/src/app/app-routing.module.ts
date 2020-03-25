@@ -6,6 +6,7 @@ import {AgbComponent} from './components/agb/agb.component';
 import {DataProtectionComponent} from './components/data-protection/data-protection.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {MapComponent} from './components/map/map.component';
+import {AdminMapComponent} from './components/admin-map/admin-map.component';
 import {UpdatePasswordComponent} from './components/update-password/update-password.component';
 import { LoginComponent } from './components/login/login.component';
 import {LocSelectionComponent} from './components/loc-selection/loc-selection.component';
@@ -22,7 +23,7 @@ const routes: Routes = [
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},
   {path: 'settings', component: SettingsComponent},
-  {path: 'map', component: MapComponent},
+  {path: 'map', component: AdminMapComponent},
   {path: 'login', component: LoginComponent},
   {path: 'leftpanel', component: LeftPanelComponent},
   {path: 'updatePassword', component: UpdatePasswordComponent},
