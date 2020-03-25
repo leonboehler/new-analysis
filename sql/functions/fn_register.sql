@@ -29,7 +29,7 @@ CREATE PROCEDURE fn_register (
 	IN pRole ENUM('USER', 'ADMIN')
 )  
 BEGIN
-	CALL proc_log('fn_register', 'REGISTER USER');
+	CALL proc_log('fn_register', CONCAT(pFirstname,' ',pLastname,' | ',pMail,' | ', pRole));
 
 	IF (pMail = '' OR LENGTH(pMail) <= 5) THEN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 301, MESSAGE_TEXT = 'please enter a valid mail';

@@ -18,7 +18,8 @@ CREATE PROCEDURE fn_insert_station_data (
 	IN pBatteryLevel decimal(2,1)
 )   
 BEGIN	
-	
+	CALL proc_log('fn_insert_station_data', 'PERFORM RECEIVING');
+
 	INSERT INTO rt_station(chip_id,  battery_level) VALUES (pChipID, pBatteryLevel);
 
 	UPDATE st_station SET battery_level = pBatteryLevel WHERE chip_id = pChipID;

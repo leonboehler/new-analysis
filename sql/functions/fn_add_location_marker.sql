@@ -11,19 +11,16 @@
 /**********************************************************************/
 delimiter //
 
-DROP PROCEDURE IF EXISTS fn_add_station//
+DROP PROCEDURE IF EXISTS fn_add_location_marker//
 
-CREATE PROCEDURE fn_add_station (
-	IN pChipID varchar(17),
+CREATE PROCEDURE fn_add_location_marker (
+	IN pLocationID int(11),
 	IN pLatitude decimal(10,7),
-	IN pLongitude decimal(10,7)
+	IN Longitude decimal(10,7)
 )    
 BEGIN	
-	
-	INSERT INTO st_station(chip_id,  latitude, longitude) VALUES(pChipID, pLatitude, pLongitude);
-  	IF (ROW_COUNT() != 1) THEN
-  		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';
-  	END IF;
+	INSERT INTO st_location_marker(location_id, latitude, longitude) VALUES(pLocationID, pLatitude, Longitude);
+	  	
 END //
 
 delimiter ;
