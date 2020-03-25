@@ -2,7 +2,7 @@
   <div>
       <h1>Selektierte Zäune</h1>
       <div fxLayout="row" *ngFor="let location of selectedLocations">
-        <p>{{ location }}</p>
+        <p>{{ location.street }}</p>
         <button mat-raised-button>X</button>
       </div>
   </div>
