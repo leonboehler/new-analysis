@@ -25,6 +25,8 @@ import LineString from 'ol/geom/LineString';
 })
 export class AdminMapComponent implements OnInit {
 
+    currentlyEditing: boolean = false;
+
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService,
                 private adminService: AdminService) { }
@@ -206,32 +208,34 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to buckets
         this.communicationService.buckets().subscribe(buckets => {
 
-            let features = [];
-            buckets.forEach(bucket => {
+            if(!this.currentlyEditing){
+                let features = [];
+                buckets.forEach(bucket => {
 
-                //Create a feature that holds important information about a bucket for every bucket in the list
-                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
-                features.push(new Feature({
-                    bucket: bucket,
-                    geometry: new Point(coords)
-                }));
+                    //Create a feature that holds important information about a bucket for every bucket in the list
+                    const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                    features.push(new Feature({
+                        bucket: bucket,
+                        geometry: new Point(coords)
+                    }));
 
-            });
+                });
 
-            //Update VectorSource
-            bucketSource.clear();
-            bucketSource.addFeatures(features);
+                //Update VectorSource
+                bucketSource.clear();
+                bucketSource.addFeatures(features);
+            }
         });
 
 
         //Subscribe to the bucket that is currently being created
         this.adminService.currentBucket.subscribe(bucket => {
 
-            selectInactiveSource.clear();
+            selectSource.clear();
 
             if(bucket != null){
               //Update VectorSource
-              selectInactiveSource.addFeature(new Feature({
+              selectSource.addFeature(new Feature({
                   bucket: bucket,
                   geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
               }));
@@ -243,6 +247,12 @@ export class AdminMapComponent implements OnInit {
 
         //Subscribe to inactive buckets
         this.adminService.createdBuckets.subscribe(buckets => {
+
+            if(buckets.length == 0){
+                this.currentlyEditing = false;
+            } else {
+                this.currentlyEditing = true;
+            }
 
             let features = [];
             buckets.forEach(bucket => {
