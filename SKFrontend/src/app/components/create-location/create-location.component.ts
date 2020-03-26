@@ -49,6 +49,7 @@ export class CreateLocationComponent implements OnInit {
 
   panelOpened(location: ExLocation){
     this.editedLocation = location
+    this.adminService.setSelectedLocation(location.locationInfo)
   }
   onEditBucketsClick() {
       this.editingBuckets = true

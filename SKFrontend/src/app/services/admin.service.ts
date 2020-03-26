@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Bucket} from '../models/Bucket';
 import {Position} from '../models/Position';
+import {LocationUpgradeModule} from '@angular/common/upgrade';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class AdminService {
 
   currentBucketData: Bucket;
   currentBucket = new BehaviorSubject<Bucket>(null)
+
+  selectedLocation = new BehaviorSubject<Location>(null)
   constructor() { }
 
   setCurrentBucket(bucket: Bucket) {
@@ -42,9 +45,13 @@ export class AdminService {
     this.createdBuckets.next(this.createdBucketsData);
   }
 
-  changeBucket(bucket: Bucket){
+  changeBucket(bucket: Bucket) {
     const index = this.createdBucketsData.indexOf(bucket)
     this.createdBucketsData[index] = bucket
     this.createdBuckets.next(this.createdBucketsData)
+  }
+
+  setSelectedLocation(location: Location) {
+    this.selectedLocation.next(location)
   }
 }
