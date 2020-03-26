@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
 import {AdminService} from '../../services/admin.service'
+import {Location} from '../../models/Location';
 import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';

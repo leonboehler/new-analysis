@@ -1,24 +1,28 @@
 <!-- start login page-->
-
-<form id="login_form" style="display: block">
-<div class="login_wrapper">
-    <div class="login_username_wrapper">
-      <input type="email" placeholder="Email" id="login_username">
+<div class="test_center">
+  <form class="login_form" style="display: block">
+    <div class="login_wrapper">
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" id="login_username" placeholder="max.m@example.com">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Passwort</mat-label>
+        <input matInput type="password" id="login_password" #setPassword minlength="8">
+      </mat-form-field>
     </div>
-    <div class="login_password_wrapper">
-      <input type="password" placeholder="Password" id="login_password">
+    <div class="button_wrapper">
+      <table class="full-width" cellspacing="0"><tr>
+        <td>
+          <button mat-raised-button color="accent" id="login_button" (click)="onClickLogin()">Login</button>
+        </td>
+        <td id="table_register_button" align="right">
+          <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister()">Registrieren</button>
+        </td>
+      </tr></table>
     </div>
-</div>
-<div class="button_wrapper">
-  <div class="login_btn_wrapper">
-    <button mat-raised-button color="accent" id="login_button" (click)="onClickLogin()">Login</button>
-  </div>
-  <div class="register_btn_wrapper">
-    <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister()">Registrieren</button>
-  </div>
-</div>
-</form>
 
-
+  </form>
+</div>
 
 

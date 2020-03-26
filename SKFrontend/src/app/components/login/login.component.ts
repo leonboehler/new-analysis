@@ -17,28 +17,13 @@ export class LoginComponent implements OnInit {
   }
 
   onClickRegister(){
-
     this.router.navigate(['/register'])
   }
 
-  registerUser(event){
-
-  }
-
-
   onClickLogin(){
 
-    const username = (<HTMLInputElement> document.getElementById('login_username')).value;
-    const password = (<HTMLInputElement> document.getElementById('login_password')).value;
-
-    if(!this.orchestratorService.validEmail(username)){
-
-
-    }
-    else if(!this.orchestratorService.validString(password)){
-      alert("Entered wrong password.")
-    }
-    else {
+    const username = (<HTMLInputElement> document.getElementById('login_username')).value
+    const password = (<HTMLInputElement> document.getElementById('login_password')).value
 
       this.communicationService.login(username, password).subscribe(response =>{
         if(response == true){
@@ -48,8 +33,6 @@ export class LoginComponent implements OnInit {
           alert("Invalid data. Try again.")
         }
       })
-    }
-
   }
 
 

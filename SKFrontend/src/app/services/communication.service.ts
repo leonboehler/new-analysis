@@ -59,7 +59,7 @@ export class CommunicationService {
                     });
 
                 });
-                
+
                 observer.next(fetchedBuckets);
             });
         });
