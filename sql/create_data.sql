@@ -23,6 +23,8 @@ CALL fn_add_readiness('max@mustermann.de' /*USER-MAIL*/,'18:00:00');
 
 CALL fn_add_assignment('max@mustermann.de' /*USER-MAIL*/,1 /*LOCATION-ID*/);
 
+CALL fn_add_job(1 /*USER-ID*/, 2 /*BUCKET-ID*/);
+
 CALL fn_add_station(222222222, 19.311143, 1.582031);
 
 CALL fn_add_location('Buchenwald', 'Der Buchenwald neben der Kirche', 'Hauptstraße','88400', 'Biberach an der Riß','Baden-Württemberg', 'Germany',12.24 /* ROUTE-LENGTH */, 1 /* STATION-ID*/);
@@ -32,7 +34,7 @@ CALL fn_add_location_marker(3, 19.311143, 1.582031);
 CALL fn_add_bucket(33,'Eimer 1', 50 /*MAX-TOADS*/, 1/*LOCATION-ID*/, 19.311143, 1.582031);
 
 
-CALL fn_insert_bucket_data(3, 66, 5.0);
+CALL fn_insert_bucket_data(33, 66, 55.10);
 
 CALL fn_insert_station_data(222222222, 2.2);
 

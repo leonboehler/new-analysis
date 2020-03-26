@@ -14,9 +14,10 @@ SET time_zone = "+01:00";
 
 DROP TABLE IF EXISTS rt_station;
 DROP TABLE IF EXISTS rt_bucket;
-DROP TABLE IF EXISTS st_bucket;
 DROP TABLE IF EXISTS st_readiness;
 DROP TABLE IF EXISTS st_assignment;
+DROP TABLE IF EXISTS st_job;
+DROP TABLE IF EXISTS st_bucket;
 DROP TABLE IF EXISTS st_location_marker;
 DROP TABLE IF EXISTS st_location;
 DROP TABLE IF EXISTS st_station;
@@ -82,7 +83,7 @@ CREATE TABLE IF NOT EXISTS st_station (
   UNIQUE KEY(chip_id), 
   latitude DECIMAL(10,7) default NULL,
   longitude DECIMAL(10,7) default NULL,  
-  battery_level decimal(2,1) default NULL,
+  battery_level decimal(4,2) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -145,6 +146,7 @@ CREATE TABLE IF NOT EXISTS st_assignment (
   UNIQUE(user_id, location_id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
 /**************************************** */
 /*** BUCKET
 /**************************************** */
@@ -160,10 +162,23 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   longitude DECIMAL(10,7) default NULL,
   toads_count int(11) default 0,
   max_toads int(11) default NULL,  
-  battery_level decimal(2,1) default NULL,
+  battery_level decimal(4,2) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
+/**************************************** */
+/*** JOB
+/**************************************** */
+CREATE TABLE IF NOT EXISTS st_job (
+  id int(11) NOT NULL auto_increment,
+  PRIMARY KEY (id),
+  user_id int(11) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES st_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bucket_id int(11) DEFAULT NULL,
+  FOREIGN KEY (bucket_id) REFERENCES st_bucket(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+  UNIQUE(user_id, bucket_id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 /**************************************** */
 /*** LOG
 /**************************************** */
@@ -183,7 +198,7 @@ CREATE TABLE IF NOT EXISTS rt_station (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   chip_id int(11) NOT NULL,   
-  battery_level decimal(2,1) NOT NULL,
+  battery_level decimal(4,2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -195,24 +210,8 @@ CREATE TABLE IF NOT EXISTS rt_bucket (
   PRIMARY KEY (id),  
   chip_id int(11) NOT NULL,
   toads_count int(11) NOT NULL,
-  battery_level decimal(2,1) NOT NULL,
+  battery_level decimal(4,2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 
-/**************************************** */
-/*** USER: SERVER
-/**************************************** */
-DROP USER IF EXISTS server;
-CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 10;
-GRANT SELECT ON dehabewe.ui_bucket TO server;
-GRANT SELECT ON dehabewe.ui_user TO server;
-GRANT SELECT ON dehabewe.ui_location TO server;
-GRANT SELECT ON dehabewe.ui_location_marker TO server;
-GRANT SELECT ON dehabewe.ui_station TO server;
-GRANT SELECT ON dehabewe.ui_assignment TO server;
-GRANT SELECT ON dehabewe.ui_readiness TO server;
-flush PRIVILEGES;
-
-/*select * from mysql.user;*/

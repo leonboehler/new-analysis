@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS fn_insert_bucket_data//
 CREATE PROCEDURE fn_insert_bucket_data (
 	IN pChipID varchar(17), 
 	IN pToadsCount int(11),
-	IN pBatteryLevel decimal(2,1)
+	IN pBatteryLevel decimal(4,2)
 ) 
   
 BEGIN	

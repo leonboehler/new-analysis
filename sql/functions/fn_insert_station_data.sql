@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS fn_insert_station_data//
 
 CREATE PROCEDURE fn_insert_station_data (
 	IN pChipID int(11), 	
-	IN pBatteryLevel decimal(2,1)
+	IN pBatteryLevel decimal(2,2)
 )   
 BEGIN	
 	CALL proc_log('fn_insert_station_data', 'PERFORM RECEIVING');

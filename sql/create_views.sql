@@ -91,6 +91,13 @@ CREATE OR REPLACE VIEW sys_assignment AS
 		
 SELECT * FROM sys_assignment;
 
+### JOBS
+CREATE OR REPLACE VIEW sys_job AS
+	SELECT *
+	FROM st_job j;
+		
+SELECT * FROM sys_job;
+
 ### STATION 
 CREATE OR REPLACE VIEW sys_station AS
 	SELECT s.id AS 'station_id', s.chip_id AS 'station_chip_id', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.location_id, l.location_name
@@ -172,3 +179,21 @@ SELECT * FROM ui_assignment;
 /**************************************** */
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
+	
+
+/**************************************** */
+/*** USER: SERVER
+/**************************************** */
+DROP USER IF EXISTS server;
+CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
+GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 10;
+GRANT SELECT ON dehabewe.ui_bucket TO server;
+GRANT SELECT ON dehabewe.ui_user TO server;
+GRANT SELECT ON dehabewe.ui_location TO server;
+GRANT SELECT ON dehabewe.ui_location_marker TO server;
+GRANT SELECT ON dehabewe.ui_station TO server;
+GRANT SELECT ON dehabewe.ui_assignment TO server;
+GRANT SELECT ON dehabewe.ui_readiness TO server;
+flush PRIVILEGES;
+
+/*select * from mysql.user;*/
