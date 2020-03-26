@@ -80,13 +80,15 @@ export class SettingsComponent implements OnInit {
       const role = this.oservice.getCurrentUser().role;
       const operationalReadiness = this.oservice.getCurrentUser().operationalReadiness;
       const assignedLocations = this.oservice.getCurrentUser().assignedLocations;
+      const aSN = Number(addressStreetNumber);
+      const aPC = Number(addressPostCode);
       const address = {
-        addressStreet,
-        addressStreetNumber,
-        addressPostCode,
-        addressCity,
-        addressState,
-        addressCountry
+        street: addressStreet,
+        streetNumber: aSN,
+        postCode: aPC,
+        city: addressCity,
+        state: addressState,
+        country: addressCountry
       }
 
       this.saveData = {
