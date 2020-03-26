@@ -10,10 +10,10 @@
             (pointerleave)="pointerLeave()"
             (click)="selectBucket(bucket.id, bucket)"
             mat-list-item *ngFor="let bucket of buckets">
-      <mat-icon *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
+      <mat-icon class="info" *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
                 [matTooltipShowDelay]="100"
                 [matTooltipHideDelay]="0">info</mat-icon>
-      <mat-icon  *ngIf="(!bucket.reserved && (bucket.currentFrogs/bucket.maxFrogs) >= 0.5)" matTooltip="Dieser Eimer muss geleert werden!"
+      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)" matTooltip="Dieser Eimer muss geleert werden!"
                  [matTooltipShowDelay]="100"
                  [matTooltipHideDelay]="0">warning</mat-icon>
       <h4 matLine>Eimer '{{bucket.id}}'</h4>
@@ -35,12 +35,12 @@
             (pointerleave)="pointerLeave()"
             (click)="selectBucket(bucket.id, bucket)"
             mat-list-item *ngFor="let bucket of buckets">
-      <mat-icon *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
+      <mat-icon class="info" *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
                 [matTooltipShowDelay]="100"
                 [matTooltipHideDelay]="0">info</mat-icon>
-      <mat-icon  *ngIf="(!bucket.reserved && (bucket.currentFrogs/bucket.maxFrogs) >= 0.5)" matTooltip="Dieser Eimer muss geleert werden!"
-                 [matTooltipShowDelay]="100"
-                 [matTooltipHideDelay]="0">warning</mat-icon>
+      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)" matTooltip="Dieser Eimer muss geleert werden!"
+                [matTooltipShowDelay]="100"
+                [matTooltipHideDelay]="0">warning</mat-icon>
       <h4 matLine>Eimer '{{bucket.id}}'</h4>
       <p matLine>
         <span>{{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten</span>

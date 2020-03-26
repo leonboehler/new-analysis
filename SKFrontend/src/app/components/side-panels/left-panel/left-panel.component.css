@@ -4,3 +4,12 @@
   margin-left: 0.75em;
   margin-top: 0.5em;
 }
+
+.warn {
+  color: red;
+}
+
+.info {
+  color: cyan;
+  text-shadow: 0 0 3px #000;
+}

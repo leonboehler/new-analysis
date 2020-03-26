@@ -13,6 +13,26 @@
     cursor: pointer;
 }
 
+#reserve {
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+}
+
 .bucketHeadline{
   color: red;
+}
+
+.info {
+  color: cyan;
+  text-shadow: 0 0 3px #000;
+}
+
+.with-icon {
+  display: flex;
+  align-items: center;
+}
+
+.text-with-icon {
+  margin-left: 0.5em;
 }
