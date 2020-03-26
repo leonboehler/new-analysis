@@ -17,12 +17,13 @@ export class AdminService {
 
   setCurrentBucket(bucket: Bucket) {
     this.currentBucketData = bucket;
+    this.changeBucket(bucket)
     this.currentBucket.next(this.currentBucketData);
   }
 
   setBucketPosition(position: Position) {
    this.currentBucketData.position = position;
-   this.currentBucket.next(this.currentBucketData);
+   this.setCurrentBucket(this.currentBucketData)
   }
 
   addBucket(bucket: Bucket) {
@@ -39,5 +40,11 @@ export class AdminService {
   setBuckets(buckets: Bucket[]) {
     this.createdBucketsData = buckets;
     this.createdBuckets.next(this.createdBucketsData);
+  }
+
+  changeBucket(bucket: Bucket){
+    const index = this.createdBucketsData.indexOf(bucket)
+    this.createdBucketsData[index] = bucket
+    this.createdBuckets.next(this.createdBucketsData)
   }
 }
