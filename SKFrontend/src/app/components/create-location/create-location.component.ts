@@ -3,6 +3,7 @@ import {CommunicationService} from '../../services/communication.service';
 import {ExLocation} from '../../models/ExLocation';
 import {Bucket} from '../../models/Bucket';
 import {AdminService} from '../../services/admin.service';
+import {range} from 'rxjs';
 
 @Component({
   selector: 'app-create-location',
@@ -45,13 +46,38 @@ export class CreateLocationComponent implements OnInit {
       this.createdBuckets = buckets;
       console.log(this.createdBuckets)
     })
+
+    this.adminService.selectedLocation.subscribe(location => {
+      if(location == null) {
+        range(0, this.locations.length).subscribe(index => {
+            this.locations[index].expanded = false;
+        })
+      }
+      range(0, this.locations.length).subscribe(index => {
+        if(this.locations[index].locationInfo.uuid === location.uuid){
+          this.locations[index].expanded = true;
+        } else {
+          this.locations[index].expanded = false;
+        }
+      })
+    })
   }
 
   panelOpened(location: ExLocation){
     this.editedLocation = location
+    this.adminService.setSelectedLocation(location.locationInfo)
+  }
+
+  panelClosed(location: ExLocation){
+      this.adminService.setSelectedLocation(null)
+      this.editingBuckets = false;
+      this.adminService.setDrawMode('none')
+      this.adminService.setCurrentBucket(null)
+      this.adminService.setBuckets(new Array<Bucket>());
   }
   onEditBucketsClick() {
       this.editingBuckets = true
+      this.adminService.setDrawMode('bucket')
       this.adminService.setBuckets(this.editedLocation.buckets)
   }
 
@@ -75,6 +101,7 @@ export class CreateLocationComponent implements OnInit {
       this.adminService.setCurrentBucket(null)
       this.adminService.setBuckets(new Array<Bucket>());
       this.editingBuckets = false;
+      this.adminService.setDrawMode('none')
   }
 
   onNewBucket() {
