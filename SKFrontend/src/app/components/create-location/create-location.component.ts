@@ -32,17 +32,18 @@ export class CreateLocationComponent implements OnInit {
         const exLocation = new ExLocation()
         exLocation.locationInfo = location
         this.locations.push(exLocation)
-      });
-    });
-    this.communicationService.buckets().subscribe(buckets => {
-      buckets.forEach(bucket => {
-        this.locations.forEach(location => {
-          if (location.locationInfo.uuid === bucket.locationId) {
-            location.buckets.push(bucket)
-          }
+        this.communicationService.buckets().subscribe(buckets => {
+          buckets.forEach(bucket => {
+            this.locations.forEach(location => {
+              if (location.locationInfo.uuid === bucket.locationId) {
+                location.buckets.push(bucket)
+              }
+            });
+          });
         });
       });
     });
+
     this.adminService.currentBucket.subscribe(bucket => {
       this.currentBucket = bucket;
     });
@@ -53,6 +54,7 @@ export class CreateLocationComponent implements OnInit {
     })
 
     this.adminService.selectedLocation.subscribe(location => {
+      if (this.locations == null) return;
       if(location == null) {
         range(0, this.locations.length).subscribe(index => {
             this.locations[index].expanded = false;
