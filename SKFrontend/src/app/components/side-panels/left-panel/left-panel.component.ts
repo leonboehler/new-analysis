@@ -14,13 +14,16 @@ import {Bucket} from '../../../models/Bucket';
   styleUrls: ['./left-panel.component.css'],
 })
 export class LeftPanelComponent implements OnInit {
-  buckets: Bucket[];
-  selectedBucket: Bucket;
 
   constructor(
     private communicationService: CommunicationService,
     private orchestratorService: OrchestratorService
   ) { }
+  buckets: Bucket[];
+  selectedBucket: Bucket;
+  clickedItem: string;
+  hoveredOverItem: string;
+  hover: boolean;
 
   ngOnInit(): void {
     this.communicationService.buckets().subscribe(buckets => {
@@ -29,12 +32,32 @@ export class LeftPanelComponent implements OnInit {
     this.orchestratorService.selectedBucket.subscribe(bucket => {
       this.selectedBucket = bucket;
       if (this.selectedBucket != null) {
-        // selectItem(this.selectedBucket.id);
+        this.clickedItem = this.selectedBucket.id;
+        this.hoveredOverItem = this.selectedBucket.id;
+      } else {
+        this.clickedItem = 'null';
+        this.hoveredOverItem = 'null';
       }
     });
   }
 
-  selectBucket(bucket: Bucket) {
+  selectBucket(item: string, bucket: Bucket) {
+    this.highlight(item);
     this.orchestratorService.bucketSelected(bucket);
+  }
+
+  highlight(item: string) {
+    this.clickedItem = item;
+  }
+
+  pointerOver(id: string) {
+    this.hover = true;
+    this.hoveredOverItem = id;
+  }
+
+  pointerLeave() {
+    if (!(this.hoveredOverItem === this.clickedItem)) {
+      this.hover = false;
+    }
   }
 }
