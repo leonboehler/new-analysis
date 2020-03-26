@@ -56,6 +56,8 @@ export class CreateLocationComponent implements OnInit {
   }
 
   onEditBucketClick(bucket: Bucket) {
+      this.adminService.removeBucket(bucket)
+      this.adminService.addBucket(bucket)
       this.adminService.setCurrentBucket(bucket)
   }
 

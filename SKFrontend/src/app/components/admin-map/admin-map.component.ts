@@ -227,11 +227,11 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to the bucket that is currently being created
         this.adminService.currentBucket.subscribe(bucket => {
 
-            selectInactiveSource.clear();
+            selectSource.clear();
 
             if(bucket != null){
               //Update VectorSource
-              selectInactiveSource.addFeature(new Feature({
+              selectSource.addFeature(new Feature({
                   bucket: bucket,
                   geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
               }));
