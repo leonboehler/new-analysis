@@ -327,7 +327,14 @@ export class AdminMapComponent implements OnInit {
             selectInactiveSource.addFeatures(features);
         });
 
+        //Subscribe to currently edited Location
         this.adminService.routePoints.subscribe(positions => {
+
+            if(positions.length == 0){
+                locationLayer.setVisible(true);
+            } else {
+                locationLayer.setVisible(false);
+            }
 
             let locationCoords = [];
 
