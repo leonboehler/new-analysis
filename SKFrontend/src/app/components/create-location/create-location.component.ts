@@ -48,6 +48,9 @@ export class CreateLocationComponent implements OnInit {
     })
 
     this.adminService.selectedLocation.subscribe(location => {
+      if(location == null) {
+        this.editedLocation.expanded = false;
+      }
       range(0, this.locations.length).subscribe(index => {
         if(this.locations[index].locationInfo.uuid === location.uuid){
           this.locations[index].expanded = true;
@@ -61,6 +64,10 @@ export class CreateLocationComponent implements OnInit {
   panelOpened(location: ExLocation){
     this.editedLocation = location
     this.adminService.setSelectedLocation(location.locationInfo)
+  }
+
+  panelClosed(location: ExLocation){
+      this.adminService.setSelectedLocation(null)
   }
   onEditBucketsClick() {
       this.editingBuckets = true

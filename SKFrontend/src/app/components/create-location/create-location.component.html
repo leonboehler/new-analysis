@@ -4,7 +4,7 @@
 
         <mat-accordion>
 
-        <mat-expansion-panel *ngFor="let location of locations;" [(expanded)]="location.expanded" (opened)="panelOpened(location)">
+        <mat-expansion-panel *ngFor="let location of locations;" [(expanded)]="location.expanded" (opened)="panelOpened(location)" (closed)="panelClosed(location)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               {{location.locationInfo.uuid}}
