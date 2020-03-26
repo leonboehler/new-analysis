@@ -1,34 +1,45 @@
-.login_wrapper{
-    padding-left: 40%;
-    padding-top: 15%;
+.test_center{
+  padding-left: 40%;
+  padding-right: 40%;
+}
+
+.login_form{
+  position: center;
+  padding-top: 15%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+}
+.login_wrapper{
+  position: center;
+  display: flex;
+  flex-direction: column;
 }
 .button_wrapper{
-  padding-left: 40%;
+  position: center;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
 }
-#login_form{
-
-}
-.login_password_wrapper{
-    padding-top: 1em;
-  float: left;
-}
-.login_btn_wrapper{
-    padding-top: 1em;
-    float: left;
+.full-width {
+  width: 100%;
 }
 
-.register_btn_wrapper{
-  padding-top: 1em;
-  padding-left: 1em;
-  float: left;
+td {
+  padding-right: 8px;
 }
-#register_button{
-  padding-right: 0.65em;
-  padding-left: 0.65em;
+#table_register_button{
+  align-content: center;
+
+  padding-right: 0em;
 }
+@media all and (max-width: 900px) {
+  .test_center {
+    padding-left: 40%;
+    padding-right: 23%;
+  }
+
+}
+
+
+
 
