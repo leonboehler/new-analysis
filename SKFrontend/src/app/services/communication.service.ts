@@ -116,7 +116,25 @@ export class CommunicationService {
       });
     } else {
       return new Observable<Station[]>((observer) => {
-        observer.next(stationList);
+          this.http.get(this.baseUrl + 'map/allstations').subscribe(returns => {
+
+              let fetchedStations = [];
+
+              returns.data.forEach(station => {
+
+                  fetchedStations.push({
+                      uuid: station.station_id,
+                      position: {
+                          longitude: station.station_longitude,
+                          latitude: station.station_latitude
+                      },
+                      bucketAmount: -1
+                  });
+
+              });
+
+              observer.next(fetchedStations)
+          });
       });
     }
   }
