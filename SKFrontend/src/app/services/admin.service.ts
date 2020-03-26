@@ -11,7 +11,7 @@ export class AdminService {
   createdBucketsData = new Array<Bucket>()
   createdBuckets = new BehaviorSubject<Bucket[]>(this.createdBucketsData)
 
-  currentBucketData = new Bucket()
+  currentBucketData: Bucket;
   currentBucket = new BehaviorSubject<Bucket>(null)
   constructor() { }
 

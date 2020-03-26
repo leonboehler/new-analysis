@@ -115,7 +115,7 @@ export class CommunicationService {
 
 const bucketList: Bucket[] = [
   {
-    id: '3in31D',
+    id: 'ErsteStation+ErsteLoc+0',
     locationId: 'ErsteLoc',
     position: {
       latitude: '48.262698',
@@ -127,7 +127,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: '3in31D1',
+    id: 'ErsteStation+ErsteLoc+1',
     locationId: 'ErsteLoc',
     position: {
       latitude: '48.264994',
@@ -139,7 +139,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: '3in31D2',
+    id: 'ErsteStation+ErsteLoc+2',
     locationId: 'ErsteLoc',
     position: {
       latitude: '48.272160',
@@ -151,7 +151,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: '3in31D3',
+    id: 'ErsteStation+ErsteLoc+3',
     locationId: 'ErsteLoc',
     position: {
       latitude: '48.274351',
@@ -163,7 +163,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: 'Zw3it31D',
+    id: 'ZweiteStation+ZweiteLoc+0',
     locationId: 'ZweiteLoc',
     position: {
       latitude: '47.393209',
@@ -175,7 +175,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: 'Zw3it31D1',
+    id: 'ZweiteStation+ZweiteLoc+1',
     locationId: 'ZweiteLoc',
     position: {
       latitude: '47.394144',
@@ -187,7 +187,7 @@ const bucketList: Bucket[] = [
     reserved: false
   },
   {
-    id: 'Zw3it31D2',
+    id: 'ZweiteStation+ZweiteLoc+2',
     locationId: 'ZweiteLoc',
     position: {
       latitude: '47.395078',

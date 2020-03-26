@@ -4,7 +4,7 @@
 
         <mat-accordion>
 
-        <mat-expansion-panel *ngFor="let location of locations;">
+        <mat-expansion-panel *ngFor="let location of locations;" (opened)="panelOpened(location)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               {{location.locationInfo.uuid}}
@@ -16,50 +16,75 @@
 
           <mat-form-field>
             <mat-label>ID</mat-label>
-            <input matInput>
+            <input id="input_location_id" matInput [value]="location.locationInfo.uuid" (input)="onInput($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Straße</mat-label>
-            <input matInput>
+            <input id="input_location_street" matInput [value]="location.locationInfo.street" (input)="onInput($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>State</mat-label>
-            <input matInput>
+            <input id="input_location_state" matInput [value]="location.locationInfo.state" (input)="onInput($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Länge</mat-label>
-            <input matInput>
+            <input matInput id="input_location_length" [value]="location.locationInfo.routeLength" (input)="onInput($event)">
           </mat-form-field>
-          <button mat-button color="primary" (click)="onEditBucketsClick(location)">Bearbeiten</button>
-          <mat-list>
-            <mat-list-item *ngFor="let bucket of location.buckets;">
-              <h1>{{bucket.id}}</h1>
-              <button mat-button color="primary" (click)="onEditBucketClick(bucket)">Bearbeiten</button>
-              <div *ngIf="currentBucket!=null && bucket.id == currentBucket.id">
-                <mat-form-field matLine>
-                  <mat-label>ID</mat-label>
-                  <input matInput>
-                </mat-form-field>
-                <mat-form-field matLine>
-                  <mat-label>maximale Froschanzahl</mat-label>
-                  <input matInput>
-                </mat-form-field>
-                <mat-form-field matLine>
-                  <mat-label>Latitude</mat-label>
-                  <input matInput>
-                </mat-form-field>
-                <mat-form-field matLine>
-                  <mat-label>Longitude</mat-label>
-                  <input matInput>
-                </mat-form-field>
+          <button mat-raised-button color="primary" (click)="onEditRoutePoints()">Bearbeite Standortverlauf</button>
+
+          <div *ngIf="editedLocation && editedLocation==location">
+            <mat-action-list>
+
+            </mat-action-list>
+          </div>
+
+          <button *ngIf="!editingBuckets " mat-raised-button color="primary" (click)="onEditBucketsClick()">Bearbeite Eimer</button>
+          <div *ngIf="editingBuckets && editedLocation==location">
+            <mat-action-list>
+
+              <mat-list-item *ngFor="let bucket of createdBuckets;">
+                <div fxLayout="row">
+              <button (click)="onEditBucketClick(bucket)">
+
+
+                <h3 *ngIf="currentBucket==null || bucket.id != currentBucket.id">{{bucket.id}}</h3>
+
+                <div *ngIf="currentBucket!=null && bucket.id == currentBucket.id" (input)="onInput($event)">
+                  <mat-form-field matLine>
+                    <mat-label>ID</mat-label>
+                    <input id="input_bucket_id" matInput [value]="currentBucket.id" (input)="onInput($event)">
+                  </mat-form-field>
+                  <mat-form-field matLine>
+                    <mat-label>maximale Froschanzahl</mat-label>
+                    <input id="input_bucket_maxFrogs" type="number" matInput [value]="currentBucket.maxFrogs" (input)="onInput($event)">
+                  </mat-form-field>
+                  <mat-form-field matLine>
+                    <mat-label>Latitude</mat-label>
+                    <input id="input_bucket_latitude" matInput [value]="currentBucket.position.latitude" (input)="onInput($event)">
+                  </mat-form-field>
+                  <mat-form-field matLine>
+                    <mat-label>Longitude</mat-label>
+                    <input id="input_bucket_longitude" matInput [value]="currentBucket.position.longitude" (input)="onInput($event)">
+                  </mat-form-field>
+                </div>
+              </button>
+                <button class="delete" mat-icon-button (click)="onDeleteBucket()"><mat-icon>delete</mat-icon></button>
               </div>
+            <mat-divider></mat-divider>
             </mat-list-item>
-          </mat-list>
+              <mat-list-item>
+              <button mat-icon-button matLine (click)="onNewBucket()">
+                <mat-icon>add</mat-icon>
+              </button>
+              </mat-list-item>
+            </mat-action-list>
+            <button mat-raised-button color="primary" (click)="saveBuckets()">Speicher Eimer</button>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
   </div>
 
   <div class="map-wrapper">
-    <app-map></app-map>
+    <app-admin-map></app-admin-map>
   </div>
 </div>

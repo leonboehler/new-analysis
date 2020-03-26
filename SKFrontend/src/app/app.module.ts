@@ -53,6 +53,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     RightPanelComponent,
     TimeSelectionComponent,
     CreateLocationComponent,
+    AdminMapComponent
   ],
   imports: [
     BrowserModule,

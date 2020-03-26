@@ -13,7 +13,10 @@ export class CreateLocationComponent implements OnInit {
 
   currentBucket: Bucket;
   locations: Array<ExLocation>
-  buckets: Array<Bucket>
+  createdBuckets: Array<Bucket>
+  editedLocation: ExLocation
+  editingBuckets = false
+  editingRoutePoints = false
   constructor(private communicationService: CommunicationService, private adminService: AdminService) {}
 
   ngOnInit(): void {
@@ -24,13 +27,10 @@ export class CreateLocationComponent implements OnInit {
         exLocation.locationInfo = location
         this.locations.push(exLocation)
       });
-      console.log(locations)
     });
     this.communicationService.buckets().subscribe(buckets => {
       buckets.forEach(bucket => {
         this.locations.forEach(location => {
-          console.log(bucket)
-          console.log(location)
           if (location.locationInfo.uuid === bucket.locationId) {
             location.buckets.push(bucket)
           }
@@ -40,14 +40,65 @@ export class CreateLocationComponent implements OnInit {
     this.adminService.currentBucket.subscribe(bucket => {
       this.currentBucket = bucket;
     });
+
+    this.adminService.createdBuckets.subscribe(buckets => {
+      this.createdBuckets = buckets;
+      console.log(this.createdBuckets)
+    })
   }
 
-  onEditBucketsClick(location: ExLocation) {
-      this.adminService.setBuckets(location.buckets)
+  panelOpened(location: ExLocation){
+    this.editedLocation = location
+  }
+  onEditBucketsClick() {
+      this.editingBuckets = true
+      this.adminService.setBuckets(this.editedLocation.buckets)
   }
 
   onEditBucketClick(bucket: Bucket) {
       this.adminService.setCurrentBucket(bucket)
+  }
+
+  onInput(event) {
+    const id = (event.target as Element).id
+    switch (id) {
+      case 'input_bucket_id': this.currentBucket.id = event.target.value; break;
+      case 'input_bucket_maxFrogs': this.currentBucket.maxFrogs = event.target.value; break;
+      case 'input_bucket_latitude': this.currentBucket.position.latitude = event.target.value; break;
+      case 'input_bucket_longitude': this.currentBucket.position.longitude = event.target.value; break;
+    }
+
+      this.adminService.setCurrentBucket(this.currentBucket)
+  }
+
+  saveBuckets(){
+      this.adminService.setCurrentBucket(null)
+      this.adminService.setBuckets(new Array<Bucket>());
+      this.editingBuckets = false;
+  }
+
+  onNewBucket() {
+    let maxIndex = 0;
+    for (const b of this.editedLocation.buckets) {
+      const index = Number.parseInt(b.id.split('+')[2], 10);
+      if (index > maxIndex) {
+        maxIndex = index;
+      }
+    }
+    const id = this.editedLocation.locationInfo.stationId + '+' + this.editedLocation.locationInfo.uuid + '+' + (maxIndex + 1);
+    const bucket = new Bucket(id, this.editedLocation.locationInfo.routePoints[0], this.editedLocation.locationInfo.street, this.editedLocation.locationInfo.uuid)
+
+    this.adminService.addBucket(bucket)
+    this.adminService.setCurrentBucket(bucket)
+
+  }
+
+  onDeleteBucket(){
+    this.adminService.removeBucket(this.currentBucket)
+  }
+
+  onEditRoutePoints(){
+
   }
 
 }
