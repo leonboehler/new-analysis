@@ -3,6 +3,7 @@ import {CommunicationService} from '../../services/communication.service';
 import {ExLocation} from '../../models/ExLocation';
 import {Bucket} from '../../models/Bucket';
 import {AdminService} from '../../services/admin.service';
+import {range} from 'rxjs';
 
 @Component({
   selector: 'app-create-location',
@@ -44,6 +45,16 @@ export class CreateLocationComponent implements OnInit {
     this.adminService.createdBuckets.subscribe(buckets => {
       this.createdBuckets = buckets;
       console.log(this.createdBuckets)
+    })
+
+    this.adminService.selectedLocation.subscribe(location => {
+      range(0, this.locations.length).subscribe(index => {
+        if(this.locations[index].locationInfo.uuid === location.uuid){
+          this.locations[index].expanded = true;
+        } else {
+          this.locations[index].expanded = false;
+        }
+      })
     })
   }
 

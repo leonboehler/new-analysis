@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {Bucket} from '../models/Bucket';
 import {Position} from '../models/Position';
 import {Location} from '../models/Location';
+import {OrchestratorService} from './orchestrator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AdminService {
 
   drawMode = new BehaviorSubject<string>('none')
 
-  constructor() { }
+  constructor(private orchestratorService: OrchestratorService) {}
 
   setCurrentBucket(bucket: Bucket) {
     this.currentBucketData = bucket;
@@ -60,5 +61,8 @@ export class AdminService {
 
   setSelectedLocation(location: Location) {
     this.selectedLocation.next(location)
+  }
+  setSelectedBucket(bucket: Bucket) {
+    this.setSelectedLocation(this.orchestratorService.getLocationFromId(bucket.locationId))
   }
 }
