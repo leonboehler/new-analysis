@@ -66,7 +66,9 @@ export class AdminService {
     this.selectedLocation.next(location)
   }
   setSelectedBucket(bucket: Bucket) {
-    this.setSelectedLocation(this.orchestratorService.getLocationFromId(bucket.locationId))
+    if(bucket != null) {
+      this.setSelectedLocation(this.orchestratorService.getLocationFromId(bucket.locationId))
+    }
   }
 
   pushRoutePoint(position: Position) {

@@ -21,6 +21,7 @@ export class CommunicationService {
 
   buckets(): Observable<Bucket[]> {
     if (this.mockUp) {
+
       return new Observable<Bucket[]>((observer) => {
 
        /* interval(1000).subscribe(() => {
@@ -35,6 +36,9 @@ export class CommunicationService {
       });
     }
 
+    this.http.get(this.baseUrl).subscribe(response => {
+
+    })
     //TODO: Server Request
   }
 

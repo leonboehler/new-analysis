@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
 import {AdminService} from '../../services/admin.service'
+import {Location} from '../../models/Location';
 import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';
@@ -70,7 +71,7 @@ export class AdminMapComponent implements OnInit {
 
           //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
           let locationEditLayer = new VectorLayer({
-              source: locatioEditnSource,
+              source: locationEditSource,
               style: new Style({
                   stroke: new Stroke({
                       color: 'blue',

@@ -52,6 +52,7 @@ export class CreateLocationComponent implements OnInit {
         range(0, this.locations.length).subscribe(index => {
             this.locations[index].expanded = false;
         })
+        return
       }
       range(0, this.locations.length).subscribe(index => {
         if(this.locations[index].locationInfo.uuid === location.uuid){
