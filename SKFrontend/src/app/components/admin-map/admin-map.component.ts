@@ -269,6 +269,25 @@ export class AdminMapComponent implements OnInit {
             selectInactiveSource.addFeatures(features);
         });
 
+
+        //Subscription to update the selected location
+        this.adminService.selectedLocation.subscribe(selectedLocation => {
+
+            //Jump to the currently selected location
+            if(selectedLocation != null){
+
+                let locationCoords = [];
+                selectedLocation.routePoints.forEach(point =>
+                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                );
+
+                let geometry = new LineString(locationCoords);
+
+                view.fit(geometry);
+                view.adjustZoom(-1);
+            }
+        });
+
     }
 
 }
