@@ -18,8 +18,6 @@ import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import LineString from 'ol/geom/LineString';
 
-import {Location} from '../../models/Location';
-
 
 @Component({
     selector: 'app-admin-map',
