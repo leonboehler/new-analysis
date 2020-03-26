@@ -17,6 +17,8 @@ import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import LineString from 'ol/geom/LineString';
 
+import {Location} from '../../models/Location';
+
 
 @Component({
     selector: 'app-admin-map',
@@ -70,7 +72,7 @@ export class AdminMapComponent implements OnInit {
 
           //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
           let locationEditLayer = new VectorLayer({
-              source: locatioEditnSource,
+              source: locationEditSource,
               style: new Style({
                   stroke: new Stroke({
                       color: 'blue',
