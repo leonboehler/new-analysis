@@ -30,15 +30,29 @@
             <mat-label>Länge</mat-label>
             <input matInput id="input_location_length" [value]="location.locationInfo.routeLength" (input)="onInput($event)">
           </mat-form-field>
-          <button mat-raised-button color="primary" (click)="onEditRoutePoints()">Bearbeite Standortverlauf</button>
-
-          <div *ngIf="editedLocation && editedLocation==location">
-            <mat-action-list>
-
-            </mat-action-list>
+          <button *ngIf="!editingRoutePoints && !editingBuckets" mat-raised-button color="primary" (click)="onEditRoutePoints()">Bearbeite Standortverlauf</button>
+          <div *ngIf="editingRoutePoints && editedLocation==location">
+            <div cdkDropList class="example-list" (cdkDropListDropped)="reorderedPoints($event)">
+              <div fxLayout="row" *ngFor="let point of createdRoutePoints" cdkDrag (mousedown)="onPositionClick(point)">
+                <button mat-icon-button (click)="onDeletePoint()"><mat-icon>delete</mat-icon></button>
+                <mat-form-field>
+                  <mat-label>Longitude</mat-label>
+                <input id="input_point_latitude" matInput [value]="point.latitude" (input)="onInputPoint($event)">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Latitude</mat-label>
+                  <input id="input_point_longitude" matInput [value]="point.longitude" (input)="onInputPoint($event)">
+                </mat-form-field>
+                <button mat-icon-button><mat-icon>drag_indicator</mat-icon></button>
+              </div>
+            </div>
+            <div fxLayout="column">
+              <button mat-icon-button (click)="onAddPoint()"><mat-icon>add</mat-icon></button>
+            <button mat-raised-button color="primary" (click)="savePoints()">Speicher Punkte</button>
+            </div>
           </div>
 
-          <button *ngIf="!editingBuckets " mat-raised-button color="primary" (click)="onEditBucketsClick()">Bearbeite Eimer</button>
+          <button *ngIf="!editingRoutePoints && !editingBuckets" mat-raised-button color="primary" (click)="onEditBucketsClick()">Bearbeite Eimer</button>
           <div *ngIf="editingBuckets && editedLocation==location">
             <mat-action-list>
 

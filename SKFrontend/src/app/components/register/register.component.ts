@@ -5,6 +5,7 @@ import { OrchestratorService } from '../../services/orchestrator.service';
 import { Router } from '@angular/router';
 import {ifError} from "assert";
 import {User} from "../../models/User";
+import {User} from "../../models/Location";
 
 @Component({
   selector: 'app-register',
@@ -16,10 +17,17 @@ export class RegisterComponent implements OnInit{
   constructor(private orchestratorService: OrchestratorService, private router: Router) { }
 
   user = new User();
+  showLocSelection = false;
 
   onTimeChanged(times: Array<string>){
-    //this.user.operationalReadiness = times;
+    this.user.operationalReadiness = times;
 
+  }
+
+  onLocSelectionFinished(locations: Array<Location>) {
+    locations.forEach(location => {
+      this.user.assignedLocations.push(location.uuid)
+    });
   }
 
   onClickRegister() {
