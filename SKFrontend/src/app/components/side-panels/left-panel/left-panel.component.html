@@ -4,20 +4,32 @@
   <mat-divider></mat-divider>
   <mat-action-list role="contentinfo">
     <h2 class="myBuckets" matSubheader>Meine Eimer</h2>
-    <button class="bucketItems" (click)="selectBucket(bucket)" mat-list-item *ngFor="let bucket of buckets">
-      <mat-icon matListIcon>warning</mat-icon>
-      <h4 matLine> {{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten in Eimer '{{bucket.id}}'</h4>
+    <button [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}" style="cursor: pointer" (pointerover)="pointerOver(bucket.id)" (pointerleave)="pointerLeave()" (click)="selectBucket(bucket.id, bucket)" mat-list-item *ngFor="let bucket of buckets">
+      <mat-icon>warning</mat-icon>
+      <h4 matLine>Eimer '{{bucket.id}}'</h4>
       <p matLine>
-        <span> Standort: {{bucket.position.latitude}}, {{bucket.position.longitude}}</span>
+        <span>{{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten</span>
+      </p>
+      <p matLine>
+        <span> Lat.: {{bucket.position.latitude}}</span>
+      </p>
+      <p matLine>
+        <span> Long.: {{bucket.position.longitude}}</span>
       </p>
       <mat-divider></mat-divider>
     </button>
     <h2 class="allBuckets" matSubheader>Alle Eimer</h2>
-    <button (click)="selectBucket(bucket)" mat-list-item *ngFor="let bucket of buckets">
-      <mat-icon matListIcon>info</mat-icon>
-      <h4 matLine> {{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten in Eimer '{{bucket.id}}'</h4>
+    <button [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}" style="cursor: pointer" (pointerover)="pointerOver(bucket.id)" (pointerleave)="pointerLeave()" (click)="selectBucket(bucket.id, bucket)" mat-list-item *ngFor="let bucket of buckets">
+      <mat-icon>warning</mat-icon>
+      <h4 matLine>Eimer '{{bucket.id}}'</h4>
       <p matLine>
-        <span> Standort: {{bucket.position.latitude}},{{bucket.position.longitude}}</span>
+        <span>{{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten</span>
+      </p>
+      <p matLine>
+        <span> Lat.: {{bucket.position.latitude}}</span>
+      </p>
+      <p matLine>
+        <span> Long.: {{bucket.position.longitude}}</span>
       </p>
       <mat-divider></mat-divider>
     </button>
