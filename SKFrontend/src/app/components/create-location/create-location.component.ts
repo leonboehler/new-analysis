@@ -181,8 +181,8 @@ export class CreateLocationComponent implements OnInit {
   onAddPoint(){
       let point: Position;
       if(this.createdRoutePoints) {
-        let lat = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].latitude,10)
-        let long = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].longitude,10)
+        let lat = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].latitude)
+        let long = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].longitude)
         lat = lat + 0.001
         long = long + 0.001
         point = new Position('' + lat,'' + long)

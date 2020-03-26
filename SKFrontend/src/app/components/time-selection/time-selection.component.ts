@@ -23,7 +23,6 @@ export class TimeSelectionComponent implements OnInit {
         label = '0' + hour;
       }
       this.times.push(`${ label }:00`);
-      this.times.push(`${ label }:30`);
     });
   }
 

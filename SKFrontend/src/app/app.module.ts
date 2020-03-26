@@ -73,26 +73,10 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatSelectModule,
     HttpClientModule,
     MatExpansionModule,
+    MatTooltipModule,
     DragDropModule
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatInputModule,
-        MatRadioModule,
-        MatCheckboxModule,
-        MatIconModule,
-        FlexLayoutModule,
-        MatListModule,
-        MatSelectModule,
-        HttpClientModule,
-        MatExpansionModule,
-        MatTooltipModule
-    ],
+
   providers: [],
   bootstrap: [AppComponent]
 })

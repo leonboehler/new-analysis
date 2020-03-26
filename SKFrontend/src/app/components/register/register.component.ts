@@ -5,7 +5,7 @@ import { OrchestratorService } from '../../services/orchestrator.service';
 import { Router } from '@angular/router';
 import {ifError} from "assert";
 import {User} from "../../models/User";
-import {User} from "../../models/Location";
+import {Location} from "../../models/Location";
 
 @Component({
   selector: 'app-register',
