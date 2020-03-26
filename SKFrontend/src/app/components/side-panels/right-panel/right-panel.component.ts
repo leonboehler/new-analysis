@@ -13,7 +13,7 @@ export class RightPanelComponent implements OnInit {
 
   buckets: Bucket[];
   selectedBucket: Bucket;
-  noBucketSelected:Boolean = true;
+  noBucketSelected = true;
 
 
   constructor(
@@ -27,13 +27,16 @@ export class RightPanelComponent implements OnInit {
     });
     this.orchestratorService.selectedBucket.subscribe(bucket => {
       this.selectedBucket = bucket;
-      console.log(bucket)
-    })
+      console.log(bucket);
+    });
   }
 
   closeSideBar() {
-    //De-select bucket thus closing sidebar
+    // De-select bucket thus closing sidebar
     this.orchestratorService.bucketSelected(null);
   }
 
+  reserveBucket() {
+    this.selectedBucket.reserved = true;
+  }
 }

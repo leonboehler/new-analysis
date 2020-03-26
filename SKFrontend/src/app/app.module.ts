@@ -33,6 +33,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,24 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatExpansionModule,
     DragDropModule
   ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatIconModule,
+        FlexLayoutModule,
+        MatListModule,
+        MatSelectModule,
+        HttpClientModule,
+        MatExpansionModule,
+        MatTooltipModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
