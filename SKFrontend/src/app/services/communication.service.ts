@@ -14,28 +14,56 @@ import {HttpClient} from '@angular/common/http';
 export class CommunicationService {
 
   baseUrl = 'https://froggyrestserver20200324160726.azurewebsites.net/'
-  mockUp = true
+  mockUp = false
   token: string
 
   constructor(private http: HttpClient) { }
 
   buckets(): Observable<Bucket[]> {
     if (this.mockUp) {
-      return new Observable<Bucket[]>((observer) => {
+        return new Observable<Bucket[]>((observer) => {
 
-       /* interval(1000).subscribe(() => {
-          bucketList[0].currentFrogs = bucketList[0].currentFrogs + 1;
+         /* interval(1000).subscribe(() => {
+            bucketList[0].currentFrogs = bucketList[0].currentFrogs + 1;
 
-          if (bucketList[0].currentFrogs === 6) {
-            bucketList[0].currentFrogs = 0;
-          }
+            if (bucketList[0].currentFrogs === 6) {
+              bucketList[0].currentFrogs = 0;
+            }
+            observer.next(bucketList);
+          });*/
+
+
+
           observer.next(bucketList);
-        });*/
-        observer.next(bucketList);
-      });
-    }
+        });
+    } else {
 
-    //TODO: Server Request
+        return new Observable<Bucket[]>((observer) => {
+            this.http.get(this.baseUrl + 'map/allbuckets').subscribe(returns => {
+
+                let fetchedBuckets = [];
+
+                returns.data.forEach(bucket => {
+
+                    fetchedBuckets.push({
+                        id: bucket.bucket_id,
+                        locationId: bucket.location_id,
+                        position: {
+                            longitude: bucket.bucket_longitude,
+                            latitude: bucket.bucket_latitude
+                        },
+                        street: '',
+                        maxFrogs: bucket.bucket_max_toads,
+                        currentFrogs: bucket.bucket_toads_count,
+                        reserved: false
+                    });
+
+                });
+                
+                observer.next(fetchedBuckets);
+            });
+        });
+    }
   }
 
   locations(): Observable<Location[]> {
@@ -43,6 +71,41 @@ export class CommunicationService {
       return new Observable<Location[]>((observer) => {
         observer.next(locationList);
       });
+    } else {
+
+      return new Observable<Location[]>((observer) => {
+        this.http.get(this.baseUrl + 'map/alllocations').subscribe(returns => {
+
+            let fetchedLocations = [];
+
+            returns.data.forEach(location => {
+
+                let routePoints = [];
+
+                location.LocationMarkers.forEach(marker => {
+                    routePoints.push({
+                        longitude: marker.longitude,
+                        latitude: marker.latitude
+                    });
+                });
+
+                fetchedLocations.push({
+                    uuid: location.location_id,
+                    stationId: location.location_station_id,
+                    street: '',
+                    state: location.location_country,
+                    routeLength: location.LocationMarkers.length,
+                    routePoints: routePoints,
+                    bucketAmount: location.location_bucket_count
+                });
+
+            });
+
+            observer.next(fetchedLocations);
+        });
+      });
+
+
     }
   }
 
@@ -51,9 +114,11 @@ export class CommunicationService {
       return new Observable<Station[]>((observer) => {
         observer.next(stationList);
       });
+    } else {
+      return new Observable<Station[]>((observer) => {
+        observer.next(stationList);
+      });
     }
-
-    //TODO: Server Request
   }
 
 
@@ -62,9 +127,11 @@ export class CommunicationService {
       return new Observable<AdminInfo[]>((observer) => {
         observer.next(adminInfoList);
       });
+    } else {
+      return new Observable<AdminInfo[]>((observer) => {
+        observer.next(adminInfoList);
+      });
     }
-
-    //TODO: Server Request
   }
 
 
@@ -79,13 +146,25 @@ export class CommunicationService {
       return new Observable<boolean>((observer) => {
         observer.next(isUser);
       });
+    } else {
+      let isUser = false;
+      userList.forEach(value => {
+        if (value.mail === mail && value.password === password) {
+          isUser = true;
+        }
+      });
+      return new Observable<boolean>((observer) => {
+        observer.next(isUser);
+      });
     }
-
-    //TODO: Server Request
   }
 
   logout(): Observable<boolean> {
     if (this.mockUp) {
+      return new Observable((observer) => {
+        observer.next(true);
+      });
+    } else {
       return new Observable((observer) => {
         observer.next(true);
       });
@@ -96,9 +175,11 @@ export class CommunicationService {
       return new Observable((observer) => {
         observer.next(true);
       });
+    } else {
+      return new Observable((observer) => {
+        observer.next(true);
+      });
     }
-
-    //TODO: Server Request
   }
 
   currentUser(): Observable<User> {
@@ -106,10 +187,12 @@ export class CommunicationService {
       return new Observable<User>((observer) => {
         observer.next(currentUser);
       });
+    } else {
+      return new Observable<User>((observer) => {
+        observer.next(currentUser);
+      });
     }
   }
-
-  //TODO: Server Request
 }
 
 
