@@ -124,32 +124,23 @@ export class AdminMapComponent implements OnInit {
             style: bucketStyleFunction
         })
 
-        let selectLocationStyle = new Style({
-            stroke: new Stroke({
-                color: 'cyan',
-                width: 7
+        let bucketEditSource = new VectorSource();
+
+        let bucketEditLayer = new VectorLayer({
+            source: bucketEditSource,
+            style: new Style({
+                image: new Icon({
+                    src: '/assets/bucket.png',
+                    imgSize: [512, 512],
+                    scale: 0.07
+                })
             })
         })
 
-        let selectBucketStyle = new Style({
-            image: new Icon({
-                src: '/assets/bucket.png',
-                imgSize: [512, 512],
-                scale: 0.07
-            })
-        })
+        let bucketEditInactiveSource = new VectorSource();
 
-        let selectSource = new VectorSource();
-
-        let selectLayer = new VectorLayer({
-            source: selectSource,
-            style: selectBucketStyle
-        })
-
-        let selectInactiveSource = new VectorSource();
-
-        let selectInactiveLayer = new VectorLayer({
-            source: selectInactiveSource,
+        let bucketEditInactiveLayer = new VectorLayer({
+            source: bucketEditInactiveSource,
             style: new Style({
                 image: new Icon({
                     src: '/assets/bucket.png',
@@ -177,8 +168,8 @@ export class AdminMapComponent implements OnInit {
                 locationLayer,
                 locationEditLayer,
                 bucketLayer,
-                selectInactiveLayer,
-                selectLayer
+                bucketEditInactiveLayer,
+                bucketEditLayer
             ],
             view: view
         });
@@ -287,11 +278,11 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to the bucket that is currently being created
         this.adminService.currentBucket.subscribe(bucket => {
 
-            selectSource.clear();
+            bucketEditSource.clear();
 
             if(bucket != null){
               //Update VectorSource
-              selectSource.addFeature(new Feature({
+              bucketEditSource.addFeature(new Feature({
                   bucket: bucket,
                   geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
               }));
@@ -323,11 +314,18 @@ export class AdminMapComponent implements OnInit {
             });
 
             //Update VectorSource
-            selectInactiveSource.clear();
-            selectInactiveSource.addFeatures(features);
+            bucketEditInactiveSource.clear();
+            bucketEditInactiveSource.addFeatures(features);
         });
 
+        //Subscribe to currently edited Location
         this.adminService.routePoints.subscribe(positions => {
+
+            if(positions.length == 0){
+                locationLayer.setVisible(true);
+            } else {
+                locationLayer.setVisible(false);
+            }
 
             let locationCoords = [];
 
