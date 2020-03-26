@@ -65,6 +65,21 @@ export class AdminMapComponent implements OnInit {
         })
 
 
+          //Create VectorSource outside the Layer to be able to add Features to it later on
+          let locationEditSource = new VectorSource();
+
+          //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+          let locationEditLayer = new VectorLayer({
+              source: locatioEditnSource,
+              style: new Style({
+                  stroke: new Stroke({
+                      color: 'blue',
+                      width: 7
+                  })
+              })
+          })
+
+
 
         //Style Function to give the markers a dynamic Icon that changes base on bucket values
         let bucketStyleFunction = function(feature) {
@@ -159,6 +174,7 @@ export class AdminMapComponent implements OnInit {
                     source: new OsmSource()
                 }),
                 locationLayer,
+                locationEditLayer,
                 bucketLayer,
                 selectInactiveLayer,
                 selectLayer
@@ -204,11 +220,14 @@ export class AdminMapComponent implements OnInit {
                     longitude: coord[0],
                     latitude: coord[1]
                 });
-                console.log(coord);
             } else
             if(this.drawMode == 'location'){
+              const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
-
+              this.adminService.pushRoutePoint({
+                  longitude: coord[0],
+                  latitude: coord[1]
+              });
             } else
             if(this.drawMode == 'station'){
 
@@ -307,6 +326,23 @@ export class AdminMapComponent implements OnInit {
             //Update VectorSource
             selectInactiveSource.clear();
             selectInactiveSource.addFeatures(features);
+        });
+
+        this.adminService.routePoints.subscribe(positions => {
+
+            let locationCoords = [];
+
+            positions.forEach(position =>
+                locationCoords.push(fromLonLat([position.longitude, position.latitude]))
+            );
+
+            locationEditSource.clear();
+
+            locationEditSource.addFeature(new Feature(({
+                location: location,
+                geometry: new LineString(locationCoords)
+            })));
+
         });
 
 
