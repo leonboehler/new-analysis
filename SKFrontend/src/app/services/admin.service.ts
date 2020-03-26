@@ -20,6 +20,9 @@ export class AdminService {
 
   drawMode = new BehaviorSubject<string>('none')
 
+  currentPointData: Position;
+  currentPoint = new BehaviorSubject<Position>(null)
+
   routePointsData = new Array<Position>()
   routePoints = new BehaviorSubject<Position[]>(this.routePointsData)
 
@@ -71,8 +74,32 @@ export class AdminService {
     }
   }
 
+  setRoutePoints(points: Array<Position>){
+    this.routePointsData = points;
+    this.routePoints.next(this.routePointsData)
+  }
   pushRoutePoint(position: Position) {
     this.routePointsData.push(position)
+    this.routePoints.next(this.routePointsData)
+  }
+
+  setCurrentPoint(point: Position) {
+    this.currentPointData = point;
+    this.changePoint(point)
+    this.currentPoint.next(this.currentPointData)
+  }
+
+  changePoint(point: Position){
+    const index = this.routePointsData.indexOf(point)
+    this.routePointsData[index] = point
+    this.routePoints.next(this.routePointsData)
+  }
+
+  removePoint(point: Position){
+    const index = this.routePointsData.indexOf(point)
+    console.log(this.routePointsData)
+    this.routePointsData.splice(index,1)
+    console.log(this.routePointsData)
     this.routePoints.next(this.routePointsData)
   }
 }

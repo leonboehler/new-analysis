@@ -32,6 +32,8 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
 import {HttpClientModule} from '@angular/common/http';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -70,8 +72,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatListModule,
     MatSelectModule,
     HttpClientModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule,
+    DragDropModule
   ],
+
   providers: [],
   bootstrap: [AppComponent]
 })

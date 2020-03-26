@@ -14,7 +14,7 @@ import {HttpClient} from '@angular/common/http';
 export class CommunicationService {
 
   baseUrl = 'https://froggyrestserver20200324160726.azurewebsites.net/'
-  mockUp = false
+  mockUp = true
   token: string
 
   constructor(private http: HttpClient) { }
@@ -224,7 +224,7 @@ const bucketList: Bucket[] = [
     },
     street: 'B27',
     maxFrogs: 10,
-    currentFrogs: 0,
+    currentFrogs: 6,
     reserved: false
   },
   {

@@ -15,7 +15,9 @@ export class LocSelectionComponent implements OnInit {
   selectedLocations = new Array<Location>();
 
   @Output() valueChanged = new EventEmitter()
-  constructor(private orchestratorService: OrchestratorService, private communicationService: CommunicationService) {}
+
+  constructor(private orchestratorService: OrchestratorService, private communicationService: CommunicationService) {
+  }
 
   ngOnInit(): void {
     this.assignedIds.forEach(id => {
@@ -35,7 +37,7 @@ export class LocSelectionComponent implements OnInit {
   }
 
   onDeleteButtonClick(index: number) {
-     this.selectedLocations.splice(index, 1);
+    this.selectedLocations.splice(index, 1);
   }
 
   onSaveButtonClick() {

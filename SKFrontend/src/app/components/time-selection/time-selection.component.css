@@ -1,5 +1,5 @@
 .main{
-  width: min-content;
+  width: available;
   border: 1px solid black;
   padding-left: 8px;
 }

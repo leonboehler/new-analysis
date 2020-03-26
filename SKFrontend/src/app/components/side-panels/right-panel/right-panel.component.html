@@ -1,6 +1,6 @@
 <div *ngIf="selectedBucket != null" class="panel">
     <div class="content">
-        <h1>
+        <h1 class="bucketHeadline">
             Eimer {{ selectedBucket?.id }}
         </h1>
         <h3>
@@ -12,6 +12,8 @@
         <h4>Latitude: {{ selectedBucket?.position?.latitude }} </h4>
         <h4>Longitude: {{ selectedBucket?.position?.longitude }} </h4>
         <h3>Frösche/Kapazität: {{ selectedBucket?.currentFrogs }}/{{ selectedBucket?.maxFrogs }} </h3>
-        <p id="close" (click)="closeSideBar()">Schließen</p>
+        <mat-icon id="close" (click)="closeSideBar()">close</mat-icon>
+
+      <button mat-raised-button color="accent" (click)="reserveBucket()">Eimer leeren/reservieren</button>
     </div>
 </div>

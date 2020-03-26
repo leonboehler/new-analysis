@@ -18,7 +18,7 @@ import {CreateLocationComponent} from './components/create-location/create-locat
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/locCreate', pathMatch: 'full'},
+  {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'agb', component: AgbComponent},
   {path: 'privacy', component: DataProtectionComponent},

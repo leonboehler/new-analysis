@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {CommunicationService} from '../../services/communication.service';
 import {ExLocation} from '../../models/ExLocation';
 import {Bucket} from '../../models/Bucket';
+import {Position} from '../../models/Position';
 import {AdminService} from '../../services/admin.service';
 import {range} from 'rxjs';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-create-location',
@@ -17,6 +19,9 @@ export class CreateLocationComponent implements OnInit {
   createdBuckets: Array<Bucket>
   editedLocation: ExLocation
   editingBuckets = false
+
+  currentPoint: Position
+  createdRoutePoints: Array<Position>
   editingRoutePoints = false
   constructor(private communicationService: CommunicationService, private adminService: AdminService) {}
 
@@ -27,17 +32,18 @@ export class CreateLocationComponent implements OnInit {
         const exLocation = new ExLocation()
         exLocation.locationInfo = location
         this.locations.push(exLocation)
-      });
-    });
-    this.communicationService.buckets().subscribe(buckets => {
-      buckets.forEach(bucket => {
-        this.locations.forEach(location => {
-          if (location.locationInfo.uuid === bucket.locationId) {
-            location.buckets.push(bucket)
-          }
+        this.communicationService.buckets().subscribe(buckets => {
+          buckets.forEach(bucket => {
+            this.locations.forEach(location => {
+              if (location.locationInfo.uuid === bucket.locationId) {
+                location.buckets.push(bucket)
+              }
+            });
+          });
         });
       });
     });
+
     this.adminService.currentBucket.subscribe(bucket => {
       this.currentBucket = bucket;
     });
@@ -48,6 +54,7 @@ export class CreateLocationComponent implements OnInit {
     })
 
     this.adminService.selectedLocation.subscribe(location => {
+      if (this.locations == null) return;
       if(location == null) {
         range(0, this.locations.length).subscribe(index => {
             this.locations[index].expanded = false;
@@ -61,6 +68,14 @@ export class CreateLocationComponent implements OnInit {
           this.locations[index].expanded = false;
         }
       })
+    })
+
+    this.adminService.routePoints.subscribe(points => {
+      this.createdRoutePoints = points;
+    })
+
+    this.adminService.currentPoint.subscribe(point => {
+      this.currentPoint = point;
     })
   }
 
@@ -84,6 +99,7 @@ export class CreateLocationComponent implements OnInit {
 
   onEditBucketClick(bucket: Bucket) {
       this.adminService.setCurrentBucket(bucket)
+      this.createdRoutePoints = this.editedLocation.locationInfo.routePoints
   }
 
   onInput(event) {
@@ -121,12 +137,61 @@ export class CreateLocationComponent implements OnInit {
 
   }
 
-  onDeleteBucket(){
+  onDeleteBucket() {
     this.adminService.removeBucket(this.currentBucket)
   }
 
-  onEditRoutePoints(){
+  onEditRoutePoints() {
+    this.editingRoutePoints = true
+    this.createdRoutePoints = this.editedLocation.locationInfo.routePoints
+    this.adminService.setRoutePoints(this.createdRoutePoints)
+    this.adminService.setDrawMode('position')
+  }
 
+  reorderedPoints(event: CdkDragDrop<Position[]>) {
+      moveItemInArray(this.createdRoutePoints, event.previousIndex, event.currentIndex);
+      this.adminService.setRoutePoints(this.createdRoutePoints)
+    }
+
+    onPositionClick(position: Position){
+        this.adminService.setCurrentPoint(position)
+        console.log('clicked')
+    }
+
+    onDeletePoint(){
+        console.log(this.currentPoint)
+        this.adminService.removePoint(this.currentPoint)
+    }
+
+  savePoints() {
+      this.adminService.setRoutePoints(null)
+      this.adminService.setDrawMode('none')
+      this.editingRoutePoints = false;
+  }
+
+  onInputPoint(event){
+    const id = (event.target as Element).id
+    switch (id) {
+      case 'input_point_latitude': this.currentPoint.latitude = event.target.value; break;
+      case 'input_point_longitude': this.currentPoint.longitude = event.target.value; break;
+      }
+      this.adminService.setCurrentPoint(this.currentPoint)
+  }
+
+  onAddPoint(){
+      let point: Position;
+      if(this.createdRoutePoints) {
+        let lat = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].latitude)
+        let long = Number.parseFloat(this.createdRoutePoints[this.createdRoutePoints.length-1].longitude)
+        lat = lat + 0.001
+        long = long + 0.001
+        point = new Position('' + lat,'' + long)
+      } else {
+        point = new Position('0', '0')
+      }
+
+      this.createdRoutePoints.push(point)
+      this.adminService.setRoutePoints(this.createdRoutePoints)
   }
 
 }

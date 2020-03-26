@@ -1,6 +1,8 @@
 <!--start register page-->
-<div class="test">
+<app-loc-selection *ngIf="showLocSelection" (valueChanged)="onLocSelectionFinished($event)"></app-loc-selection>
+<div *ngIf="!showLocSelection" class="test">
   <form class="register_form">
+    <button mat-raised-button color="accent" id="loc_selection_button" (click)="showLocSelection=true;">Setzte Einsatzgebiete</button>
     <div class="register_personaldata">
       <mat-form-field class="full-width">
         <mat-label>Vorname</mat-label>
@@ -58,12 +60,11 @@
         <mat-label>Land</mat-label>
         <input matInput disabled value="Deutschland" id="input_country">
       </mat-form-field>
-
-      <app-time-selection [selectedTimes]="[]" (valueChanged)="onTimeChanged($event)"></app-time-selection>
-
-      <mat-checkbox id="input_agb">AGB`s akzeptieren</mat-checkbox>
-      <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister();">Registrieren</button>
-
     </div>
+  </form>
+  <app-time-selection [selectedTimes]="[]"></app-time-selection>
+  <form class="register_form">
+  <mat-checkbox id="input_agb">AGB`s akzeptieren</mat-checkbox>
+  <button mat-raised-button color="accent" id="register_button" (click)="onClickRegister();">Registrieren</button>
   </form>
 </div>
