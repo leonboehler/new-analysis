@@ -127,7 +127,7 @@ const bucketList: Bucket[] = [
     },
     street: 'B27',
     maxFrogs: 10,
-    currentFrogs: 0,
+    currentFrogs: 6,
     reserved: false
   },
   {

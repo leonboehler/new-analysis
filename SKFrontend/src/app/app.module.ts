@@ -32,6 +32,7 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
 import {HttpClientModule} from '@angular/common/http';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -55,23 +56,24 @@ import {MatExpansionModule} from '@angular/material/expansion';
     CreateLocationComponent,
     AdminMapComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    MatCheckboxModule,
-    MatIconModule,
-    FlexLayoutModule,
-    MatListModule,
-    MatSelectModule,
-    HttpClientModule,
-    MatExpansionModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatIconModule,
+        FlexLayoutModule,
+        MatListModule,
+        MatSelectModule,
+        HttpClientModule,
+        MatExpansionModule,
+        MatTooltipModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

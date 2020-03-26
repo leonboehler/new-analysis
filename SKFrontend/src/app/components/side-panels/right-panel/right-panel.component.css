@@ -4,10 +4,15 @@
     background-color: white;
 }
 .content {
-    padding: 15px;
+    padding: 1em;
 }
 #close {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0.25em;
+    right: 0.25em;
+    cursor: pointer;
+}
+
+.bucketHeadline{
+  color: red;
 }
