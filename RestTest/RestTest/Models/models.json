@@ -1,0 +1,42 @@
+[
+
+    /* DateInterval */
+    {
+        "startDate": "String",
+        "endDate": "String"
+    },
+
+    /* Address */
+    {
+        "street": "String",
+        "streetNumber": "String",
+        "postCode": "String",
+        "city": "String",
+        "state": "String",
+        "country": "String"
+    },
+
+    /* Fence */
+    {
+
+    },
+
+    /* User */
+    {
+        "id": "String",
+        "Password": "String",
+        "firstName": "String",
+        "lastName": "String",
+        "phoneNumber": "String",
+        "Email": "String",
+        "birthdate": "String [2002-06-03]",
+        "OperationalReadiness": "DateInterval",
+        "address": "Address",
+        "Role": "String [ENUM('USER', 'ADMIN')]",
+        "AssignedFences": [
+            "Fence1",
+            "Fence2",
+            "..."
+        ]
+    }
+]
