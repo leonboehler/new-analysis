@@ -5,9 +5,11 @@
     "\\SKFrontend\\src",
     "\\SKFrontend\\src\\app",
     "\\SKFrontend\\src\\app\\components",
+    "\\SKFrontend\\src\\app\\components\\agb",
+    "\\SKFrontend\\src\\app\\components\\data-protection",
     "\\SKFrontend\\src\\app\\components\\footer",
     "\\SKFrontend\\src\\app\\components\\toolbar"
   ],
-  "SelectedNode": "\\SKFrontend\\src\\polyfills.ts",
+  "SelectedNode": "\\SKFrontend\\src\\app\\components\\agb\\agb.component.css",
   "PreviewInSolutionExplorer": false
 }
