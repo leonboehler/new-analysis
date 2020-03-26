@@ -1,0 +1,25 @@
+<div fxLayout="column">
+    <h3>
+      Selektieren sie die Zäune, für die Sie Benachrichtigungen per Email erhalten wollen. Bestätigen Sie mit einem Klick auf "Speichern".
+    </h3>
+  <div fxLayout="row">
+    <div fxLayout="column" class="panel">
+      <mat-list role="contentinfo">
+      <h2 class="myBuckets" matSubheader>Selektierte Zäune</h2>
+      <mat-list-item *ngFor="let location of selectedLocations; index as i;">
+        <h4 matLine> {{location.uuid}}</h4>
+        <p matLine>
+          <span> Straße: {{location.street}}</span>
+        </p>
+        <button mat-icon-button (click)="onDeleteButtonClick(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+      <button mat-raised-button color="primary" (click)="onSaveButtonClick()">Speichern</button>
+    </div>
+    <div class="map-wrapper">
+      <app-map></app-map>
+    </div>
+  </div>
+</div>

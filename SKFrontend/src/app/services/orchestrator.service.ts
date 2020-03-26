@@ -3,21 +3,44 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {User} from '../models/User';
 import {CommunicationService} from './communication.service';
 import { Validators } from '@angular/forms';
+import {Bucket} from '../models/Bucket';
+import {Location} from '../models/Location';
 @Injectable({
   providedIn: 'root'
 })
 export class OrchestratorService {
 
-  selectedBucket: BehaviorSubject<number> = new BehaviorSubject<number>(-1)
+  selectedBucket: BehaviorSubject<Bucket> = new BehaviorSubject<Bucket>(null)
+  selectedLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null)
+
+  loadedLocations = new Array<Location>()
+
   currentUser: User
   constructor(private communicationService: CommunicationService) {
-    this.communicationService.user().subscribe(user => {
+    this.communicationService.currentUser().subscribe(user => {
       this.currentUser = user;
+    });
+
+    this.communicationService.locations().subscribe(locations => {
+      this.loadedLocations = locations;
     });
   }
 
-  bucketSelected(id: number) {
-    this.selectedBucket.next(id);
+  getLocationFromId(id: string): Location {
+    for (const location of this.loadedLocations) {
+      if (location.uuid === id) {
+        return location;
+      }
+    }
+    return null;
+  }
+
+  bucketSelected(bucket: Bucket) {
+    this.selectedBucket.next(bucket);
+  }
+
+  locationSelected(location: Location) {
+    this.selectedLocation.next(location);
   }
   validName(name){
     var strReg = "^([a-zA-Z-])";

@@ -8,6 +8,7 @@ import { AgbComponent } from './components/agb/agb.component';
 import { DataProtectionComponent } from './components/data-protection/data-protection.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MapComponent } from './components/map/map.component';
+import { AdminMapComponent } from './components/admin-map/admin-map.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +20,18 @@ import { RegisterComponent } from './components/register/register.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
+import { LocSelectionComponent } from './components/loc-selection/loc-selection.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { LeftPanelComponent } from './components/side-panels/left-panel/left-panel.component';
+import {MatListModule} from "@angular/material/list";
+import { HomeComponent } from './components/home/home.component';
+import { RightPanelComponent } from './components/side-panels/right-panel/right-panel.component';
+import {MatSelectModule} from '@angular/material/select';
+import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
+import {HttpClientModule} from '@angular/common/http';
+import { CreateLocationComponent } from './components/create-location/create-location.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -31,7 +44,16 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MapComponent,
     SettingsComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent,
+    LocSelectionComponent,
+    UpdatePasswordComponent,
+    LeftPanelComponent,
+    HomeComponent,
+    RightPanelComponent,
+    TimeSelectionComponent,
+    CreateLocationComponent,
+    AdminMapComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +64,13 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatIconModule,
     MatInputModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatIconModule,
+    FlexLayoutModule,
+    MatListModule,
+    MatSelectModule,
+    HttpClientModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

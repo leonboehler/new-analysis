@@ -8,12 +8,16 @@
     <mat-icon>home</mat-icon>
     Home
   </a>
-  <a routerLink="/account" mat-button>
+  <a *ngIf="isAdmin" routerLink="/Administraiton" mat-button>
     <mat-icon>account_circle</mat-icon>
-    Account
+    Adminstration
   </a>
   <a routerLink="/settings" mat-button>
     <mat-icon>settings</mat-icon>
     Einstellungen
   </a>
+
+  <button mat-button (click)="onLogout()">
+    <mat-icon>logout</mat-icon>
+  </button>
 </mat-toolbar>

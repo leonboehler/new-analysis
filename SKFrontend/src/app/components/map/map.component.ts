@@ -1,16 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 
+import {Bucket} from '../../models/Bucket';
+import {Location} from '../../models/Location';
+import {CommunicationService} from '../../services/communication.service'
+import {OrchestratorService} from '../../services/orchestrator.service'
+import {Subscription} from 'rxjs';
+
 import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import OsmSource from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
-import Style from 'ol/style/Style';
-import Icon from 'ol/style/Icon';
+import {Icon, Stroke, Style} from 'ol/style';
 import {fromLonLat} from 'ol/proj';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import LineString from 'ol/geom/LineString';
 
 
 @Component({
@@ -20,114 +26,215 @@ import Point from 'ol/geom/Point';
 })
 export class MapComponent implements OnInit {
 
-    features: any = [];
-    // array for data-binding
-    data: any = {
-        bucketID: -1,
-        category: ''
-    };
+    selectedLocation: Location;
+    selectedBucket: Bucket;
 
-    constructor() { }
+    constructor(private communicationService: CommunicationService,
+                private orchestratorService: OrchestratorService) { }
+
 
     ngOnInit(): void {
 
-        this.populateMarkers();
+        //Style Function to give that colors the locations dynamically
+        let locationStyleFunction = function(feature) {
 
-        let source = new VectorSource();
-        let selected = null;
+            //default value
+            let color = 'green';
 
-        let styleFunction = function(feature) {
-            let scale = 0.2;
-            let opacity = 0.75;
+            if(feature.get('location') == this.selectedLocation){
+                color = 'blue';
+            }
+
+            let style = new Style({
+                stroke: new Stroke({
+                    color: color,
+                    width: 7
+                })
+            })
+
+            return style;
+        }.bind(this)
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let locationSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        let locationLayer = new VectorLayer({
+            source: locationSource,
+            style: locationStyleFunction
+        })
+
+
+
+        //Style Function to give the markers a dynamic Icon that changes base on bucket values
+        let bucketStyleFunction = function(feature) {
+
+            let bucket = feature.get('bucket');
+
+            //Default values
+            let scale = 0.07;
             let color = 'white';
-            if(selected == feature){
-                scale = 0.25;
-                opacity = 1;
+
+            //Make the marker larger if it is selected
+            if(this.selectedBucket == feature.get('bucket')){
+                scale = 0.1;
             }
-            let src = '';
-            switch(feature.get('category')){
-            case 'own_empty':
-                src = '/assets/minecraft_bucket.png';
-                color = 'green';
-                break;
-            case 'own_full':
-                src = '/assets/minecraft_bucket.png';
-                color = 'red';
-                break;
-            case 'empty':
-                src = '/assets/minecraft_bucket.png';
-                color = 'yellow';
-                break;
-            case 'full':
-                src = '/assets/minecraft_bucket.png';
-                color = 'orange';
-                break;
+
+            //Color the bucket based on fill status
+            if(bucket.reserved){
+              color = 'cyan';
+            } else if(bucket.currentFrogs == 0){
+                color = 'lime'; //empty
+            } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
+                color = 'yellow'; //less than 50% full
+            } else if(bucket.currentFrogs < bucket.maxFrogs){
+                color = 'orange'; //more than 50% full
+            } else {
+                color = 'red'; //full
             }
+
+            //Create final Icon
             let style = new Style({
                 image: new Icon({
-                    src: src,
-                    imgSize: [160, 160],
+                    src: '/assets/bucket.png',
+                    imgSize: [512, 512],
                     scale: scale,
-                    opacity: opacity,
                     color: color
                 })
             });
-            return style;
-        }
 
-        let markerLayer = new VectorLayer({
-            source: source,
-            style: styleFunction
+            return style;
+        }.bind(this)
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let bucketSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
+        let bucketLayer = new VectorLayer({
+            source: bucketSource,
+            style: bucketStyleFunction
         })
 
+        let view = new View({
+            center: fromLonLat([10.4515, 51.1657]),
+            zoom: 6.3
+        })
+
+
+        //Create map
         let map = new Map({
             target: 'map',
             layers: [
                 new TileLayer({
                     source: new OsmSource()
                 }),
-                markerLayer
+                locationLayer,
+                bucketLayer
             ],
-            view: new View({
-                center: fromLonLat([10.4515, 51.1657]),
-                zoom: 6.3
-            })
+            view: view
         });
 
-        source.addFeatures(this.features);
-
+        //Register a click event to be able to select markers
         map.on('click', function(e){
-            selected = null;
-            this.data.bucketID = -1
+            let selectedLocation = null;
+            let selectedBucket = null;
+
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                selected = feature;
-                this.data.bucketID = feature.get('bucketID');
-                this.data.category = feature.get('category');
+                if(layer == locationLayer){
+                    selectedLocation = feature.get('location');
+                }
+                if(layer == bucketLayer){
+                    selectedBucket = feature.get('bucket');
+                }
             }.bind(this));
-            markerLayer.changed();
+
+            //If a bucket is selected, don't select the location below it
+            if(selectedBucket != null){
+                selectedLocation = null;
+            }
+
+            this.orchestratorService.locationSelected(selectedLocation);
+            this.orchestratorService.bucketSelected(selectedBucket);
         }.bind(this));
 
-    }
 
-    populateMarkers() {
+        //Subscribe to locations
+        this.communicationService.locations().subscribe(locations => {
 
-        this.addMarker(1, 'own_empty', 11.55, 50.22);
-        this.addMarker(2, 'own_empty', 13.55, 51.22);
-        this.addMarker(3, 'own_full', 10.55, 49.22);
-        this.addMarker(4, 'full', 9.55, 52.22);
-        this.addMarker(5, 'empty', 11.55, 48.22);
+            let features = [];
+            locations.forEach(location => {
 
-    }
+                let locationCoords = [];
 
-    addMarker(bucketID, category, lon, lat) {
+                location.routePoints.forEach(point =>
+                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                );
 
-        const coords = fromLonLat([lon, lat]);
+                features.push(new Feature(({
+                    location: location,
+                    geometry: new LineString(locationCoords)
+                })));
 
-        this.features.push(new Feature({
-            bucketID: bucketID,
-            category: category,
-            geometry: new Point(coords)
-        }));
+            });
+
+            locationSource.addFeatures(features);
+            locationLayer.changed();
+
+        });
+
+
+        //Subscription to update the selected location
+        this.orchestratorService.selectedLocation.subscribe(selectedLocation => {
+            this.selectedLocation = selectedLocation;
+            locationLayer.changed();
+
+            //Jump to the currently selected location
+            if(selectedLocation != null){
+
+                let locationCoords = [];
+                selectedLocation.routePoints.forEach(point =>
+                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                );
+
+                let geometry = new LineString(locationCoords);
+
+                view.fit(geometry);
+                view.adjustZoom(-1);
+            }
+        });
+
+
+        //Subscribe to buckets
+        this.communicationService.buckets().subscribe(buckets => {
+
+            let features = [];
+            buckets.forEach(bucket => {
+
+                //Create a feature that holds important information about a bucket for every bucket in the list
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                features.push(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(coords)
+                }));
+
+            });
+
+            //Update VectorSource
+            bucketSource.clear();
+            bucketSource.addFeatures(features);
+        });
+
+        //Subscription to update the selected bucket
+        this.orchestratorService.selectedBucket.subscribe(selectedBucket => {
+            this.selectedBucket = selectedBucket;
+            bucketLayer.changed();
+
+            //Jump to the currently selected bucket
+            if(selectedBucket != null){
+                view.setCenter(fromLonLat([selectedBucket.position.longitude, selectedBucket.position.latitude]));
+                view.setZoom(14);
+            }
+        });
 
     }
 
