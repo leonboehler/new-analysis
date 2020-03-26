@@ -328,6 +328,8 @@ export class AdminMapComponent implements OnInit {
                 view.fit(geometry);
                 view.adjustZoom(-1);
             }
+
+            locationLayer.changed();
         });
 
     }
