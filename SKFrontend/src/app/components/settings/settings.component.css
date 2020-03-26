@@ -14,8 +14,16 @@
   color: red;
 }
 
-#data{
-  width: 100%;
+#tablePasswordAndLocation{
+  margin-left: 35%;
+}
+
+#tableAvailableTime{
+  margin-left: 27%;
+}
+
+#tableUserData, #tableAddressData{
+  margin-left: 13%;
 }
 
 #errorInput{
