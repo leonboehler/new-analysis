@@ -49,7 +49,9 @@ export class CreateLocationComponent implements OnInit {
 
     this.adminService.selectedLocation.subscribe(location => {
       if(location == null) {
-        this.editedLocation.expanded = false;
+        range(0, this.locations.length).subscribe(index => {
+            this.locations[index].expanded = false;
+        })
       }
       range(0, this.locations.length).subscribe(index => {
         if(this.locations[index].locationInfo.uuid === location.uuid){
@@ -71,6 +73,7 @@ export class CreateLocationComponent implements OnInit {
   }
   onEditBucketsClick() {
       this.editingBuckets = true
+      this.adminService.setDrawMode('bucket')
       this.adminService.setBuckets(this.editedLocation.buckets)
   }
 
@@ -94,6 +97,7 @@ export class CreateLocationComponent implements OnInit {
       this.adminService.setCurrentBucket(null)
       this.adminService.setBuckets(new Array<Bucket>());
       this.editingBuckets = false;
+      this.adminService.setDrawMode('none')
   }
 
   onNewBucket() {
