@@ -205,12 +205,13 @@ CREATE TABLE IF NOT EXISTS rt_bucket (
 /**************************************** */
 DROP USER IF EXISTS server;
 CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 5;
+GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 10;
 GRANT SELECT ON dehabewe.ui_bucket TO server;
 GRANT SELECT ON dehabewe.ui_user TO server;
-GRANT SELECT ON dehabewe.ui_user_profile TO server;
 GRANT SELECT ON dehabewe.ui_location TO server;
+GRANT SELECT ON dehabewe.ui_location_marker TO server;
 GRANT SELECT ON dehabewe.ui_station TO server;
+GRANT SELECT ON dehabewe.ui_assignment TO server;
 GRANT SELECT ON dehabewe.ui_readiness TO server;
 flush PRIVILEGES;
 

@@ -32,7 +32,7 @@ CALL fn_add_location_marker(3, 19.311143, 1.582031);
 CALL fn_add_bucket(33,'Eimer 1', 50 /*MAX-TOADS*/, 1/*LOCATION-ID*/, 19.311143, 1.582031);
 
 
-CALL fn_insert_bucket_data(1111111, 10, 2.2);
+CALL fn_insert_bucket_data(3, 66, 5.0);
 
 CALL fn_insert_station_data(222222222, 2.2);
 
@@ -70,7 +70,7 @@ SELECT * FROM ui_location;
 
 SELECT * FROM ui_station;
 
-SELECT * FROM ui_user;
+SELECT * FROM ui_user ;
 
 SELECT * FROM ui_readiness WHERE user_mail = 'max@mustermann.de';
 

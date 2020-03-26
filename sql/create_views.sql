@@ -137,7 +137,7 @@ CREATE OR REPLACE VIEW ui_bucket AS
 	FROM sys_bucket b
 	ORDER BY b.bucket_name;
 	
-SELECT * FROM ui_bucket WHERE bucket_id = 1;
+SELECT * FROM ui_bucket;
 
 ### READINESS
 CREATE OR REPLACE VIEW ui_readiness AS
