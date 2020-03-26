@@ -10,6 +10,7 @@ import {OrchestratorService} from "../../services/orchestrator.service";
 
 export class UpdatePasswordComponent implements OnInit {
   valid = false;
+  newPassword = '';
   constructor(private oservice: OrchestratorService, private router: Router) { }
 
   backToSettings(): void{
@@ -29,9 +30,12 @@ export class UpdatePasswordComponent implements OnInit {
     }
 
     if(this.valid){
-      // Save password to databse
-      console.log('Password saved!');
+      // TODO: Save password to databse
+      console.log(this.newPassword);
       document.getElementById('errorOldPassword').innerHTML = '';
+    }else{
+      // Don't save to database
+      this.newPassword = '';
     }
   }
 
@@ -57,7 +61,7 @@ export class UpdatePasswordComponent implements OnInit {
     }else {
       this.valid = true;
       document.getElementById('errorNewPassword').innerHTML = '';
-      console.log('B');
+      this.newPassword = newPassword;
     }
   }
 
