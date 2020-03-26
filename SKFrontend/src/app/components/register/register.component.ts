@@ -4,16 +4,22 @@ import { CommunicationService } from '../../services/communication.service';
 import { OrchestratorService } from '../../services/orchestrator.service';
 import { Router } from '@angular/router';
 import {ifError} from "assert";
+import {User} from "../../models/User";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit{
 
-  constructor(private orchestratorService:OrchestratorService, private router: Router) { }
+  constructor(private orchestratorService: OrchestratorService, private router: Router) { }
 
+  user = new User();
+
+  onTimeChanged(times: Array<string>){
+    //this.user.operationalReadiness = times;
+  }
 
   onClickRegister() {
     const firstname = (<HTMLInputElement> document.getElementById('input_firstname')).value
@@ -29,9 +35,7 @@ export class RegisterComponent implements OnInit {
     const city = (<HTMLInputElement> document.getElementById('input_city')).value
     const state = (<HTMLInputElement> document.getElementById('input_state')).value
     const country = (<HTMLInputElement> document.getElementById('input_country')).value
-    const agb = (<HTMLInputElement> document.getElementById('input_agb')).value
-
-    console.log(birthday)
+    const agb = (<HTMLInputElement> document.getElementById('input_agb')).checked
 
     if(firstname == ''){
       alert("Bitte Vornamen angeben!")
@@ -57,34 +61,39 @@ export class RegisterComponent implements OnInit {
       alert("Bitte Stadt angeben!")
     }else if(state == ''){
       alert("Bitte Bundesland angeben!")
-    }else if(agb == 'false'){
+    }else if(agb == false){
       alert("Bitte AGB`s akzeptieren!")
     }else{
       console.log("Could read all parameters")
 
+      var strPassword = password.toString();
+      var strPasswordConfirm = passwordConfirm.toString();
       if(!this.orchestratorService.validName(firstname)){
-        alert("Vorname darf nur aus Buchstaben (und '-') bestehen!")
+        alert("Vorname darf nur aus Buchstaben (und '-') bestehen!");
       }else if(!this.orchestratorService.validName(name)){
-        alert("Nachname darf nur aus Buchstaben (und '-') bestehen!")
+        alert("Nachname darf nur aus Buchstaben (und '-') bestehen!");
       }else if(!this.orchestratorService.validBirthday(birthday)){
-        alert("Registrierung nur bei Volljährigkeit!")
+        alert("Registrierung nur bei Volljährigkeit!");
       }else if(!this.orchestratorService.validNumber(telNumber)){
-        alert("Telefonnummer darf nur aus Zahlen bestehen!")
+        alert("Telefonnummer darf nur aus Zahlen bestehen!");
       }else if(!this.orchestratorService.validPassword(password)){
         console.log(!this.orchestratorService.validPassword(password))
-        alert("Das Passwort darf nur aus Groß-/Kleinbuchstaben und Zahlen bestehen")
-      }else if(password == passwordConfirm){
-        alert("Passwörter müssen übereinstimmen!")
+        alert("Passwort erfüllt nicht Anforderungen (mind. 8 Zeichen; mind. ein Groß-/Kleinbuchstabe; mind. eine Ziffer)");
+      }else if(strPasswordConfirm === strPassword == false){
+        alert("Passwörter müssen übereinstimmen!");
       }else if(!this.orchestratorService.validName(street)){
-        alert("Straße darf nur aus Buchstaben (und '-') bestehen!")
+        alert("Straße darf nur aus Buchstaben (und '-') bestehen!");
       }else if(!this.orchestratorService.validNumber(streetNumber)){
-        alert("Hausnummer darf nur aus Zahlen bestehen!")
+        alert("Hausnummer darf nur aus Zahlen bestehen!");
       }else if(!this.orchestratorService.validPostcode(postcode)){
-        alert("Postleitzahl darf nur aus Zahlen bestehen und muss fünf Zeichen lang sein!")
+        alert("Postleitzahl darf nur aus Zahlen bestehen und muss fünf Zeichen lang sein!");
       }else if(!this.orchestratorService.validName(city)){
-        alert("Stadt darf nur aus Buchstaben bestehen!")
+        alert("Stadt darf nur aus Buchstaben bestehen!");
       }else if(!this.orchestratorService.validName(state)){
-        alert("Bundesland darf nur aus Buchstaben bestehen!")
+        alert("Bundesland darf nur aus Buchstaben bestehen!");
+      }else{
+        //Daten können User übergeben werden
+
       }
     }
 

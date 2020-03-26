@@ -70,7 +70,8 @@ export class OrchestratorService {
         }
       }
       for (var e = 0; e < numbers.length; e++) {
-        if ( password.substr(i,1)  ==  number[e]) {
+        var convertNumber = parseInt( password.substr(i,1))
+        if ( convertNumber == parseInt(numbers[e])) {
           number = true;
         }
       }
@@ -88,8 +89,9 @@ export class OrchestratorService {
       returnValue = false;
     }
 
-    return returnValue;
+    return !returnValue;
   }
+
   validNumber(value) {
 
     var strReg = "^([0-9])";
