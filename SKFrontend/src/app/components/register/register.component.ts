@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit{
 
   onTimeChanged(times: Array<string>){
     //this.user.operationalReadiness = times;
+
   }
 
   onClickRegister() {
