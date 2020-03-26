@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Bucket} from '../models/Bucket';
 import {Position} from '../models/Position';
-import {LocationUpgradeModule} from '@angular/common/upgrade';
+import {Location} from '../models/Location';
 
 @Injectable({
   providedIn: 'root'
