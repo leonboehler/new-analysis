@@ -77,7 +77,7 @@ export class CommunicationService {
         this.http.get(this.baseUrl + 'map/alllocations').subscribe(returns => {
 
             let fetchedLocations = [];
-
+            console.log(returns.constructor.name)
             returns.data.forEach(location => {
 
                 let routePoints = [];

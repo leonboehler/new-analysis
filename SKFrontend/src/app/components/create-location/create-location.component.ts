@@ -145,7 +145,7 @@ export class CreateLocationComponent implements OnInit {
     this.editingRoutePoints = true
     this.createdRoutePoints = this.editedLocation.locationInfo.routePoints
     this.adminService.setRoutePoints(this.createdRoutePoints)
-    this.adminService.setDrawMode('position')
+    this.adminService.setDrawMode('location')
   }
 
   reorderedPoints(event: CdkDragDrop<Position[]>) {

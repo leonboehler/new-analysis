@@ -79,8 +79,9 @@ export class AdminService {
     this.routePoints.next(this.routePointsData)
   }
   pushRoutePoint(position: Position) {
-    this.routePointsData.push(position)
-    this.routePoints.next(this.routePointsData)
+    this.currentPointData.latitude = position.latitude
+    this.currentPointData.longitude = position.longitude
+    this.setCurrentPoint(this.currentPointData)
   }
 
   setCurrentPoint(point: Position) {
