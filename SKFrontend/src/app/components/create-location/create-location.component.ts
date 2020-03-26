@@ -70,6 +70,10 @@ export class CreateLocationComponent implements OnInit {
 
   panelClosed(location: ExLocation){
       this.adminService.setSelectedLocation(null)
+      this.editingBuckets = false;
+      this.adminService.setDrawMode('none')
+      this.adminService.setCurrentBucket(null)
+      this.adminService.setBuckets(new Array<Bucket>());
   }
   onEditBucketsClick() {
       this.editingBuckets = true

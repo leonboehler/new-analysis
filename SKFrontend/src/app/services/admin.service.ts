@@ -20,6 +20,9 @@ export class AdminService {
 
   drawMode = new BehaviorSubject<string>('none')
 
+  routePointsData = new Array<Position>()
+  routePoints = new BehaviorSubject<Position[]>(this.routePointsData)
+
   constructor(private orchestratorService: OrchestratorService) {}
 
   setCurrentBucket(bucket: Bucket) {
@@ -64,5 +67,10 @@ export class AdminService {
   }
   setSelectedBucket(bucket: Bucket) {
     this.setSelectedLocation(this.orchestratorService.getLocationFromId(bucket.locationId))
+  }
+
+  pushRoutePoint(position: Position) {
+    this.routePointsData.push(position)
+    this.routePoints.next(this.routePointsData)
   }
 }
