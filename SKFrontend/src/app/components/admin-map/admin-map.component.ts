@@ -25,6 +25,9 @@ import LineString from 'ol/geom/LineString';
 })
 export class AdminMapComponent implements OnInit {
 
+    drawMode: string = 'none';
+    selectedLocation: Location;
+
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService,
                 private adminService: AdminService) { }
@@ -32,18 +35,25 @@ export class AdminMapComponent implements OnInit {
 
     ngOnInit(): void {
 
-        //Style Function to give that colors the locations dynamically
-        let locationStyleFunction = function(feature) {
+      //Style Function to give that colors the locations dynamically
+      let locationStyleFunction = function(feature) {
 
-            let style = new Style({
-                stroke: new Stroke({
-                    color: 'green',
-                    width: 7
-                })
-            })
+          //default value
+          let color = 'green';
 
-            return style;
-        }.bind(this)
+          if(feature.get('location') == this.selectedLocation){
+              color = 'blue';
+          }
+
+          let style = new Style({
+              stroke: new Stroke({
+                  color: color,
+                  width: 7
+              })
+          })
+
+          return style;
+      }.bind(this)
 
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let locationSource = new VectorSource();
@@ -156,12 +166,38 @@ export class AdminMapComponent implements OnInit {
             view: view
         });
 
-        let drawMode = 'bucket';
+        this.adminService.drawMode.subscribe( drawMode =>
+            this.drawMode = drawMode
+        )
 
         //Register a click event
         map.on('click', function(e){
 
-            if(drawMode == 'bucket'){
+
+            if(this.drawMode == 'none'){
+
+              let selectedLocation = null;
+              let selectedBucket = null;
+
+              map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                  if(layer == locationLayer){
+                      selectedLocation = feature.get('location');
+                  }
+                  if(layer == bucketLayer){
+                      selectedBucket = feature.get('bucket');
+                  }
+              }.bind(this));
+
+              //If a bucket is selected, don't select the location below it
+              if(selectedBucket != null){
+                  selectedLocation = null;
+              }
+
+              this.adminService.setSelectedLocation(selectedLocation);
+              this.adminService.setSelectedBucket(selectedBucket);
+
+            } else
+            if(this.drawMode == 'bucket'){
                 const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
                 this.adminService.setBucketPosition({
@@ -170,7 +206,11 @@ export class AdminMapComponent implements OnInit {
                 });
                 console.log(coord);
             } else
-            if(drawMode == 'location'){
+            if(this.drawMode == 'location'){
+
+
+            } else
+            if(this.drawMode == 'station'){
 
 
             }
@@ -272,6 +312,8 @@ export class AdminMapComponent implements OnInit {
 
         //Subscription to update the selected location
         this.adminService.selectedLocation.subscribe(selectedLocation => {
+
+            this.selectedLocation = selectedLocation;
 
             //Jump to the currently selected location
             if(selectedLocation != null){
