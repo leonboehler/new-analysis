@@ -25,8 +25,6 @@ import LineString from 'ol/geom/LineString';
 })
 export class AdminMapComponent implements OnInit {
 
-    currentlyEditing: boolean = false;
-
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService,
                 private adminService: AdminService) { }
@@ -208,23 +206,21 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to buckets
         this.communicationService.buckets().subscribe(buckets => {
 
-            if(!this.currentlyEditing){
-                let features = [];
-                buckets.forEach(bucket => {
+            let features = [];
+            buckets.forEach(bucket => {
 
-                    //Create a feature that holds important information about a bucket for every bucket in the list
-                    const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
-                    features.push(new Feature({
-                        bucket: bucket,
-                        geometry: new Point(coords)
-                    }));
+                //Create a feature that holds important information about a bucket for every bucket in the list
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                features.push(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(coords)
+                }));
 
-                });
+            });
 
-                //Update VectorSource
-                bucketSource.clear();
-                bucketSource.addFeatures(features);
-            }
+            //Update VectorSource
+
+            bucketSource.addFeatures(features);
         });
 
 
@@ -248,10 +244,12 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to inactive buckets
         this.adminService.createdBuckets.subscribe(buckets => {
 
+            console.log(buckets.length);
+
             if(buckets.length == 0){
-                this.currentlyEditing = false;
+                bucketLayer.setVisible(true);
             } else {
-                this.currentlyEditing = true;
+                bucketLayer.setVisible(false);
             }
 
             let features = [];
