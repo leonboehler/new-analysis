@@ -27,7 +27,6 @@ export class AdminMapComponent implements OnInit {
 
     drawMode: string = 'none';
     selectedLocation: Location;
-    selectedBucket: Bucket;
 
     constructor(private communicationService: CommunicationService,
                 private orchestratorService: OrchestratorService,
@@ -262,18 +261,6 @@ export class AdminMapComponent implements OnInit {
             //Update VectorSource
 
             bucketSource.addFeatures(features);
-        });
-
-        //Subscription to update the selected bucket
-        this.adminService.selectedBucket.subscribe(selectedBucket => {
-            this.selectedBucket = selectedBucket;
-            bucketLayer.changed();
-
-            //Jump to the currently selected bucket
-            if(selectedBucket != null){
-                view.setCenter(fromLonLat([selectedBucket.position.longitude, selectedBucket.position.latitude]));
-                view.setZoom(14);
-            }
         });
 
 
