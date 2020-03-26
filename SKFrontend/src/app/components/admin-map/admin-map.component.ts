@@ -304,8 +304,6 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to inactive buckets
         this.adminService.createdBuckets.subscribe(buckets => {
 
-            console.log(buckets.length);
-
             if(buckets.length == 0){
                 bucketLayer.setVisible(true);
             } else {
