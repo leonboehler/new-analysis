@@ -34,6 +34,7 @@ import { CreateLocationComponent } from './components/create-location/create-loc
 import {MatExpansionModule} from '@angular/material/expansion';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminEditingUserComponent } from './components/admin-editing-user/admin-editing-user.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { AdminEditingUserComponent } from './components/admin-editing-user/admin
     MatListModule,
     MatSelectModule,
     HttpClientModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -61,6 +61,10 @@
 
       <app-time-selection [selectedTimes]="[]" (valueChanged)="onTimeChanged($event)"></app-time-selection>
 
+      <mat-slide-toggle class="example-margin" [checked]="checked" (click)="setRolle()">Admin!</mat-slide-toggle>
+
+
+
       <button mat-raised-button color="accent" id="register_button" (click)="onClickSafe();">Speichern</button>
 
     </div>
