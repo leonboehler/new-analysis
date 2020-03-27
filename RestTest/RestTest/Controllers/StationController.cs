@@ -17,13 +17,5 @@ namespace FroggyRestServer.Controllers
             Dictionary<String, object> map = Station.UpdateBucketsAndBattery();
             return map;
         }
-
-        [HttpPost]
-        [ActionName("updateMap")]
-        public Dictionary<String, object> UpdateStationMap([FromBody]Station Station)
-        {
-            Dictionary<String, object> map = Station.UpdateBucketsAndBattery();
-            return map;
-        }
     }
 }

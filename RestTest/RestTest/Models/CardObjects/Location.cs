@@ -34,6 +34,8 @@ namespace FroggyRestServer.Models
             Dictionary<string, object> sqlResultLocation = MySQLConnector.ConExecuteReaderMany(commandGetLocation);
             List<Dictionary<string, object>> locations = (List<Dictionary<string, object>>)sqlResultLocation["data"];
 
+            System.Diagnostics.Debug.WriteLine(sqlResultLocation);
+
             if ((int)sqlResultLocation["code"] != 200)
             {
                 return sqlResultLocation;

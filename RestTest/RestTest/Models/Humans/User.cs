@@ -57,8 +57,20 @@ namespace FroggyRestServer.Models
             System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(readinessDatas));
 
 
-            String commandGetAssigned = $"SELECT * FROM ui_assignment WHERE user_mail = '{Email}';";
-            Dictionary<String, object> assignedData = MySQLConnector.ConExecuteReaderMany(commandGetAssigned);
+            string commandGetAssigned = $"SELECT * FROM ui_assignment WHERE user_mail = '{Email}';";
+            Dictionary<string, object> assignedData = MySQLConnector.ConExecuteReaderMany(commandGetAssigned);
+
+            List<Dictionary<string, object>> assignedLocationMaps = new List<Dictionary<string, object>>();
+
+
+            foreach (Dictionary<string, object> assignedLocation in (List<Dictionary<string, object>>)assignedData["data"])
+            {
+                assignedLocationMaps.Add(assignedLocation);
+            }
+            userData["AssignedLocations"] = assignedLocationMaps;
+
+
+
             System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(assignedData));
 
             return userData;

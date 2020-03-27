@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FroggyRestServer
@@ -12,15 +13,16 @@ namespace FroggyRestServer
         private const String user = "server";
         private const String pass = "dhbw2020#";
         private const String database = "dehabewe";
-        private static String connectionString = "server=" + host + ";port=3306;database=" + database + "; UID=" + user + "; PASSWORD=" + pass + "; SSLMODE=none;";
+        private const String connectionString = "server=" + host + ";port=3306;database=" + database + "; UID=" + user + "; PASSWORD=" + pass + "; SSLMODE=none;";
 
-        static MySqlConnection connection = new MySqlConnection(connectionString);
 
         /// <summary>
         /// checks if there is a database connection
         /// </summary>
         static public bool ConTestOpen()
         {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
             try
             {
                 connection.Open();
@@ -40,12 +42,39 @@ namespace FroggyRestServer
         /// </summary>
         /// <param name="command">MySQL-Query as string</param>
         /// <returns name="data"></returns>
+        /// 
+
+
+        public static MySqlConnection openConnection()
+        {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+
+            bool connected = false;
+
+            while (!connected)
+            {
+
+                try
+                {
+                    connection.Open();
+                    connected = true;
+                }
+                catch (MySqlException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("--------------------------- waiting for connection --------------------------------------");
+
+                    Thread.Sleep(100);
+                }
+            }
+            return connection;
+        }
+
         static public Dictionary<string, object> ConExecuteReaderMany(string command)
         {
             Dictionary<string, object> response = new Dictionary<string, object>();
             List<Dictionary<String, object>> data = new List<Dictionary<String, object>>();
 
-            connection.Open();
+            MySqlConnection connection = openConnection();
 
             MySqlCommand Command = connection.CreateCommand();
             Command.CommandText = command;
@@ -90,7 +119,7 @@ namespace FroggyRestServer
             Dictionary<String, object> response = new Dictionary<String, object>();
             Dictionary<String, object> data = new Dictionary<String, object>();
 
-            connection.Open();
+            MySqlConnection connection = openConnection();
 
             MySqlCommand Command = connection.CreateCommand();
             Command.CommandText = command;

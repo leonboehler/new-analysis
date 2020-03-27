@@ -65,10 +65,10 @@ namespace FroggyRestServer.Controllers
         }
 
         [HttpPost]
-        [ActionName("update/info")]
+        [ActionName("updateinfo")]
         public Dictionary<string, object> UpdateUserProfile([FromBody] User NewUser)
         {
-            Dictionary<String, object> data = NewUser.Update();
+            Dictionary<string, object> data = NewUser.Update();
             return data;
         }
 
@@ -76,14 +76,14 @@ namespace FroggyRestServer.Controllers
         [ActionName("updateoperationalreadiness")]
         public Dictionary<string, object> UpdateUserOperationalReadiness([FromBody] User NewUser)
         {
-            Dictionary<String, object> data = NewUser.UpdateOperationalReadiness();
+            Dictionary<string, object> data = NewUser.UpdateOperationalReadiness();
             return data;
         }
         [HttpPost]
-        [ActionName("update/assignedlocations")]
+        [ActionName("updateassignedlocations")]
         public Dictionary<string, object> UpdateUserAssignedLocations([FromBody] User NewUser)
         {
-            Dictionary<String, object> data = NewUser.UpdateAssignedLocations();
+            Dictionary<string, object> data = NewUser.UpdateAssignedLocations();
             return data;
         }
     }
