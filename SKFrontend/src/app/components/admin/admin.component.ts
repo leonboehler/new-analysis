@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin',
@@ -8,14 +9,29 @@ import { CommunicationService } from '../../services/communication.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private communicationService:CommunicationService) { this.createList() }
+  constructor(private communicationService:CommunicationService, private router: Router) { this.createList() }
   test = new Array();
 
-  edit(){
+  edit(user){
+    console.log(user.firstName);
+    //TODO: open editing panel with user data
+    this.communicationService.setEditUser(user);
+    this.router.navigate(['/adminEditingUser']);
 
   }
 
+  //TODO: change currentUser/getAdmins with all for example getAllUsers()
+
   createList(){
+    this.communicationService.currentUser().subscribe(response =>{
+
+        this.test.push(response);
+
+    })
+    return false;
+  }
+
+  createListe(){
     this.communicationService.getAdmins().subscribe(response =>{
       for (var i = 0; i < response.length; i++){
         this.test.push(response[i]);

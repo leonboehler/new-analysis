@@ -27,10 +27,10 @@ export class LoginComponent implements OnInit {
 
       this.communicationService.login(username, password).subscribe(response =>{
         if(response == true){
-          this.router.navigate(['/map'])
+          this.router.navigate(['/map']);
         }
         else{
-          alert("Invalid data. Try again.")
+          alert("Invalid data. Try again.");
         }
       })
   }

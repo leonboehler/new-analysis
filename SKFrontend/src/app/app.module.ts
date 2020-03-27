@@ -33,6 +33,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { AdminComponent } from './components/admin/admin.component';
+import { AdminEditingUserComponent } from './components/admin-editing-user/admin-editing-user.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { AdminComponent } from './components/admin/admin.component';
     TimeSelectionComponent,
     CreateLocationComponent,
     AdminMapComponent,
-    AdminComponent
+    AdminComponent,
+    AdminEditingUserComponent
   ],
   imports: [
     BrowserModule,
