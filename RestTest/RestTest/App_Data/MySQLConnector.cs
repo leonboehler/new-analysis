@@ -8,9 +8,9 @@ namespace FroggyRestServer
 {
     public class MySQLConnector
     {
-        private const String host = "bc.dyndns.deseyve.com";
-        private const String user = "server";
-        private const String pass = "dhbw2020#";
+        private const String host = "localhost";
+        private const String user = "root";
+        private const String pass = "27102009";
         private const String database = "dehabewe";
         private static String connectionString = "server=" + host + ";port=3306;database=" + database + "; UID=" + user + "; PASSWORD=" + pass + "; SSLMODE=none;";
 

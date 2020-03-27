@@ -338,3 +338,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+RestTest/RestTest/App_Data/MySQLConnector.cs
