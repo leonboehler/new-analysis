@@ -102,7 +102,7 @@ export class RegisterComponent implements OnInit{
         alert("Bundesland darf nur aus Buchstaben bestehen!");
       }else{
         //Daten können User übergeben werden
-
+        return true;
       }
     }
 
