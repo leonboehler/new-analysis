@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing'
 
 import { UpdatePasswordComponent } from './update-password.component';
 
@@ -8,7 +10,12 @@ describe('UpdatePasswordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UpdatePasswordComponent ]
+      declarations: [ UpdatePasswordComponent ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ]
+
     })
     .compileComponents();
   }));

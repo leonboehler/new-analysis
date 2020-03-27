@@ -39,7 +39,15 @@ export class CommunicationService {
     } else {
 
         return new Observable<Bucket[]>((observer) => {
-            this.http.get(this.baseUrl + 'map/allbuckets').subscribe(returns => {
+            class Json {data: Array<{
+              bucket_id: number,
+              location_id: number,
+              bucket_longitude: number,
+              bucket_latitude: number,
+              bucket_max_toads: number,
+              bucket_toads_count: number
+            }>};
+            this.http.get<Json>(this.baseUrl + 'map/allbuckets').subscribe(returns => {
 
                 let fetchedBuckets = [];
 
@@ -74,7 +82,16 @@ export class CommunicationService {
     } else {
 
       return new Observable<Location[]>((observer) => {
-        this.http.get(this.baseUrl + 'map/alllocations').subscribe(returns => {
+        class Json {
+          data: Array<{
+            LocationMarkers: Array<{longitude: number, latitude: number}>,
+            location_id: number,
+            location_station_id: number,
+            location_country: string,
+            location_bucket_count
+          }>
+        };
+        this.http.get<Json>(this.baseUrl + 'map/alllocations').subscribe(returns => {
 
             let fetchedLocations = [];
             console.log(returns.constructor.name)
@@ -116,7 +133,8 @@ export class CommunicationService {
       });
     } else {
       return new Observable<Station[]>((observer) => {
-          this.http.get(this.baseUrl + 'map/allstations').subscribe(returns => {
+          class Json {data: Array<{station_id: number, station_longitude: number, station_latitude: number}>};
+          this.http.get<Json>(this.baseUrl + 'map/allstations').subscribe(returns => {
 
               let fetchedStations = [];
 

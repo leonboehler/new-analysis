@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { LocSelectionComponent } from './loc-selection.component';
 
@@ -8,7 +9,8 @@ describe('LocSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LocSelectionComponent ]
+      declarations: [ LocSelectionComponent ],
+      imports: [ HttpClientTestingModule ]
     })
     .compileComponents();
   }));
@@ -16,6 +18,7 @@ describe('LocSelectionComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LocSelectionComponent);
     component = fixture.componentInstance;
+    component.assignedIds = []; // Initialisation neccessary for @Input attributes
     fixture.detectChanges();
   });
 
