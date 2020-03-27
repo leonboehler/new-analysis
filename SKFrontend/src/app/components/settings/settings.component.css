@@ -1,6 +1,5 @@
 .options{
   display: flex;
-  font-size: 1.5em;
   text-align: center;
   width: 80%;
   margin-left: 10%;
@@ -8,7 +7,6 @@
 
 .optionsHeadline{
   display: flex;
-  font-size: 2em;
   width: 100%;
   margin-left: 20.5%;
   color: red;

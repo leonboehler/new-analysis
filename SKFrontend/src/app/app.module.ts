@@ -32,6 +32,7 @@ import {TimeSelectionComponent} from './components/time-selection/time-selection
 import {HttpClientModule} from '@angular/common/http';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     RightPanelComponent,
     TimeSelectionComponent,
     CreateLocationComponent,
-    AdminMapComponent
+    AdminMapComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

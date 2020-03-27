@@ -1,0 +1,28 @@
+<div class="box">
+  <form class="tabel_form">
+    <mat-list>
+      <table class="tabel_head_headline" id="table_head_id">
+        <tr>
+          <th class="tg-2uhc">Nachname</th>
+          <th class="tg-031e">Vorname</th>
+          <th class="tg-031e">Email</th>
+        </tr>
+      </table>
+    </mat-list>
+
+    <mat-action-list id="action_list_wrapper">
+    <button *ngFor="let value of test" mat-list-item class="data_button" (click)="edit()">
+      <table class="tabel_head_content" id="table_data_id">
+        <tr>
+          <td class="tg-2uhc">{{value.lastName}}</td>
+          <td class="tg-031e">{{value.firstName}}</td>
+          <td class="tg-031e">{{value.mail}}</td>
+        </tr>
+      </table>
+    </button>
+  </mat-action-list>
+
+  </form>
+</div>
+
+
