@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { RightPanelComponent } from './right-panel.component';
 
@@ -8,7 +9,8 @@ describe('RightPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RightPanelComponent ]
+      declarations: [ RightPanelComponent ],
+      imports: [ HttpClientTestingModule ]
     })
     .compileComponents();
   }));

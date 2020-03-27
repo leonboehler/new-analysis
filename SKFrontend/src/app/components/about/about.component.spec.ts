@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AboutComponent } from './about.component';
 
@@ -8,7 +9,8 @@ describe('AboutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AboutComponent ]
+      declarations: [ AboutComponent ],
+      imports: [ HttpClientTestingModule ]
     })
     .compileComponents();
   }));
@@ -21,5 +23,9 @@ describe('AboutComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('loads admins', () => {
+    expect(component.adminList.length).toBeTruthy();
   });
 });
