@@ -233,17 +233,22 @@ export class AdminMapComponent implements OnInit {
             } else
             //Send location positions at the click to the adminService
             if(this.drawMode == 'location'){
-              const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
+                const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
-              this.adminService.pushRoutePoint({
-                  longitude: coord[0],
-                  latitude: coord[1]
-              });
+                this.adminService.pushRoutePoint({
+                    longitude: coord[0],
+                    latitude: coord[1]
+                });
 
             } else
             //Send station positions at the click to the adminService
             if(this.drawMode == 'station'){
-                //TODO
+                const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
+
+                this.adminService.setStationPosition({
+                    longitude: coord[0],
+                    latitude: coord[1]
+                });
             }
 
         }.bind(this));
@@ -278,22 +283,25 @@ export class AdminMapComponent implements OnInit {
 
         //Subscription to update the selected location
         this.adminService.selectedLocation.subscribe(selectedLocation => {
+
             this.selectedLocation = selectedLocation;
-            locationLayer.changed();
 
             //Jump to the currently selected location
             if(selectedLocation != null){
+                if(selectedLocation.locationMarkers.length > 1) {
+                    let locationCoords = [];
+                    selectedLocation.locationMarkers.forEach(point =>
+                        locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                    );
 
-                let locationCoords = [];
-                selectedLocation.locationMarkers.forEach(point =>
-                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
-                );
+                    let geometry = new LineString(locationCoords);
 
-                let geometry = new LineString(locationCoords);
-
-                view.fit(geometry);
-                view.adjustZoom(-1);
+                    view.fit(geometry);
+                    view.adjustZoom(-1);
+                }
             }
+
+            locationLayer.changed();
         });
 
         //Subscribe to the location that is currently being edited
@@ -388,30 +396,6 @@ export class AdminMapComponent implements OnInit {
             bucketEditInactiveSource.clear();
             bucketEditInactiveSource.addFeatures(features);
             bucketEditInactiveLayer.changed();
-        });
-
-
-        //Subscription to update the selected location
-        this.adminService.selectedLocation.subscribe(selectedLocation => {
-
-            this.selectedLocation = selectedLocation;
-
-            //Jump to the currently selected location
-            if(selectedLocation != null){
-                if(selectedLocation.locationMarkers.length > 1) {
-                    let locationCoords = [];
-                    selectedLocation.locationMarkers.forEach(point =>
-                        locationCoords.push(fromLonLat([point.longitude, point.latitude]))
-                    );
-
-                    let geometry = new LineString(locationCoords);
-
-                    view.fit(geometry);
-                    view.adjustZoom(-1);
-                }
-            }
-
-            locationLayer.changed();
         });
 
     }
