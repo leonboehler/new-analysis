@@ -36,7 +36,11 @@ CREATE TABLE IF NOT EXISTS sys_config (		/* USER-TABLE like mentioned in SM05 */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 INSERT INTO sys_config(name, value) VALUES ('session_id_station','a181f342661a20e112bcc86323b4cfbf88e20cfda4ed8a7c7414b1c1e2c47a4e');
-
+SELECT LAST_INSERT_ID();
+INSERT #a(x) 
+  OUTPUT inserted.identity_column 
+  VALUES('b'),('c');
+SELECT SCOPE_IDENTITY();
 /**************************************** */
 /*** USER
 /**************************************** */	

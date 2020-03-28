@@ -13,20 +13,22 @@ delimiter //
 
 DROP PROCEDURE IF EXISTS fn_add_bucket//
 
-CREATE PROCEDURE fn_add_bucket (
-	IN pChipID varchar(17),
-	IN pName varchar(50),
-	IN pMaxToads int(3), 
-	IN pLocationID int(11),
-	IN pLatitude decimal(10,7),
-	IN Longitude decimal(10,7)
+CREATE FUNCTION fn_add_bucket (
+	pChipID varchar(17),
+	pName varchar(50),
+	pMaxToads int(3), 
+	pLocationID int(11),
+	pLatitude decimal(10,7),
+	Longitude decimal(10,7)
 )    
+RETURNS int(11)
 BEGIN
 	IF (pMaxToads < 0) THEN
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';
 	END IF;	 
 	
 	INSERT INTO st_bucket(chip_id, name, max_toads, location_id, latitude, longitude) VALUES(pChipID, pName, pMaxToads, (SELECT id FROM st_location WHERE id = pLocationID), pLatitude, Longitude);
+	RETURN LAST_INSERT_ID();
 
   	IF (ROW_COUNT() != 1) THEN
   		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 501, MESSAGE_TEXT = 'unknown error';

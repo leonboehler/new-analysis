@@ -1,5 +1,5 @@
 /**********************************************************************
-* Project           : DeHaBewe: Smarte Kroetenzaune
+* Project           : DeHaBewe: Smarte Kroetenzaunedehabewe.st_bucket
 *
 * Program name      : views.sql
 *
@@ -100,10 +100,9 @@ SELECT * FROM sys_job;
 
 ### STATION 
 CREATE OR REPLACE VIEW sys_station AS
-	SELECT s.id AS 'station_id', s.chip_id AS 'station_chip_id', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude', l.location_id, l.location_name
-	FROM st_station s
-	JOIN sys_location l	
-	ON l.location_station_id = s.id;
+	SELECT s.id AS 'station_id', s.chip_id AS 'station_chip_id', s.battery_level AS 'station_battery_level', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude'
+	FROM st_station s;
+	
 	
 SELECT * FROM sys_station;
 
@@ -186,7 +185,7 @@ CREATE OR REPLACE VIEW ui_log AS
 /**************************************** */
 DROP USER IF EXISTS server;
 CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT EXECUTE ON dehabewe.* TO server WITH max_user_connections 10;
+GRANT EXECUTE, UPDATE, DELETE ON dehabewe.* TO server WITH max_user_connections 10;
 GRANT SELECT ON dehabewe.ui_bucket TO server;
 GRANT SELECT ON dehabewe.ui_user TO server;
 GRANT SELECT ON dehabewe.ui_location TO server;
@@ -194,6 +193,23 @@ GRANT SELECT ON dehabewe.ui_location_marker TO server;
 GRANT SELECT ON dehabewe.ui_station TO server;
 GRANT SELECT ON dehabewe.ui_assignment TO server;
 GRANT SELECT ON dehabewe.ui_readiness TO server;
+flush PRIVILEGES;
+
+/**************************************** */
+/*** USER: UNITTEST
+/**************************************** */
+DROP USER IF EXISTS unittest;
+CREATE USER 'unittest'@'%' IDENTIFIED BY "dhbw2020#";
+GRANT EXECUTE, UPDATE, DELETE ON dehabewe.* TO unittest WITH max_user_connections 5;
+GRANT DROP ON dehabewe.* TO unittest;
+GRANT SELECT ON dehabewe.ui_bucket TO unittest;
+GRANT SELECT ON dehabewe.ui_user TO unittest;
+GRANT SELECT ON dehabewe.ui_mailing TO unittest;
+GRANT SELECT ON dehabewe.ui_location TO unittest;
+GRANT SELECT ON dehabewe.ui_location_marker TO unittest;
+GRANT SELECT ON dehabewe.ui_station TO unittest;
+GRANT SELECT ON dehabewe.ui_assignment TO unittest;
+GRANT SELECT ON dehabewe.ui_readiness TO unittest;
 flush PRIVILEGES;
 
 /*select * from mysql.user;*/
