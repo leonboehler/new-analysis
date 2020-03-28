@@ -4,8 +4,12 @@ import { RouterTestingModule } from '@angular/router/testing'
 
 import { RegisterComponent } from './register.component';
 
+//M
+import { CommunicationService } from '../../services/communication.service';
+
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
+  let communicationService :CommunicationService;
   let fixture: ComponentFixture<RegisterComponent>;
   let element: HTMLElement;
 
@@ -23,6 +27,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
+    communicationService = new CommunicationService(null);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
@@ -111,5 +116,18 @@ describe('RegisterComponent', () => {
   it('should accept valid details (TK-0201a; FBB02)', () => {
     // Valid input was already set up in beforeEach()
     expect(component.onClickRegister()).not.toBeFalse();
+  });
+
+  it('should store valid birthdate in db (TK-0202b; ?????)', () => {
+    // Valid input was already set up in beforeEach()
+
+    //register user
+    component.onClickRegister()
+
+    //compare user observable to 
+    communicationService.mockUp = false;
+    communicationService.currentUser().subscribe((user)=> {  
+      expect(user.birthdate).toBe("01011980");
+    })
   });
 });
