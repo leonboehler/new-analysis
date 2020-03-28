@@ -157,6 +157,14 @@ export class CreateLocationComponent implements OnInit {
     if(this.editedLocation.locationMarkers.length!=0)position = this.editedLocation.locationMarkers[0];
     else position = {latitude: 0,longitude: 0}
     const bucket = new Bucket(0,position , this.editedLocation.street);
+    let maxId = 0
+    this.editedLocation.buckets.forEach(buc => {
+      if(buc.id>maxId){
+        maxId = buc.id+1
+      }
+      bucket.id = maxId
+    })
+    console.log(bucket.id)
     this.adminService.addBucket(bucket);
     this.adminService.setCurrentBucket(bucket);
 
