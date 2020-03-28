@@ -285,7 +285,7 @@ export class AdminMapComponent implements OnInit {
             if(selectedLocation != null){
 
                 let locationCoords = [];
-                selectedLocation.routePoints.forEach(point =>
+                selectedLocation.locationMarkers.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
@@ -400,7 +400,7 @@ export class AdminMapComponent implements OnInit {
             if(selectedLocation != null){
 
                 let locationCoords = [];
-                selectedLocation.routePoints.forEach(point =>
+                selectedLocation.locationMarkers.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
