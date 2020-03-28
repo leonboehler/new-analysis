@@ -34,15 +34,14 @@ export class CreateLocationComponent implements OnInit {
       this.locations = new Array<Location>();
       locations.forEach(location => {
         this.locations.push(location);
-        console.log("Received Locations")
+
         this.communicationService.allbuckets.subscribe(buckets => {
-          console.log("Received Buckets")
+
           this.locations.forEach(loc => {
             loc.buckets = new Array<Bucket>()
             buckets.forEach(bucket => {
               if (loc.id === bucket.locationId) {
-                console.log(bucket.chipId)
-                console.log(loc.id)
+
                 loc.buckets.push(bucket);
               }
             });
@@ -65,7 +64,7 @@ export class CreateLocationComponent implements OnInit {
 
     this.adminService.createdBuckets.subscribe(buckets => {
       this.createdBuckets = buckets;
-      console.log(this.createdBuckets);
+
     });
 
     this.adminService.selectedLocation.subscribe(location => {
@@ -102,6 +101,12 @@ export class CreateLocationComponent implements OnInit {
   panelClosed(location: Location) {
     console.log("Zu speichernde Location")
     console.log(this.editedLocation)
+    if(this.editedLocation.id==null){
+      this.communicationService.createLocation(this.editedLocation).subscribe(result => {
+        if(result.success)this.communicationService.fetchAll()
+      });
+    }
+
       this.adminService.setSelectedLocation(null);
       this.editingBuckets = false;
       this.adminService.setDrawMode('none');

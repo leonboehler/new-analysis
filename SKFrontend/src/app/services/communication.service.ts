@@ -387,11 +387,11 @@ createUser(user: User): Observable <boolean> {
       });
     });
   }
-login(mail: string, password: string): Observable <{success: boolean, token: string}> {
+login(email: string, password: string): Observable <{success: boolean, token: string}> {
     if(this.mockUp) {
       let isUser = false;
       userList.forEach(value => {
-        if (value.mail === mail && value.password === password) {
+        if (value.email === email && value.password === password) {
           isUser = true;
         }
       });
@@ -402,7 +402,7 @@ login(mail: string, password: string): Observable <{success: boolean, token: str
 
     return new Observable<{success: boolean, token: string}>((observer) => {
       const body = {
-        email: mail,
+        email: email,
         password: password
       }
 
@@ -605,7 +605,7 @@ const userList: User[] = [
       token: 'token',
       firstName: 'Ron',
       lastName: 'Chef',
-      mail: 'ron@dhbw.de',
+      email: 'ron@dhbw.de',
       birthdate: '12121960',
       phoneNumber: '0156824435',
       password: 'csgo1234',
@@ -626,13 +626,13 @@ const userList: User[] = [
       token: 'token2',
       firstName: 'Chris',
       lastName: 'Boss',
-      mail: 'chris@dhbw.de',
-      birthdate: 12121960,
+      email: 'chris@dhbw.de',
+      birthdate: '12121960',
       phoneNumber: '0156824435',
       password: 'test123',
       role: 'admin',
       operationalReadiness: ['13:00'],
-      assignedLocations: locationList.slice(1, 1),
+      assignedLocations: [{id: 1}],
       address: {
         street: 'strasse2',
         streetNumber: '19',
