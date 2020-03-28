@@ -29,4 +29,15 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should give an error on invalid credentials (TK-0220a; FBT02)', () => {
+    spyOn(window, 'alert');
+    const element: HTMLElement = fixture.nativeElement;
+    (<HTMLInputElement> element.querySelector('#login_username')).value = 'h4ck3r';
+    (<HTMLInputElement> element.querySelector('#login_password')).value = 'SuP3R_S3CuR3'
+
+    component.onClickLogin();
+
+    expect(window.alert).toHaveBeenCalled();
+  });
 });
