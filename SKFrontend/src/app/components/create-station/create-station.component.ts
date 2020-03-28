@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {AdminService} from '../../services/admin.service';
+import {CommunicationService} from '../../services/communication.service';
+import {Station} from '../../models/Station';
 
 @Component({
   selector: 'app-create-station',
@@ -7,9 +10,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateStationComponent implements OnInit {
 
-  constructor() { }
+  stations: Array<Station>
+
+  constructor(private adminService: AdminService, private communicationService: CommunicationService) { }
 
   ngOnInit(): void {
+
+  }
+
+  panelOpened(station: Station){
+
+  }
+
+  panelClosed(station: Station){
+
+  }
+
+  onInput(event){
+
   }
 
 }

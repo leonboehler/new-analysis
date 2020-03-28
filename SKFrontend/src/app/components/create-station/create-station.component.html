@@ -1,1 +1,38 @@
-<p>create-station works!</p>
+<div fxLayout="row">
+
+  <div fxLayout="column" class="panel">
+
+    <mat-accordion>
+
+      <mat-expansion-panel *ngFor="let station of stations;" [(expanded)]="station.expanded" (opened)="panelOpened(station)" (closed)="panelClosed(station)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{station.chipId}}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ station.battery}}%
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field>
+          <mat-label>ChipId</mat-label>
+          <input id="input_station_chipId" matInput [value]="station.chipId" (input)="onInput($event)">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Latitude</mat-label>
+          <input id="input_station_latitude" matInput [value]="station.position.latitude" (input)="onInput($event)">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>State</mat-label>
+          <input id="input_station_longitude" matInput [value]="station.position.longitude" (input)="onInput($event)">
+        </mat-form-field>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="map-wrapper">
+    <app-admin-map></app-admin-map>
+  </div>
+</div>

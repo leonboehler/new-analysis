@@ -9,4 +9,5 @@ export class Station {
   position: Position;
   buckets?: Array<Bucket>
   locations?: Array<Location>
+  expanded?: boolean;
 }

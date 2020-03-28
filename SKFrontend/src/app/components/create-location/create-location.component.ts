@@ -27,7 +27,7 @@ export class CreateLocationComponent implements OnInit {
   editingRoutePoints = false;
 
   stationIds: Array<number>
-  constructor(private communicationService: CommunicationService, private adminService: AdminService) {}
+  constructor(private communicationService: CommunicationService, private adminService: AdminService) {this.locations = new Array<Location>();}
 
   ngOnInit(): void {
     this.communicationService.alllocations.subscribe(locations => {
@@ -94,6 +94,8 @@ export class CreateLocationComponent implements OnInit {
   }
 
   panelOpened(location: Location) {
+    console.log("Panel Openned")
+    console.log(location)
     this.editedLocation = location;
     this.adminService.setSelectedLocation(location);
   }
@@ -155,6 +157,14 @@ export class CreateLocationComponent implements OnInit {
     if(this.editedLocation.locationMarkers.length!=0)position = this.editedLocation.locationMarkers[0];
     else position = {latitude: 0,longitude: 0}
     const bucket = new Bucket(0,position , this.editedLocation.street);
+    let maxId = 0
+    this.editedLocation.buckets.forEach(buc => {
+      if(buc.id>maxId){
+        maxId = buc.id+1
+      }
+      bucket.id = maxId
+    })
+    console.log(bucket.id)
     this.adminService.addBucket(bucket);
     this.adminService.setCurrentBucket(bucket);
 
@@ -222,6 +232,7 @@ export class CreateLocationComponent implements OnInit {
     location.locationMarkers = []
     location.buckets = []
     this.locations.push(location)
+    this.adminService.setBuckets(new Array<Bucket>());
 
   }
   stationChanged(event){
