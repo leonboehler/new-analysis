@@ -240,10 +240,14 @@ export class AdminMapComponent implements OnInit {
             //Basic Selection Functionality
             if(this.drawMode == 'none'){
 
+              let selectedStation = null;
               let selectedLocation = null;
               let selectedBucket = null;
 
               map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                  if(layer == stationLayer){
+                      selectedStation = feature.get('station');
+                  }
                   if(layer == locationLayer){
                       selectedLocation = feature.get('location');
                   }
@@ -252,11 +256,18 @@ export class AdminMapComponent implements OnInit {
                   }
               }.bind(this));
 
+              //If a station is selected, don't select anything else with it
+              if(selectedStation != null){
+                  selectedLocation = null;
+                  selectedBucket = null;
+              }
+
               //If a bucket is selected, don't select the location below it
               if(selectedBucket != null){
                   selectedLocation = null;
               }
 
+              this.adminService.setSelectedStation(selectedStation);
               this.adminService.setSelectedLocation(selectedLocation);
               this.adminService.setSelectedBucket(selectedBucket);
 
@@ -316,6 +327,19 @@ export class AdminMapComponent implements OnInit {
             stationSource.addFeatures(features);
             stationLayer.changed();
         })
+
+        //Subscription to update the selected bucket
+        this.adminService.selectedStation.subscribe(selectedStation => {
+            this.selectedStation = selectedStation;
+            stationLayer.changed();
+
+            //Jump to the currently selected station
+            if(selectedStation != null){
+                view.setCenter(fromLonLat([selectedStation.position.longitude, selectedStation.position.latitude]));
+                view.setZoom(14);
+            }
+        });
+
 
         // Subscribe to locations
         this.communicationService.alllocations.subscribe(locations => {
