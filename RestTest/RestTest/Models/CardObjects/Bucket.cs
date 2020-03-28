@@ -16,7 +16,7 @@ namespace FroggyRestServer.Models
         
         public bool Reserved { get; set; }
 
-        public Postition Postition { get; set; }
+        public Position Postition { get; set; }
 
 
         public int FrogAmount { get; set; }

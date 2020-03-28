@@ -22,7 +22,7 @@ namespace FroggyRestServer.Models
 
         public String RouteLength { get; set; }
 
-        public List<Postition> LocationMarkers { get; set; }
+        public List<Position> LocationMarkers { get; set; }
 
         public int StationId { get; set; }
 
@@ -78,7 +78,7 @@ namespace FroggyRestServer.Models
         public Dictionary<string, object> InsertLocationMarker()
         {
             Dictionary<string, object> data = new Dictionary<string,object>();
-            foreach (Postition postition in LocationMarkers)
+            foreach (Position postition in LocationMarkers)
             {
                 string commandInsert = $"CALL fn_add_location_marker({Id},{postition.GetStringForDatabase()});";
                 data = MySQLConnector.ConExecuteReaderSingle(commandInsert);

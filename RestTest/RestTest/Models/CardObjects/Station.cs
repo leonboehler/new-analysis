@@ -9,7 +9,7 @@ namespace FroggyRestServer.Models
     {
         public int Id { get; set; }
         public float Battery { get; set; }
-        public Postition Postition { get; set; }
+        public Position Postition { get; set; }
         public List<Bucket> Buckets { get; set; }
         public List<Location> Locations { get; set; }
 

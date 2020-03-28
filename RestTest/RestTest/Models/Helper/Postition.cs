@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FroggyRestServer.Models
 {
-    public class Postition
+    public class Position
     {
         public float Longitude { get; set; }
         public float Latitude { get; set; }
