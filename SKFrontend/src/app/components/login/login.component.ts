@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     const password = (<HTMLInputElement> document.getElementById('login_password')).value
 
       this.communicationService.login(username, password).subscribe(response =>{
-        if(response == true){
+        if(response.success == true){
           this.router.navigate(['/map'])
         }
         else{

@@ -14,7 +14,7 @@ export class AboutComponent implements OnInit {
   adminList: AdminInfo[];
 
   ngOnInit(): void {
-    this.communicationService.getAdmins().subscribe(admins => {
+    this.communicationService.alladmins.subscribe(admins => {
       this.adminList = admins;
     });
   }

@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit{
 
   onLocSelectionFinished(locations: Array<Location>) {
     locations.forEach(location => {
-      this.user.assignedLocations.push(location.id)
+      this.user.assignedLocations.push({id: location.id})
     });
   }
 

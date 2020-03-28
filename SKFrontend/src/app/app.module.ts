@@ -34,6 +34,7 @@ import { CreateLocationComponent } from './components/create-location/create-loc
 import {MatExpansionModule} from '@angular/material/expansion';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { CreateStationComponent } from './components/create-station/create-station.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     RightPanelComponent,
     TimeSelectionComponent,
     CreateLocationComponent,
-    AdminMapComponent
+    AdminMapComponent,
+    CreateStationComponent
   ],
   imports: [
     BrowserModule,

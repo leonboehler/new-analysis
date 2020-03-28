@@ -75,8 +75,8 @@ export class SettingsComponent implements OnInit {
     if (valid) {
       // TODO: Save data to database
       console.log('Saving data...');
-      const birthdate = Number(birthday.substr(8, 2) + birthday.substr(5, 2) + birthday.substr(0, 4));
-      const mail = this.oservice.getCurrentUser().mail;
+      const birthdate = birthday.substr(8, 2) + birthday.substr(5, 2) + birthday.substr(0, 4);
+      const mail = this.oservice.getCurrentUser().email;
       const password = this.oservice.getCurrentUser().password;
       const role = this.oservice.getCurrentUser().role;
       const operationalReadiness = this.oservice.getCurrentUser().operationalReadiness;
@@ -95,7 +95,7 @@ export class SettingsComponent implements OnInit {
         firstName,
         lastName,
         birthdate,
-        mail,
+        email: mail,
         phoneNumber,
         password,
         role,
