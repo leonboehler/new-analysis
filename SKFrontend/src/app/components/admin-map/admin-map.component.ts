@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import {CommunicationService} from '../../services/communication.service'
-import {OrchestratorService} from '../../services/orchestrator.service'
-import {AdminService} from '../../services/admin.service'
+import {CommunicationService} from '../../services/communication.service';
+import {OrchestratorService} from '../../services/orchestrator.service';
+import {AdminService} from '../../services/admin.service';
 import {Location} from '../../models/Location';
 import {Subscription} from 'rxjs';
 
@@ -26,7 +26,7 @@ import LineString from 'ol/geom/LineString';
 })
 export class AdminMapComponent implements OnInit {
 
-    drawMode: string = 'none';
+    drawMode = 'none';
     selectedLocation: Location;
 
     constructor(private communicationService: CommunicationService,
@@ -36,41 +36,41 @@ export class AdminMapComponent implements OnInit {
 
     ngOnInit(): void {
 
-      //Style Function to give that colors the locations dynamically
-      let locationStyleFunction = function(feature) {
+      // Style Function to give that colors the locations dynamically
+      const locationStyleFunction = function(feature) {
 
-          //default value
+          // default value
           let color = 'green';
 
-          if(feature.get('location') == this.selectedLocation){
+          if (feature.get('location') == this.selectedLocation) {
               color = 'blue';
           }
 
-          let style = new Style({
+          const style = new Style({
               stroke: new Stroke({
-                  color: color,
+                  color,
                   width: 7
               })
-          })
+          });
 
           return style;
-      }.bind(this)
+      }.bind(this);
 
-        //Create VectorSource outside the Layer to be able to add Features to it later on
-        let locationSource = new VectorSource();
+        // Create VectorSource outside the Layer to be able to add Features to it later on
+      const locationSource = new VectorSource();
 
-        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-        let locationLayer = new VectorLayer({
+        // Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+      const locationLayer = new VectorLayer({
             source: locationSource,
             style: locationStyleFunction
-        })
+        });
 
 
-          //Create VectorSource outside the Layer to be able to add Features to it later on
-          let locationEditSource = new VectorSource();
+          // Create VectorSource outside the Layer to be able to add Features to it later on
+      const locationEditSource = new VectorSource();
 
-          //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-          let locationEditLayer = new VectorLayer({
+          // Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+      const locationEditLayer = new VectorLayer({
               source: locationEditSource,
               style: new Style({
                   stroke: new Stroke({
@@ -78,55 +78,55 @@ export class AdminMapComponent implements OnInit {
                       width: 7
                   })
               })
-          })
+          });
 
 
 
-        //Style Function to give the markers a dynamic Icon that changes base on bucket values
-        let bucketStyleFunction = function(feature) {
+        // Style Function to give the markers a dynamic Icon that changes base on bucket values
+      const bucketStyleFunction = function(feature) {
 
-            let bucket = feature.get('bucket');
+            const bucket = feature.get('bucket');
 
             let color = 'white';
 
-            //Color the bucket based on fill status
-            if(bucket.reserved){
+            // Color the bucket based on fill status
+            if (bucket.reserved) {
               color = 'cyan';
-            } else if(bucket.currentFrogs == 0){
-                color = 'lime'; //empty
-            } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
-                color = 'yellow'; //less than 50% full
-            } else if(bucket.currentFrogs < bucket.maxFrogs){
-                color = 'orange'; //more than 50% full
+            } else if (bucket.currentFrogs == 0) {
+                color = 'lime'; // empty
+            } else if (bucket.currentFrogs < bucket.maxFrogs / 2) {
+                color = 'yellow'; // less than 50% full
+            } else if (bucket.currentFrogs < bucket.maxFrogs) {
+                color = 'orange'; // more than 50% full
             } else {
-                color = 'red'; //full
+                color = 'red'; // full
             }
 
-            //Create final Icon
-            let style = new Style({
+            // Create final Icon
+            const style = new Style({
                 image: new Icon({
                     src: '/assets/bucket.png',
                     imgSize: [512, 512],
                     scale: 0.07,
-                    color: color
+                    color
                 })
             });
 
             return style;
-        }.bind(this)
+        }.bind(this);
 
-        //Create VectorSource outside the Layer to be able to add Features to it later on
-        let bucketSource = new VectorSource();
+        // Create VectorSource outside the Layer to be able to add Features to it later on
+      const bucketSource = new VectorSource();
 
-        //Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
-        let bucketLayer = new VectorLayer({
+        // Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
+      const bucketLayer = new VectorLayer({
             source: bucketSource,
             style: bucketStyleFunction
-        })
+        });
 
-        let bucketEditSource = new VectorSource();
+      const bucketEditSource = new VectorSource();
 
-        let bucketEditLayer = new VectorLayer({
+      const bucketEditLayer = new VectorLayer({
             source: bucketEditSource,
             style: new Style({
                 image: new Icon({
@@ -135,11 +135,11 @@ export class AdminMapComponent implements OnInit {
                     scale: 0.07
                 })
             })
-        })
+        });
 
-        let bucketEditInactiveSource = new VectorSource();
+      const bucketEditInactiveSource = new VectorSource();
 
-        let bucketEditInactiveLayer = new VectorLayer({
+      const bucketEditInactiveLayer = new VectorLayer({
             source: bucketEditInactiveSource,
             style: new Style({
                 image: new Icon({
@@ -149,17 +149,17 @@ export class AdminMapComponent implements OnInit {
                     color: 'gray'
                 })
             })
-        })
+        });
 
 
-        let view = new View({
+      const view = new View({
             center: fromLonLat([10.4515, 51.1657]),
             zoom: 6.3
-        })
+        });
 
 
-        //Create map
-        let map = new Map({
+        // Create map
+      const map = new Map({
             target: 'map',
             layers: [
                 new TileLayer({
@@ -171,33 +171,33 @@ export class AdminMapComponent implements OnInit {
                 bucketEditInactiveLayer,
                 bucketEditLayer
             ],
-            view: view
+            view
         });
 
-        this.adminService.drawMode.subscribe( drawMode =>
+      this.adminService.drawMode.subscribe( drawMode =>
             this.drawMode = drawMode
-        )
+        );
 
-        //Register a click event
-        map.on('click', function(e){
+        // Register a click event
+      map.on('click', function(e) {
 
 
-            if(this.drawMode == 'none'){
+            if (this.drawMode == 'none') {
 
               let selectedLocation = null;
               let selectedBucket = null;
 
               map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                  if(layer == locationLayer){
+                  if (layer == locationLayer) {
                       selectedLocation = feature.get('location');
                   }
-                  if(layer == bucketLayer){
+                  if (layer == bucketLayer) {
                       selectedBucket = feature.get('bucket');
                   }
               }.bind(this));
 
-              //If a bucket is selected, don't select the location below it
-              if(selectedBucket != null){
+              // If a bucket is selected, don't select the location below it
+              if (selectedBucket != null) {
                   selectedLocation = null;
               }
 
@@ -205,7 +205,7 @@ export class AdminMapComponent implements OnInit {
               this.adminService.setSelectedBucket(selectedBucket);
 
             } else
-            if(this.drawMode == 'bucket'){
+            if (this.drawMode == 'bucket') {
                 const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
                 this.adminService.setBucketPosition({
@@ -213,7 +213,7 @@ export class AdminMapComponent implements OnInit {
                     latitude: coord[1]
                 });
             } else
-            if(this.drawMode == 'location'){
+            if (this.drawMode == 'location') {
               const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
               this.adminService.pushRoutePoint({
@@ -221,7 +221,7 @@ export class AdminMapComponent implements OnInit {
                   latitude: coord[1]
               });
             } else
-            if(this.drawMode == 'station'){
+            if (this.drawMode == 'station') {
 
 
             }
@@ -229,20 +229,20 @@ export class AdminMapComponent implements OnInit {
         }.bind(this));
 
 
-        //Subscribe to locations
-        this.communicationService.locations().subscribe(locations => {
+        // Subscribe to locations
+      this.communicationService.alllocations.subscribe(locations => {
 
-            let features = [];
+            const features = [];
             locations.forEach(location => {
 
-                let locationCoords = [];
+                const locationCoords = [];
 
-                location.routePoints.forEach(point =>
+                location.locationMarkers.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
                 features.push(new Feature(({
-                    location: location,
+                    location,
                     geometry: new LineString(locationCoords)
                 })));
 
@@ -254,36 +254,36 @@ export class AdminMapComponent implements OnInit {
         });
 
 
-        //Subscribe to buckets
-        this.communicationService.buckets().subscribe(buckets => {
+        // Subscribe to buckets
+      this.communicationService.allbuckets.subscribe(buckets => {
 
-            let features = [];
+            const features = [];
             buckets.forEach(bucket => {
 
-                //Create a feature that holds important information about a bucket for every bucket in the list
+                // Create a feature that holds important information about a bucket for every bucket in the list
                 const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
-                    bucket: bucket,
+                    bucket,
                     geometry: new Point(coords)
                 }));
 
             });
 
-            //Update VectorSource
+            // Update VectorSource
 
             bucketSource.addFeatures(features);
         });
 
 
-        //Subscribe to the bucket that is currently being created
-        this.adminService.currentBucket.subscribe(bucket => {
+        // Subscribe to the bucket that is currently being created
+      this.adminService.currentBucket.subscribe(bucket => {
 
             bucketEditSource.clear();
 
-            if(bucket != null){
-              //Update VectorSource
+            if (bucket != null) {
+              // Update VectorSource
               bucketEditSource.addFeature(new Feature({
-                  bucket: bucket,
+                  bucket,
                   geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
               }));
             }
@@ -292,42 +292,42 @@ export class AdminMapComponent implements OnInit {
         });
 
 
-        //Subscribe to inactive buckets
-        this.adminService.createdBuckets.subscribe(buckets => {
+        // Subscribe to inactive buckets
+      this.adminService.createdBuckets.subscribe(buckets => {
 
-            if(buckets.length == 0){
+            if (buckets.length == 0) {
                 bucketLayer.setVisible(true);
             } else {
                 bucketLayer.setVisible(false);
             }
 
-            let features = [];
+            const features = [];
             buckets.forEach(bucket => {
 
-                //Create a feature that holds important information about a bucket for every bucket in the list
+                // Create a feature that holds important information about a bucket for every bucket in the list
                 const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
-                    bucket: bucket,
+                    bucket,
                     geometry: new Point(coords)
                 }));
 
             });
 
-            //Update VectorSource
+            // Update VectorSource
             bucketEditInactiveSource.clear();
             bucketEditInactiveSource.addFeatures(features);
         });
 
-        //Subscribe to currently edited Location
-        this.adminService.routePoints.subscribe(positions => {
+        // Subscribe to currently edited Location
+      this.adminService.routePoints.subscribe(positions => {
 
-            if(positions.length == 0){
+            if (positions.length == 0) {
                 locationLayer.setVisible(true);
             } else {
                 locationLayer.setVisible(false);
             }
 
-            let locationCoords = [];
+            const locationCoords = [];
 
             positions.forEach(position =>
                 locationCoords.push(fromLonLat([position.longitude, position.latitude]))
@@ -336,27 +336,27 @@ export class AdminMapComponent implements OnInit {
             locationEditSource.clear();
 
             locationEditSource.addFeature(new Feature(({
-                location: location,
+                location,
                 geometry: new LineString(locationCoords)
             })));
 
         });
 
 
-        //Subscription to update the selected location
-        this.adminService.selectedLocation.subscribe(selectedLocation => {
+        // Subscription to update the selected location
+      this.adminService.selectedLocation.subscribe(selectedLocation => {
 
             this.selectedLocation = selectedLocation;
 
-            //Jump to the currently selected location
-            if(selectedLocation != null){
+            // Jump to the currently selected location
+            if (selectedLocation != null) {
 
-                let locationCoords = [];
-                selectedLocation.routePoints.forEach(point =>
+                const locationCoords = [];
+                selectedLocation.locationMarkers.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
-                let geometry = new LineString(locationCoords);
+                const geometry = new LineString(locationCoords);
 
                 view.fit(geometry);
                 view.adjustZoom(-1);

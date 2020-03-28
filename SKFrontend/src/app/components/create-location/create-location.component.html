@@ -7,28 +7,37 @@
         <mat-expansion-panel *ngFor="let location of locations;" [(expanded)]="location.expanded" (opened)="panelOpened(location)" (closed)="panelClosed(location)">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{location.locationInfo.uuid}}
+              {{location.chipId}}
             </mat-panel-title>
             <mat-panel-description>
-              {{ location.locationInfo.street}}
+              {{ location.street}}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
           <mat-form-field>
-            <mat-label>ID</mat-label>
-            <input id="input_location_id" matInput [value]="location.locationInfo.uuid" (input)="onInput($event)">
+            <mat-label>ChipId</mat-label>
+            <input id="input_location_chipId" matInput [value]="location.chipId" (input)="onInput($event)">
           </mat-form-field>
+
+            <mat-form-field *ngIf="editedLocation!=null">
+              <mat-label>Station</mat-label>
+              <mat-select [(value)]="this.editedLocation.stationId">
+                <mat-option *ngFor="let stationId of stationIds" [value]="stationId">
+                  {{stationId}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           <mat-form-field>
-            <mat-label>Straße</mat-label>
-            <input id="input_location_street" matInput [value]="location.locationInfo.street" (input)="onInput($event)">
+            <mat-label>Stadt</mat-label>
+            <input id="input_location_city" matInput [value]="location.city" (input)="onInput($event)">
           </mat-form-field>
-          <mat-form-field>
+            <mat-form-field>
             <mat-label>State</mat-label>
-            <input id="input_location_state" matInput [value]="location.locationInfo.state" (input)="onInput($event)">
+            <input id="input_location_state" matInput [value]="location.state" (input)="onInput($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Länge</mat-label>
-            <input matInput id="input_location_length" [value]="location.locationInfo.routeLength" (input)="onInput($event)">
+            <input matInput id="input_location_length" [value]="location.routeLength" (input)="onInput($event)">
           </mat-form-field>
           <button *ngIf="!editingRoutePoints && !editingBuckets" mat-raised-button color="primary" (click)="onEditRoutePoints()">Bearbeite Standortverlauf</button>
           <div *ngIf="editingRoutePoints && editedLocation==location">
@@ -65,12 +74,16 @@
 
                 <div *ngIf="currentBucket!=null && bucket.id == currentBucket.id" (input)="onInput($event)">
                   <mat-form-field matLine>
-                    <mat-label>ID</mat-label>
-                    <input id="input_bucket_id" matInput [value]="currentBucket.id" (input)="onInput($event)">
+                    <mat-label>ChipId</mat-label>
+                    <input id="input_bucket_chipId" matInput [value]="currentBucket.chipId" (input)="onInput($event)">
+                  </mat-form-field>
+                  <mat-form-field matLine>
+                    <mat-label>Name</mat-label>
+                    <input id="input_bucket_name" matInput [value]="currentBucket.name" (input)="onInput($event)">
                   </mat-form-field>
                   <mat-form-field matLine>
                     <mat-label>maximale Froschanzahl</mat-label>
-                    <input id="input_bucket_maxFrogs" type="number" matInput [value]="currentBucket.maxFrogs" (input)="onInput($event)">
+                    <input id="input_bucket_maxFrogs" type="number" matInput [value]="currentBucket.frogAmountMax" (input)="onInput($event)">
                   </mat-form-field>
                   <mat-form-field matLine>
                     <mat-label>Latitude</mat-label>
@@ -95,6 +108,8 @@
             <button mat-raised-button color="primary" (click)="saveBuckets()">Speicher Eimer</button>
           </div>
         </mat-expansion-panel>
+          <button mat-raised-button color="primary" (click)="onNewLocationClick()">Füge neue Location hinzu</button>
+          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
       </mat-accordion>
   </div>
 

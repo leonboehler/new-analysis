@@ -21,12 +21,12 @@ export class LeftPanelComponent implements OnInit {
   ) { }
   buckets: Bucket[];
   selectedBucket: Bucket;
-  clickedItem: string;
-  hoveredOverItem: string;
+  clickedItem: number;
+  hoveredOverItem: number;
   hover: boolean;
 
   ngOnInit(): void {
-    this.communicationService.buckets().subscribe(buckets => {
+    this.communicationService.allbuckets.subscribe(buckets => {
       this.buckets = buckets;
     });
     this.orchestratorService.selectedBucket.subscribe(bucket => {
@@ -35,22 +35,22 @@ export class LeftPanelComponent implements OnInit {
         this.clickedItem = this.selectedBucket.id;
         this.hoveredOverItem = this.selectedBucket.id;
       } else {
-        this.clickedItem = 'null';
-        this.hoveredOverItem = 'null';
+        this.clickedItem = null;
+        this.hoveredOverItem = null;
       }
     });
   }
 
-  selectBucket(item: string, bucket: Bucket) {
+  selectBucket(item: number, bucket: Bucket) {
     this.highlight(item);
     this.orchestratorService.bucketSelected(bucket);
   }
 
-  highlight(item: string) {
+  highlight(item: number) {
     this.clickedItem = item;
   }
 
-  pointerOver(id: string) {
+  pointerOver(id: number) {
     this.hover = true;
     this.hoveredOverItem = id;
   }

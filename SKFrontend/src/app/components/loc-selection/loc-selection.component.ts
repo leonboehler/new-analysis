@@ -11,7 +11,7 @@ import {CommunicationService} from '../../services/communication.service';
 })
 export class LocSelectionComponent implements OnInit {
 
-  @Input() assignedIds: Array<string>;
+  @Input() assignedIds: Array<number>;
   selectedLocations = new Array<Location>();
 
   @Output() valueChanged = new EventEmitter()

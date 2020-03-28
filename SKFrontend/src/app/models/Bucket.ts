@@ -1,21 +1,21 @@
 import {Position} from './Position';
 
 export class Bucket {
-  id: string;
-  locationId: string;
+  chipId: number;
+  id?: number;
+  locationId: number;
+  name: string;
+  battery?: number;
+  reserved?: boolean;
   position: Position;
-  street: string;
-  maxFrogs: number;
-  currentFrogs: number;
-  reserved: boolean;
+  frogAmountMax: number;
+  frogAmount?: number;
 
-  constructor(id: string, position: Position, street: string, locationId: string) {
-    this.id = id;
-    this.locationId = locationId;
+  constructor(chipId: number, position: Position, street: string) {
+    this.chipId = chipId;
     this.position = position;
-    this.street = street;
-    this.maxFrogs = 0;
-    this.currentFrogs = 0;
+    this.frogAmountMax = 0;
+    this.frogAmount = 0;
     this.reserved = false;
   }
 

@@ -22,7 +22,7 @@ export class RightPanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.communicationService.buckets().subscribe(buckets => {
+    this.communicationService.allbuckets.subscribe(buckets => {
       this.buckets = buckets;
     });
     this.orchestratorService.selectedBucket.subscribe(bucket => {

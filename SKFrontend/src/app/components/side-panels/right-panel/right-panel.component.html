@@ -14,7 +14,7 @@
         <h4>Longitude: {{ selectedBucket?.position?.longitude }} </h4>
         <mat-divider></mat-divider>
         <p></p>
-        <h2>Füllstand: {{ selectedBucket?.currentFrogs }}/{{ selectedBucket?.maxFrogs }} </h2>
+        <h2>Füllstand: {{ selectedBucket?.frogAmount }}/{{ selectedBucket?.frogAmountMax }} </h2>
         <mat-icon id="close" (click)="closeSideBar()">close</mat-icon>
         <p class="with-icon" *ngIf="selectedBucket.reserved">
           <mat-icon class="info">info</mat-icon> <span class="text-with-icon">Eimer wird bereits geleert!</span>

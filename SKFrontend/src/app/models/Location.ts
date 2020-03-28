@@ -1,12 +1,19 @@
 import {Position} from './Position';
+import {Bucket} from './Bucket';
 
 export class Location {
-  uuid: string;
-  stationId: string;
-  street: string;
+  name: string;
+  chipId: number;
+  id?: number;
+  description: string;
+  street?: string;
+  postalCode?: number;
+  city: string;
   state: string;
-  battery: string;
   routeLength: string;
-  routePoints: Array<Position>;
-  bucketAmount: number;
+  locationMarkers?: Array<Position>;
+  stationId: number;
+  buckets?: Array<Bucket>;
+  expanded?: boolean;
+  bucketAmount?: number;
 }

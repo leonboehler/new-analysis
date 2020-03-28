@@ -1,7 +1,12 @@
 import {Position} from './Position';
+import {Bucket} from './Bucket';
+import {Location} from './Location';
 
 export class Station {
-  uuid: string;
+  chipId: number;
+  id?: number;
+  battery?: number;
   position: Position;
-  bucketAmount: number;
+  buckets?: Array<Bucket>
+  locations?: Array<Location>
 }
