@@ -323,7 +323,7 @@ export class AdminMapComponent implements OnInit {
 
 
         // Subscribe to buckets
-      this.communicationService.allbuckets.subscribe(buckets => {
+        this.communicationService.allbuckets.subscribe(buckets => {
 
             //Parse all buckets into OpenLayers features
             let features = [];
@@ -398,16 +398,17 @@ export class AdminMapComponent implements OnInit {
 
             //Jump to the currently selected location
             if(selectedLocation != null){
+                if(selectedLocation.locationMarkers.length > 1) {
+                    let locationCoords = [];
+                    selectedLocation.locationMarkers.forEach(point =>
+                        locationCoords.push(fromLonLat([point.longitude, point.latitude]))
+                    );
 
-                let locationCoords = [];
-                selectedLocation.locationMarkers.forEach(point =>
-                    locationCoords.push(fromLonLat([point.longitude, point.latitude]))
-                );
+                    let geometry = new LineString(locationCoords);
 
-                let geometry = new LineString(locationCoords);
-
-                view.fit(geometry);
-                view.adjustZoom(-1);
+                    view.fit(geometry);
+                    view.adjustZoom(-1);
+                }
             }
 
             locationLayer.changed();
