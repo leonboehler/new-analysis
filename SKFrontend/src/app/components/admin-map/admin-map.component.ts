@@ -24,8 +24,14 @@ import LineString from 'ol/geom/LineString';
     templateUrl: './admin-map.component.html',
     styleUrls: ['./admin-map.component.css']
 })
+
+/*
+* Component that contains an OpenLayers map for viewing and editing purposes.
+*/
+
 export class AdminMapComponent implements OnInit {
 
+    //String used to select the current click interaction with the map
     drawMode: string = 'none';
     selectedLocation: Location;
 
@@ -36,25 +42,26 @@ export class AdminMapComponent implements OnInit {
 
     ngOnInit(): void {
 
-      //Style Function to give that colors the locations dynamically
-      let locationStyleFunction = function(feature) {
+        //Style Function that colors the locations dynamically
+        let locationStyleFunction = function(feature) {
 
-          //default value
-          let color = 'green';
+            //default value
+            let color = 'green';
 
-          if(feature.get('location') == this.selectedLocation){
-              color = 'blue';
-          }
+            //show the selected location as blue
+            if(feature.get('location') == this.selectedLocation){
+                color = 'blue';
+            }
 
-          let style = new Style({
-              stroke: new Stroke({
-                  color: color,
-                  width: 7
-              })
-          })
+            let style = new Style({
+                stroke: new Stroke({
+                    color: color,
+                    width: 7
+                })
+            })
 
-          return style;
-      }.bind(this)
+            return style;
+        }.bind(this)
 
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let locationSource = new VectorSource();
@@ -66,27 +73,27 @@ export class AdminMapComponent implements OnInit {
         })
 
 
-          //Create VectorSource outside the Layer to be able to add Features to it later on
-          let locationEditSource = new VectorSource();
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let locationEditSource = new VectorSource();
 
-          //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-          let locationEditLayer = new VectorLayer({
-              source: locationEditSource,
-              style: new Style({
-                  stroke: new Stroke({
-                      color: 'blue',
-                      width: 7
-                  })
-              })
-          })
+        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        let locationEditLayer = new VectorLayer({
+            source: locationEditSource,
+            style: new Style({
+                stroke: new Stroke({
+                    color: 'blue',
+                    width: 7
+                })
+            })
+        })
 
 
-
-        //Style Function to give the markers a dynamic Icon that changes base on bucket values
+        //Style Function to give the markers a dynamic Icon that changes based on bucket values
         let bucketStyleFunction = function(feature) {
 
             let bucket = feature.get('bucket');
 
+            //Base color
             let color = 'white';
 
             //Color the bucket based on fill status
@@ -124,8 +131,11 @@ export class AdminMapComponent implements OnInit {
             style: bucketStyleFunction
         })
 
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
         let bucketEditSource = new VectorSource();
 
+        //Create VectorLayer outside the map to be able to refresh it using bucketEditLayer.changed()
         let bucketEditLayer = new VectorLayer({
             source: bucketEditSource,
             style: new Style({
@@ -137,8 +147,11 @@ export class AdminMapComponent implements OnInit {
             })
         })
 
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
         let bucketEditInactiveSource = new VectorSource();
 
+        //Create VectorLayer outside the map to be able to refresh it using bucketEditInactiveLayer.changed()
         let bucketEditInactiveLayer = new VectorLayer({
             source: bucketEditInactiveSource,
             style: new Style({
@@ -152,6 +165,7 @@ export class AdminMapComponent implements OnInit {
         })
 
 
+        //Create the view outside the map to be able to adjust its position
         let view = new View({
             center: fromLonLat([10.4515, 51.1657]),
             zoom: 6.3
@@ -174,6 +188,8 @@ export class AdminMapComponent implements OnInit {
             view: view
         });
 
+
+        //Subscribe to the current interaction mode
         this.adminService.drawMode.subscribe( drawMode =>
             this.drawMode = drawMode
         )
@@ -181,7 +197,7 @@ export class AdminMapComponent implements OnInit {
         //Register a click event
         map.on('click', function(e){
 
-
+            //Basic Selection Functionality
             if(this.drawMode == 'none'){
 
               let selectedLocation = null;
@@ -205,6 +221,7 @@ export class AdminMapComponent implements OnInit {
               this.adminService.setSelectedBucket(selectedBucket);
 
             } else
+            //Send bucket positions at the click to the adminService
             if(this.drawMode == 'bucket'){
                 const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
@@ -212,7 +229,9 @@ export class AdminMapComponent implements OnInit {
                     longitude: coord[0],
                     latitude: coord[1]
                 });
+
             } else
+            //Send location positions at the click to the adminService
             if(this.drawMode == 'location'){
               const coord = toLonLat(map.getCoordinateFromPixel(e.pixel));
 
@@ -220,10 +239,11 @@ export class AdminMapComponent implements OnInit {
                   longitude: coord[0],
                   latitude: coord[1]
               });
+
             } else
+            //Send station positions at the click to the adminService
             if(this.drawMode == 'station'){
-
-
+                //TODO
             }
 
         }.bind(this));
@@ -232,6 +252,7 @@ export class AdminMapComponent implements OnInit {
         //Subscribe to locations
         this.communicationService.locations().subscribe(locations => {
 
+            //Parse all locations into OpenLayers features
             let features = [];
             locations.forEach(location => {
 
@@ -248,105 +269,17 @@ export class AdminMapComponent implements OnInit {
 
             });
 
+            //Refresh locations
+            locationSource.clear();
             locationSource.addFeatures(features);
             locationLayer.changed();
 
         });
 
-
-        //Subscribe to buckets
-        this.communicationService.buckets().subscribe(buckets => {
-
-            let features = [];
-            buckets.forEach(bucket => {
-
-                //Create a feature that holds important information about a bucket for every bucket in the list
-                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
-                features.push(new Feature({
-                    bucket: bucket,
-                    geometry: new Point(coords)
-                }));
-
-            });
-
-            //Update VectorSource
-
-            bucketSource.addFeatures(features);
-        });
-
-
-        //Subscribe to the bucket that is currently being created
-        this.adminService.currentBucket.subscribe(bucket => {
-
-            bucketEditSource.clear();
-
-            if(bucket != null){
-              //Update VectorSource
-              bucketEditSource.addFeature(new Feature({
-                  bucket: bucket,
-                  geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
-              }));
-            }
-
-
-        });
-
-
-        //Subscribe to inactive buckets
-        this.adminService.createdBuckets.subscribe(buckets => {
-
-            if(buckets.length == 0){
-                bucketLayer.setVisible(true);
-            } else {
-                bucketLayer.setVisible(false);
-            }
-
-            let features = [];
-            buckets.forEach(bucket => {
-
-                //Create a feature that holds important information about a bucket for every bucket in the list
-                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
-                features.push(new Feature({
-                    bucket: bucket,
-                    geometry: new Point(coords)
-                }));
-
-            });
-
-            //Update VectorSource
-            bucketEditInactiveSource.clear();
-            bucketEditInactiveSource.addFeatures(features);
-        });
-
-        //Subscribe to currently edited Location
-        this.adminService.routePoints.subscribe(positions => {
-
-            if(positions.length == 0){
-                locationLayer.setVisible(true);
-            } else {
-                locationLayer.setVisible(false);
-            }
-
-            let locationCoords = [];
-
-            positions.forEach(position =>
-                locationCoords.push(fromLonLat([position.longitude, position.latitude]))
-            );
-
-            locationEditSource.clear();
-
-            locationEditSource.addFeature(new Feature(({
-                location: location,
-                geometry: new LineString(locationCoords)
-            })));
-
-        });
-
-
         //Subscription to update the selected location
         this.adminService.selectedLocation.subscribe(selectedLocation => {
-
             this.selectedLocation = selectedLocation;
+            locationLayer.changed();
 
             //Jump to the currently selected location
             if(selectedLocation != null){
@@ -361,9 +294,98 @@ export class AdminMapComponent implements OnInit {
                 view.fit(geometry);
                 view.adjustZoom(-1);
             }
-
-            locationLayer.changed();
         });
+
+        //Subscribe to the location that is currently being edited
+        this.adminService.routePoints.subscribe(positions => {
+
+            //Hide all other locations while a location is being edited
+            if(positions.length == 0){
+                locationLayer.setVisible(true);
+            } else {
+                locationLayer.setVisible(false);
+            }
+
+            //Parse the location points
+            let locationCoords = [];
+            positions.forEach(position =>
+                locationCoords.push(fromLonLat([position.longitude, position.latitude]))
+            );
+
+            //Refresh the edited location on the map
+            locationEditSource.clear();
+            locationEditSource.addFeature(new Feature(({
+                location: location,
+                geometry: new LineString(locationCoords)
+            })));
+
+        });
+
+
+        //Subscribe to buckets
+        this.communicationService.buckets().subscribe(buckets => {
+
+            //Parse all buckets into OpenLayers features
+            let features = [];
+            buckets.forEach(bucket => {
+
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                features.push(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(coords)
+                }));
+
+            });
+
+            //Refresh buckets
+            bucketSource.clear();
+            bucketSource.addFeatures(features);
+            bucketLayer.changed();
+        });
+
+        //Subscribe to the bucket that is currently being created
+        this.adminService.currentBucket.subscribe(bucket => {
+
+            //Refresh the edited location on the map
+            bucketEditSource.clear();
+            if(bucket != null){
+                bucketEditSource.addFeature(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
+                }));
+            }
+            bucketEditLayer.changed();
+
+        });
+
+        //Subscribe to inactive buckets
+        this.adminService.createdBuckets.subscribe(buckets => {
+
+            //Hide all other buckets while buckets are being edited
+            if(buckets.length == 0){
+                bucketLayer.setVisible(true);
+            } else {
+                bucketLayer.setVisible(false);
+            }
+
+            //Parse all buckets into OpenLayers features
+            let features = [];
+            buckets.forEach(bucket => {
+
+                const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
+                features.push(new Feature({
+                    bucket: bucket,
+                    geometry: new Point(coords)
+                }));
+
+            });
+
+            //Update VectorSource
+            bucketEditInactiveSource.clear();
+            bucketEditInactiveSource.addFeatures(features);
+            bucketEditInactiveLayer.changed();
+        });
+
 
     }
 

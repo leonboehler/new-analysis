@@ -24,6 +24,11 @@ import LineString from 'ol/geom/LineString';
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
+
+/*
+* Component that contains an OpenLayers map for basic viewing purposes.
+*/
+
 export class MapComponent implements OnInit {
 
     selectedLocation: Location;
@@ -35,12 +40,13 @@ export class MapComponent implements OnInit {
 
     ngOnInit(): void {
 
-        //Style Function to give that colors the locations dynamically
+        //Style Function that colors the locations dynamically
         let locationStyleFunction = function(feature) {
 
             //default value
             let color = 'green';
 
+            //show the selected location as blue
             if(feature.get('location') == this.selectedLocation){
                 color = 'blue';
             }
@@ -58,15 +64,14 @@ export class MapComponent implements OnInit {
         //Create VectorSource outside the Layer to be able to add Features to it later on
         let locationSource = new VectorSource();
 
-        //Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
+        //Create VectorLayer outside the map to be able to refresh it using locationLayer.changed()
         let locationLayer = new VectorLayer({
             source: locationSource,
             style: locationStyleFunction
         })
 
 
-
-        //Style Function to give the markers a dynamic Icon that changes base on bucket values
+        //Style Function to give the markers a dynamic Icon that changes based on bucket values
         let bucketStyleFunction = function(feature) {
 
             let bucket = feature.get('bucket');
@@ -76,7 +81,7 @@ export class MapComponent implements OnInit {
             let color = 'white';
 
             //Make the marker larger if it is selected
-            if(this.selectedBucket == feature.get('bucket')){
+            if(this.selectedBucket == bucket){
                 scale = 0.1;
             }
 
@@ -115,6 +120,8 @@ export class MapComponent implements OnInit {
             style: bucketStyleFunction
         })
 
+
+        //Create the view outside the map to be able to adjust its position
         let view = new View({
             center: fromLonLat([10.4515, 51.1657]),
             zoom: 6.3
@@ -133,6 +140,7 @@ export class MapComponent implements OnInit {
             ],
             view: view
         });
+
 
         //Register a click event to be able to select markers
         map.on('click', function(e){
@@ -161,6 +169,7 @@ export class MapComponent implements OnInit {
         //Subscribe to locations
         this.communicationService.locations().subscribe(locations => {
 
+            //Parse all locations into OpenLayers features
             let features = [];
             locations.forEach(location => {
 
@@ -177,11 +186,12 @@ export class MapComponent implements OnInit {
 
             });
 
+            //Refresh locations
+            locationSource.clear();
             locationSource.addFeatures(features);
             locationLayer.changed();
 
         });
-
 
         //Subscription to update the selected location
         this.orchestratorService.selectedLocation.subscribe(selectedLocation => {
@@ -207,10 +217,10 @@ export class MapComponent implements OnInit {
         //Subscribe to buckets
         this.communicationService.buckets().subscribe(buckets => {
 
+            //Parse all buckets into OpenLayers features
             let features = [];
             buckets.forEach(bucket => {
 
-                //Create a feature that holds important information about a bucket for every bucket in the list
                 const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
                     bucket: bucket,
@@ -219,9 +229,10 @@ export class MapComponent implements OnInit {
 
             });
 
-            //Update VectorSource
+            //Refresh buckets
             bucketSource.clear();
             bucketSource.addFeatures(features);
+            bucketLayer.changed();
         });
 
         //Subscription to update the selected bucket
