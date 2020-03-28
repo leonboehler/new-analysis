@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {Bucket} from '../../models/Bucket';
 import {Location} from '../../models/Location';
+import {Bucket} from '../../models/Bucket';
 import {CommunicationService} from '../../services/communication.service'
 import {OrchestratorService} from '../../services/orchestrator.service'
 import {Subscription} from 'rxjs';
@@ -221,7 +221,6 @@ export class MapComponent implements OnInit {
             let features = [];
             buckets.forEach(bucket => {
 
-                //Create a feature that holds important information about a bucket for every bucket in the list
                 const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
                     bucket: bucket,
