@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import {Bucket} from '../../models/Bucket';
 import {Location} from '../../models/Location';
-import {CommunicationService} from '../../services/communication.service';
-import {OrchestratorService} from '../../services/orchestrator.service';
+import {CommunicationService} from '../../services/communication.service'
+import {OrchestratorService} from '../../services/orchestrator.service'
 import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';
@@ -24,6 +24,11 @@ import LineString from 'ol/geom/LineString';
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
+
+/*
+* Component that contains an OpenLayers map for basic viewing purposes.
+*/
+
 export class MapComponent implements OnInit {
 
     selectedLocation: Location;
@@ -35,94 +40,96 @@ export class MapComponent implements OnInit {
 
     ngOnInit(): void {
 
-        // Style Function to give that colors the locations dynamically
-        const locationStyleFunction = function(feature) {
+        //Style Function that colors the locations dynamically
+        let locationStyleFunction = function(feature) {
 
-            // default value
+            //default value
             let color = 'green';
 
-            if (feature.get('location') == this.selectedLocation) {
+            //show the selected location as blue
+            if(feature.get('location') == this.selectedLocation){
                 color = 'blue';
             }
 
-            const style = new Style({
+            let style = new Style({
                 stroke: new Stroke({
-                    color,
+                    color: color,
                     width: 7
                 })
-            });
+            })
 
             return style;
-        }.bind(this);
+        }.bind(this)
 
-        // Create VectorSource outside the Layer to be able to add Features to it later on
-        const locationSource = new VectorSource();
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let locationSource = new VectorSource();
 
-        // Create VectorLayer outside the map to be able to refresh it using fenceLayer.changed()
-        const locationLayer = new VectorLayer({
+        //Create VectorLayer outside the map to be able to refresh it using locationLayer.changed()
+        let locationLayer = new VectorLayer({
             source: locationSource,
             style: locationStyleFunction
-        });
+        })
 
 
+        //Style Function to give the markers a dynamic Icon that changes based on bucket values
+        let bucketStyleFunction = function(feature) {
 
-        // Style Function to give the markers a dynamic Icon that changes base on bucket values
-        const bucketStyleFunction = function(feature) {
+            let bucket = feature.get('bucket');
 
-            const bucket = feature.get('bucket');
-
-            // Default values
+            //Default values
             let scale = 0.07;
             let color = 'white';
 
-            // Make the marker larger if it is selected
-            if (this.selectedBucket == feature.get('bucket')) {
+            //Make the marker larger if it is selected
+            if(this.selectedBucket == bucket){
                 scale = 0.1;
             }
 
-            // Color the bucket based on fill status
-            if (bucket.reserved) {
+            //Color the bucket based on fill status
+            if(bucket.reserved){
               color = 'cyan';
-            } else if (bucket.currentFrogs == 0) {
-                color = 'lime'; // empty
-            } else if (bucket.currentFrogs < bucket.maxFrogs / 2) {
-                color = 'yellow'; // less than 50% full
-            } else if (bucket.currentFrogs < bucket.maxFrogs) {
-                color = 'orange'; // more than 50% full
+            } else if(bucket.currentFrogs == 0){
+                color = 'lime'; //empty
+            } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
+                color = 'yellow'; //less than 50% full
+            } else if(bucket.currentFrogs < bucket.maxFrogs){
+                color = 'orange'; //more than 50% full
             } else {
-                color = 'red'; // full
+                color = 'red'; //full
             }
 
-            // Create final Icon
-            const style = new Style({
+            //Create final Icon
+            let style = new Style({
                 image: new Icon({
                     src: '/assets/bucket.png',
                     imgSize: [512, 512],
-                    scale,
-                    color
+                    scale: scale,
+                    color: color
                 })
             });
 
             return style;
-        }.bind(this);
+        }.bind(this)
 
-        // Create VectorSource outside the Layer to be able to add Features to it later on
-        const bucketSource = new VectorSource();
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let bucketSource = new VectorSource();
 
-        // Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
-        const bucketLayer = new VectorLayer({
+        //Create VectorLayer outside the map to be able to refresh it using bucketLayer.changed()
+        let bucketLayer = new VectorLayer({
             source: bucketSource,
             style: bucketStyleFunction
-        });
+        })
 
-        const view = new View({
+
+        //Create the view outside the map to be able to adjust its position
+        let view = new View({
             center: fromLonLat([10.4515, 51.1657]),
             zoom: 6.3
-        });
+        })
 
 
-        // Create map
-        const map = new Map({
+        //Create map
+        let map = new Map({
             target: 'map',
             layers: [
                 new TileLayer({
@@ -131,25 +138,26 @@ export class MapComponent implements OnInit {
                 locationLayer,
                 bucketLayer
             ],
-            view
+            view: view
         });
 
-        // Register a click event to be able to select markers
-        map.on('click', function(e) {
+
+        //Register a click event to be able to select markers
+        map.on('click', function(e){
             let selectedLocation = null;
             let selectedBucket = null;
 
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-                if (layer == locationLayer) {
+                if(layer == locationLayer){
                     selectedLocation = feature.get('location');
                 }
-                if (layer == bucketLayer) {
+                if(layer == bucketLayer){
                     selectedBucket = feature.get('bucket');
                 }
             }.bind(this));
 
-            // If a bucket is selected, don't select the location below it
-            if (selectedBucket != null) {
+            //If a bucket is selected, don't select the location below it
+            if(selectedBucket != null){
                 selectedLocation = null;
             }
 
@@ -161,42 +169,44 @@ export class MapComponent implements OnInit {
         // Subscribe to locations
         this.communicationService.alllocations.subscribe(locations => {
 
-            const features = [];
+            //Parse all locations into OpenLayers features
+            let features = [];
             locations.forEach(location => {
 
-                const locationCoords = [];
+                let locationCoords = [];
 
                 location.locationMarkers.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
                 features.push(new Feature(({
-                    location,
+                    location: location,
                     geometry: new LineString(locationCoords)
                 })));
 
             });
 
+            //Refresh locations
+            locationSource.clear();
             locationSource.addFeatures(features);
             locationLayer.changed();
 
         });
 
-
-        // Subscription to update the selected location
+        //Subscription to update the selected location
         this.orchestratorService.selectedLocation.subscribe(selectedLocation => {
             this.selectedLocation = selectedLocation;
             locationLayer.changed();
 
-            // Jump to the currently selected location
-            if (selectedLocation != null) {
+            //Jump to the currently selected location
+            if(selectedLocation != null){
 
-                const locationCoords = [];
-                selectedLocation.locationMarkers.forEach(point =>
+                let locationCoords = [];
+                selectedLocation.routePoints.forEach(point =>
                     locationCoords.push(fromLonLat([point.longitude, point.latitude]))
                 );
 
-                const geometry = new LineString(locationCoords);
+                let geometry = new LineString(locationCoords);
 
                 view.fit(geometry);
                 view.adjustZoom(-1);
@@ -207,30 +217,32 @@ export class MapComponent implements OnInit {
         // Subscribe to buckets
         this.communicationService.allbuckets.subscribe(buckets => {
 
-            const features = [];
+            //Parse all buckets into OpenLayers features
+            let features = [];
             buckets.forEach(bucket => {
 
-                // Create a feature that holds important information about a bucket for every bucket in the list
+                //Create a feature that holds important information about a bucket for every bucket in the list
                 const coords = fromLonLat([bucket.position.longitude, bucket.position.latitude]);
                 features.push(new Feature({
-                    bucket,
+                    bucket: bucket,
                     geometry: new Point(coords)
                 }));
 
             });
 
-            // Update VectorSource
+            //Refresh buckets
             bucketSource.clear();
             bucketSource.addFeatures(features);
+            bucketLayer.changed();
         });
 
-        // Subscription to update the selected bucket
+        //Subscription to update the selected bucket
         this.orchestratorService.selectedBucket.subscribe(selectedBucket => {
             this.selectedBucket = selectedBucket;
             bucketLayer.changed();
 
-            // Jump to the currently selected bucket
-            if (selectedBucket != null) {
+            //Jump to the currently selected bucket
+            if(selectedBucket != null){
                 view.setCenter(fromLonLat([selectedBucket.position.longitude, selectedBucket.position.latitude]));
                 view.setZoom(14);
             }
