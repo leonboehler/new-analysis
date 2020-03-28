@@ -48,67 +48,67 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should catch no first name (FBB02)', () => {
+  it('should catch no first name (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_firstname')).value = '';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch no surname (FBB02)', () => {
+  it('should catch no surname (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_name')).value = '';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch invalid e-mail address (FBB02)', () => {
+  it('should catch invalid e-mail address (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_email')).value = 'WRONG!';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch no city (FBB02)', () => {
+  it('should catch no city (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_city')).value = '';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch no postcode (FBB02)', () => {
+  it('should catch no postcode (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_postcode')).value = '';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should allow no street (FBB02)', () => {
+  it('should allow no street (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_street')).value = '';
     expect(component.onClickRegister()).not.toBeFalse();
   });
 
-  it('should catch short password (FBB02)', () => {
+  it('should catch short password (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_password')).value = 'S#0rt';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch no capitals in password (FBB02)', () => {
+  it('should catch no capitals in password (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_password')).value = 'l0wer_case';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch only capitals in password (FBB02)', () => {
+  it('should catch only capitals in password (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_password')).value = 'UPP3R_CAS3';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch no numbers in password (FBB02)', () => {
+  it('should catch no numbers in password (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_password')).value = 'Non_Numeric';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch passwords don\'t match (FBB02)', () => {
+  it('should catch passwords don\'t match (TK-0201a; FBB02)', () => {
     (<HTMLInputElement> element.querySelector('#input_password_confirm')).value += 'x';
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should catch unchecked terms of use (FBB07)', () => {
+  it('should catch unchecked terms of use (TK-0206a; FBB07)', () => {
     (<HTMLInputElement> element.querySelector('#input_agb')).checked = false;
     expect(component.onClickRegister()).toBeFalse();
   });
 
-  it('should accept valid details (FBB02)', () => {
+  it('should accept valid details (TK-0201a; FBB02)', () => {
     // Valid input was already set up in beforeEach()
     expect(component.onClickRegister()).not.toBeFalse();
   });
