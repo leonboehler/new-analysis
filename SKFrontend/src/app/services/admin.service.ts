@@ -4,6 +4,7 @@ import {Bucket} from '../models/Bucket';
 import {Position} from '../models/Position';
 import {Location} from '../models/Location';
 import {OrchestratorService} from './orchestrator.service';
+import {Station} from '../models/Station';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,8 @@ export class AdminService {
 
   routePointsData = new Array<Position>();
   routePoints = new BehaviorSubject<Position[]>(this.routePointsData);
+
+  selectedStation = new BehaviorSubject<Station>(null)
 
   constructor(private orchestratorService: OrchestratorService) {}
 
@@ -102,5 +105,9 @@ export class AdminService {
     this.routePointsData.splice(index, 1);
     console.log(this.routePointsData);
     this.routePoints.next(this.routePointsData);
+  }
+
+  setStationPosition(position: Position){
+
   }
 }
