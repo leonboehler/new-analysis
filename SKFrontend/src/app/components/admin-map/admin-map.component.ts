@@ -36,6 +36,7 @@ export class AdminMapComponent implements OnInit {
     //String used to select the current click interaction with the map
     drawMode: string = 'none';
     selectedStation: Station;
+    currentStation: Station;
     selectedLocation: Location;
 
     constructor(private communicationService: CommunicationService,
@@ -56,6 +57,9 @@ export class AdminMapComponent implements OnInit {
             //Make the marker larger if it is selected
             if(this.selectedStation == station){
                 scale = 0.1;
+            }
+            if(this.currentStation == station){
+                scale = 0;
             }
 
             //Create final Icon
@@ -78,6 +82,21 @@ export class AdminMapComponent implements OnInit {
         let stationLayer = new VectorLayer({
             source: stationSource,
             style: stationStyleFunction
+        })
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let stationEditSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using bucketEditLayer.changed()
+        let stationEditLayer = new VectorLayer({
+            source: stationEditSource,
+            style: new Style({
+                image: new Icon({
+                    src: '/assets/station.png',
+                    imgSize: [512, 512],
+                    scale: 0.07
+                })
+            })
         })
 
 
@@ -219,6 +238,7 @@ export class AdminMapComponent implements OnInit {
                     source: new OsmSource()
                 }),
                 stationLayer,
+                stationEditLayer,
                 locationLayer,
                 locationEditLayer,
                 bucketLayer,
@@ -308,8 +328,6 @@ export class AdminMapComponent implements OnInit {
         // Subscribe to Stations
         this.communicationService.allstations.subscribe(stations => {
 
-            console.log('hi');
-
             //Parse all stations into OpenLayers features
             let features = [];
             stations.forEach(station => {
@@ -328,16 +346,34 @@ export class AdminMapComponent implements OnInit {
             stationLayer.changed();
         })
 
-        //Subscription to update the selected bucket
-        this.adminService.currentStation.subscribe(selectedStation => {
+        //Subscription to update the selected station
+        this.adminService.selectedStation.subscribe(selectedStation => {
             this.selectedStation = selectedStation;
             stationLayer.changed();
 
             //Jump to the currently selected station
             if(selectedStation != null){
-                view.setCenter(fromLonLat([selectedStation.position.longitude, selectedStation.position.latitude]));
-                view.setZoom(14);
+                if(selectedStation.position.longitude != 0 || selectedStation.position.latitude != 0) {
+                    view.setCenter(fromLonLat([selectedStation.position.longitude, selectedStation.position.latitude]));
+                    view.setZoom(14);
+                }
             }
+        });
+
+        //Subscribe to the station that is currently being edited
+        this.adminService.currentStation.subscribe(station => {
+            this.currentStation = station;
+
+            //Refresh the edited location on the map
+            stationEditSource.clear();
+            if(station != null){
+                stationEditSource.addFeature(new Feature({
+                    station: station,
+                    geometry: new Point(fromLonLat([station.position.longitude, station.position.latitude]))
+                }));
+            }
+            stationEditLayer.changed();
+
         });
 
 
@@ -440,7 +476,7 @@ export class AdminMapComponent implements OnInit {
         });
 
 
-        //Subscribe to the bucket that is currently being created
+        //Subscribe to the bucket that is currently being edited
         this.adminService.currentBucket.subscribe(bucket => {
 
             //Refresh the edited location on the map
@@ -451,7 +487,7 @@ export class AdminMapComponent implements OnInit {
                     geometry: new Point(fromLonLat([bucket.position.longitude, bucket.position.latitude]))
                 }));
             }
-
+            bucketEditLayer.changed();
 
         });
 
