@@ -14,22 +14,23 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-form-field>
+        <mat-form-field matLine>
           <mat-label>ChipId</mat-label>
-          <input id="input_station_chipId" matInput [value]="station.chipId" (input)="onInput($event)">
+          <input id="input_station_chipId" matInput type="number" [value]="station.chipId" (input)="onInput($event)">
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field matLine>
           <mat-label>Latitude</mat-label>
-          <input id="input_station_latitude" matInput [value]="station.position.latitude" (input)="onInput($event)">
+          <input id="input_station_latitude" matInput type="number" [value]="station.position.latitude" (input)="onInput($event)">
         </mat-form-field>
         <mat-form-field>
-          <mat-label>State</mat-label>
-          <input id="input_station_longitude" matInput [value]="station.position.longitude" (input)="onInput($event)">
+          <mat-label>Longitude</mat-label>
+          <input id="input_station_longitude" matInput  type="number" [value]="station.position.longitude" (input)="onInput($event)">
         </mat-form-field>
 
       </mat-expansion-panel>
     </mat-accordion>
+    <button mat-raised-button color="primary"  (click)="addStation()">Füge Station hinzu</button>
   </div>
 
   <div class="map-wrapper">

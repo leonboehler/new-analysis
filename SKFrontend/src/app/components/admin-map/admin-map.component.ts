@@ -267,7 +267,7 @@ export class AdminMapComponent implements OnInit {
                   selectedLocation = null;
               }
 
-              this.adminService.setSelectedStation(selectedStation);
+              this.adminService.setCurrentStation(selectedStation);
               this.adminService.setSelectedLocation(selectedLocation);
               this.adminService.setSelectedBucket(selectedBucket);
 
@@ -329,7 +329,7 @@ export class AdminMapComponent implements OnInit {
         })
 
         //Subscription to update the selected bucket
-        this.adminService.selectedStation.subscribe(selectedStation => {
+        this.adminService.currentStation.subscribe(selectedStation => {
             this.selectedStation = selectedStation;
             stationLayer.changed();
 

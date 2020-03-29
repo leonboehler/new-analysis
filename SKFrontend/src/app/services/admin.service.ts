@@ -28,6 +28,8 @@ export class AdminService {
   routePoints = new BehaviorSubject<Position[]>(this.routePointsData);
 
   selectedStation = new BehaviorSubject<Station>(null)
+  currentStationData: Station
+  currentStation = new BehaviorSubject<Station>(null)
 
   constructor(private orchestratorService: OrchestratorService) {}
 
@@ -68,8 +70,9 @@ export class AdminService {
     this.drawMode.next(mode);
   }
 
-  setSelectedStation(station: Station) {
-    this.selectedStation.next(station);
+  setCurrentStation(station: Station) {
+    this.currentStationData = station
+    this.currentStation.next(station);
   }
   setSelectedLocation(location: Location) {
     this.selectedLocation.next(location);
@@ -111,7 +114,12 @@ export class AdminService {
   }
 
   setStationPosition(position: Position){
+    this.currentStationData.position = position
+    this.currentStation.next(this.currentStationData)
+  }
 
+  setSelectedStation(station: Station){
+    this.selectedStation.next(station)
   }
 
 }
