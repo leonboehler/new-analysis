@@ -1,0 +1,22 @@
+/**************************************** */
+/*** TYPE	MySQL 8+
+/*** IP:	bc.dyndns.deseyve.com
+/*** DATABASE:	dehabewe
+/*** USER:	server
+/*** PASSWORT:	dhbw2020#
+/**************************************** */
+
+sudo apt-get install mysql-server
+
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf -->bind address
+
+sudo systemctl restart mysql.service
+sudo systemctl restart mariadb.service
+
+
+mysql -u root -p
+use mysql;
+update user set password=PASSWORD("dhbw2020#") where User='root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY "dhbw2020#" WITH GRANT OPTION;
+
+flush privileges;
