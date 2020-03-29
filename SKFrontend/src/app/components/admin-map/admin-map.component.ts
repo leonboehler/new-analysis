@@ -157,11 +157,11 @@ export class AdminMapComponent implements OnInit {
             //Color the bucket based on fill status
             if(bucket.reserved){
               color = 'cyan';
-            } else if(bucket.currentFrogs == 0){
+            } else if(bucket.frogAmount == 0){
                 color = 'lime'; //empty
-            } else if(bucket.currentFrogs < bucket.maxFrogs/2) {
+            } else if(bucket.frogAmount < bucket.frogAmountMax/2) {
                 color = 'yellow'; //less than 50% full
-            } else if(bucket.currentFrogs < bucket.maxFrogs){
+            } else if(bucket.frogAmount < bucket.frogAmountMax){
                 color = 'orange'; //more than 50% full
             } else {
                 color = 'red'; //full
