@@ -15,7 +15,6 @@ export class AdminComponent implements OnInit {
 
   edit(user){
     console.log(user.firstName);
-    //TODO: open editing panel with user data
     this.orchestratorService.setEditUser(user);
     this.router.navigate(['/adminEditingUser']);
 
@@ -41,10 +40,10 @@ export class AdminComponent implements OnInit {
     return false;
   }
   onClickStation(){
-    this.router.navigate(['/adminEditingUser']);
+    this.router.navigate(['/locSelection']);
   }
   onClickLocation(){
-    this.router.navigate(['/adminEditingUser']);
+    this.router.navigate(['/locCreate']);
   }
   ngOnInit(): void {
   }
