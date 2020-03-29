@@ -1,13 +1,16 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_add_readiness.sql
+* Program name      : fn_add_station.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
-* RETURN            : --
+* Purpose           : Adds a new station 
+* PARAMS            : pChipID: 		xunique chip id of the station
+* 					  pLatitude:    latitude coordinate
+* 					  pLongitude:	longitude coordinate
+* 
+* RETURN            : ID:			identifier of the inserted station
 /**********************************************************************/
 delimiter //
 

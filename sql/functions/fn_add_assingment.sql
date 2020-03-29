@@ -1,12 +1,13 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_add_readiness.sql
+* Program name      : fn_add_assignment.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
+* Purpose           : Adds a new assignment for the user according to a bucket.
+* PARAMS            : pMail:		mail address of the user to identify the user-id
+* 					  pLocation:	foreign-key of the location.
 * RETURN            : --
 /**********************************************************************/
 delimiter //

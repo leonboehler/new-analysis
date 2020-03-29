@@ -5,8 +5,20 @@
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Function checks whether the user already exists. Then login and register session
-* PARAMS            : --
+* Purpose           : Function checks whether the user already exists. When not exists, the users data will be registered.
+* PARAMS            : pFirstname : 		firstname of the user
+*					  pLastname :		lastname of the user
+*					  pBirthday : 		birthday of the user
+*					  pPhone:			phone number of the user
+*					  pStreet:			street address of the user
+*					  pStreetnumber:	streetnumber of the user
+*					  pPLZ:				postal code
+*					  pCity:			city of the users address
+*					  pState:			state within the country
+*					  pCountry:			country of the user location
+*					  pMail:			users mail address
+*				      pPassword:		sha256 hashed password
+*					  pRole:			either USER for regular user account or ADMIN for extended permissions
 * RETURN            : --
 /**********************************************************************/
 delimiter //

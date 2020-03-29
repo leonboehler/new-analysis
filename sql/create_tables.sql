@@ -1,11 +1,11 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : create.sql
+* Program name      : create_tables.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Create all tables
+* Purpose           : Create database, set timezone and all tables with columns 
 * 
 /**********************************************************************/
 CREATE DATABASE IF NOT EXISTS dehabewe;
@@ -28,19 +28,15 @@ DROP TABLE IF EXISTS sys_config;
 /**************************************** */
 /*** CONFIG
 /**************************************** */	
-CREATE TABLE IF NOT EXISTS sys_config (		/* USER-TABLE like mentioned in SM05 */
+CREATE TABLE IF NOT EXISTS sys_config (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   name varchar(100),
   value varchar(256) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
+# Persistent session id for the verification of stations
 INSERT INTO sys_config(name, value) VALUES ('session_id_station','a181f342661a20e112bcc86323b4cfbf88e20cfda4ed8a7c7414b1c1e2c47a4e');
-SELECT LAST_INSERT_ID();
-INSERT #a(x) 
-  OUTPUT inserted.identity_column 
-  VALUES('b'),('c');
-SELECT SCOPE_IDENTITY();
 /**************************************** */
 /*** USER
 /**************************************** */	
@@ -87,10 +83,9 @@ CREATE TABLE IF NOT EXISTS st_station (
   UNIQUE KEY(chip_id), 
   latitude DECIMAL(10,7) default NULL,
   longitude DECIMAL(10,7) default NULL,  
-  battery_level decimal(4,2) default NULL,
+  battery_level decimal(5,2) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
-
 
 /**************************************** */
 /*** LOCATION
@@ -105,7 +100,7 @@ CREATE TABLE IF NOT EXISTS st_location (
   city varchar(127) default NULL,
   state varchar(100) default NULL,
   country VARCHAR(100) default 'Deutschland', 
-  route_length DECIMAL(4,2) default NULL, 
+  route_length decimal(5,2) default NULL, 
   station_id int(11) NOT NULL,
   FOREIGN KEY (station_id) REFERENCES st_station(id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -166,7 +161,7 @@ CREATE TABLE IF NOT EXISTS st_bucket (
   longitude DECIMAL(10,7) default NULL,
   toads_count int(11) default 0,
   max_toads int(11) default NULL,  
-  battery_level decimal(4,2) default NULL,
+  battery_level decimal(5,2) default NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -183,6 +178,7 @@ CREATE TABLE IF NOT EXISTS st_job (
   UNIQUE(user_id, bucket_id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
 /**************************************** */
 /*** LOG
 /**************************************** */
@@ -202,7 +198,7 @@ CREATE TABLE IF NOT EXISTS rt_station (
   id int(11) NOT NULL auto_increment,
   PRIMARY KEY (id),  
   chip_id int(11) NOT NULL,   
-  battery_level decimal(4,2) NOT NULL,
+  battery_level decimal(5,2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
@@ -214,8 +210,6 @@ CREATE TABLE IF NOT EXISTS rt_bucket (
   PRIMARY KEY (id),  
   chip_id int(11) NOT NULL,
   toads_count int(11) NOT NULL,
-  battery_level decimal(4,2) NOT NULL,
+  battery_level decimal(5,2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
-
-

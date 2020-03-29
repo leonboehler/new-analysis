@@ -5,14 +5,14 @@
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
+* Purpose           : Adds a new readiness for a user
+* PARAMS            : pMail:	mail address to identify a user
+* 					  pTime:	time of a day when the user wants to be notified
 * RETURN            : --
 /**********************************************************************/
 delimiter //
 
 DROP PROCEDURE IF EXISTS fn_add_readiness//
-
 
 CREATE PROCEDURE fn_add_readiness (
 	IN pMail varchar(100),

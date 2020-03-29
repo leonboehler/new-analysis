@@ -1,13 +1,21 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_add_readiness.sql
+* Program name      : fn_add_location.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
-* RETURN            : --
+* Purpose           : Adds a new location with the given parameters to the location set
+* PARAMS            : pName: 		name of the location
+* 					  pInfo:		more detailed information about the location
+* 					  pStreet: 	 	streeet address of the location
+* 					  pPLZ: 		postal code
+* 					  pCity:		city address
+* 					  pState:		state within the country
+* 					  pLength:		length of the fence based on kilometres
+* 					  pStationID:	foreign-id of the assigned station
+* 
+* RETURN            : ID:			identifier of the inserted location
 /**********************************************************************/
 delimiter //
 

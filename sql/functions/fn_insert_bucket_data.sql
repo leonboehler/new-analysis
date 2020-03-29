@@ -1,12 +1,14 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_inc_toads.sql
+* Program name      : fn_insert_bucket_data.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
+* Purpose           : Insert the bucket data received by the station module
+* PARAMS            : pChipID :			varchar(17)
+* 					  pToadsCount : 	int(11)
+* 					  pBatteryLevel : 	decimal(5,2)
 * RETURN            : --
 /**********************************************************************/
 delimiter //
@@ -16,25 +18,24 @@ DROP PROCEDURE IF EXISTS fn_insert_bucket_data//
 CREATE PROCEDURE fn_insert_bucket_data (
 	IN pChipID varchar(17), 
 	IN pToadsCount int(11),
-	IN pBatteryLevel decimal(4,2)
-) 
-  
+	IN pBatteryLevel decimal(5,2)
+)   
 BEGIN	
-	DECLARE _maxToads int(5);	
-	DECLARE _oldToads int(5);
-
-	INSERT INTO rt_bucket(chip_id, toads_count, battery_level) VALUES (pChipID, pToadsCount, pBatteryLevel);
-
-	SELECT bucket_max_toads, bucket_toads_count INTO _maxToads, _oldToads FROM sys_bucket WHERE bucket_chip_id = pChipID;	
 	
+	SET AUTOCOMMIT = 0;
+	START TRANSACTION;
+
+	INSERT INTO rt_bucket(chip_id, toads_count, battery_level) VALUES (pChipID, pToadsCount, pBatteryLevel);	
 	UPDATE st_bucket SET toads_count = pToadsCount, battery_level = pBatteryLevel WHERE chip_id = pChipID;
+
 	IF(ROW_COUNT() != 1) THEN
+		SET AUTOCOMMIT = 1;
+		COMMIT;
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 404, MESSAGE_TEXT = 'chip (or bucket id) is is wrong';	
-	END IF;	
-	
-	IF(pToadsCount > _oldToads) THEN
-		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 502, MESSAGE_TEXT = 'toads count increased - please send mail';	
-	END IF;  	
+	ELSE 
+		SET AUTOCOMMIT = 0;
+		ROLLBACK;
+	END IF;		
 	
 END //
 delimiter ;

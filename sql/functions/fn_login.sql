@@ -6,7 +6,9 @@
 * Author            : Dominik Deseyve
 *
 * Purpose           : Function checks whether the user already exists. Then login and register session
-* PARAMS            : --
+* PARAMS            : pMail : 		mail address of the user
+* 					  pPassword : 	sha256 hashed password
+* 					  pSessionID : 	given session id of the user
 * RETURN            : --
 /**********************************************************************/
 delimiter //
@@ -51,7 +53,6 @@ BEGIN
 	ELSE 
 		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 413, MESSAGE_TEXT = 'wrong pw';
  	END IF;
-  
-  	
+    	
 END //
 delimiter ;

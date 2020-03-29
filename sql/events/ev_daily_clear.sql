@@ -1,11 +1,11 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_add_readiness.sql
+* Program name      : ev_daily_clear.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
+* Purpose           : Daily clear of the tables that wont be used anymre
 * PARAMS            : --
 * RETURN            : --
 /**********************************************************************/
@@ -14,14 +14,11 @@ SET GLOBAL event_scheduler = ON;
 CREATE OR REPLACE EVENT ev_daily_clear
   ON SCHEDULE
     EVERY 1 DAY        
-    STARTS DATE_FORMAT(NOW(), "%Y-%m-%d 00:00:00")
-  DO CALL sys_daily_clear();
-
- 
+    STARTS DATE_FORMAT(NOW(), "%Y-%m-%d 00:00:00")	/* start the event today at midnight */
+  DO CALL sys_daily_clear(); 
 delimiter //
 
 DROP PROCEDURE IF EXISTS sys_daily_clear//
-
 
 CREATE PROCEDURE sys_daily_clear()  
 BEGIN

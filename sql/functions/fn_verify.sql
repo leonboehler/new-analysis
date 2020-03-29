@@ -5,8 +5,8 @@
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
+* Purpose           : Verifies a valid session id
+* PARAMS            : pSessionID:	session id of a request
 * RETURN            : --
 /**********************************************************************/
 delimiter //

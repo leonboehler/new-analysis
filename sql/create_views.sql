@@ -1,11 +1,13 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaunedehabewe.st_bucket
 *
-* Program name      : views.sql
+* Program name      : create_views.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Create all views for system and ui
+* Purpose           : Create all views for:
+* 					  system => sys_view 
+* 					  user-interface => ui_view
 * 
 /**********************************************************************/
 /**************************************** */
@@ -101,8 +103,7 @@ SELECT * FROM sys_job;
 ### STATION 
 CREATE OR REPLACE VIEW sys_station AS
 	SELECT s.id AS 'station_id', s.chip_id AS 'station_chip_id', s.battery_level AS 'station_battery_level', s.latitude AS 'station_latitude', s.longitude AS 'station_longitude'
-	FROM st_station s;
-	
+	FROM st_station s;	
 	
 SELECT * FROM sys_station;
 
@@ -129,6 +130,13 @@ CREATE OR REPLACE VIEW ui_location AS
 	FROM sys_location l;
 	
 SELECT * FROM ui_location WHERE location_id = 1;
+
+### JOB
+CREATE OR REPLACE VIEW ui_job AS 
+	SELECT *
+	FROM sys_job;
+
+SELECT * FROM ui_job;
 
 ### LOCATION-MARKER
 CREATE OR REPLACE VIEW ui_location_marker AS
@@ -172,44 +180,7 @@ CREATE OR REPLACE VIEW ui_assignment AS
 
 SELECT * FROM ui_assignment;
 
-
-/**************************************** */
-/*** UI-VIEW: LOG
-/**************************************** */
+### LOG
 CREATE OR REPLACE VIEW ui_log AS
 	SELECT * FROM log;
 	
-
-/**************************************** */
-/*** USER: SERVER
-/**************************************** */
-DROP USER IF EXISTS server;
-CREATE USER 'server'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT EXECUTE, UPDATE, DELETE ON dehabewe.* TO server WITH max_user_connections 10;
-GRANT SELECT ON dehabewe.ui_bucket TO server;
-GRANT SELECT ON dehabewe.ui_user TO server;
-GRANT SELECT ON dehabewe.ui_location TO server;
-GRANT SELECT ON dehabewe.ui_location_marker TO server;
-GRANT SELECT ON dehabewe.ui_station TO server;
-GRANT SELECT ON dehabewe.ui_assignment TO server;
-GRANT SELECT ON dehabewe.ui_readiness TO server;
-flush PRIVILEGES;
-
-/**************************************** */
-/*** USER: UNITTEST
-/**************************************** */
-DROP USER IF EXISTS unittest;
-CREATE USER 'unittest'@'%' IDENTIFIED BY "dhbw2020#";
-GRANT EXECUTE, UPDATE, DELETE ON dehabewe.* TO unittest WITH max_user_connections 5;
-GRANT DROP ON dehabewe.* TO unittest;
-GRANT SELECT ON dehabewe.ui_bucket TO unittest;
-GRANT SELECT ON dehabewe.ui_user TO unittest;
-GRANT SELECT ON dehabewe.ui_mailing TO unittest;
-GRANT SELECT ON dehabewe.ui_location TO unittest;
-GRANT SELECT ON dehabewe.ui_location_marker TO unittest;
-GRANT SELECT ON dehabewe.ui_station TO unittest;
-GRANT SELECT ON dehabewe.ui_assignment TO unittest;
-GRANT SELECT ON dehabewe.ui_readiness TO unittest;
-flush PRIVILEGES;
-
-/*select * from mysql.user;*/

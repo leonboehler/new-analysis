@@ -1,17 +1,23 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_add_readiness.sql
+* Program name      : fn_add_bucket.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
-* RETURN            : --
+* Purpose           : Adds a new bucket
+* PARAMS            : pChipID:		unique identifier of the bucket (like mac address)
+* 					  pName:		name of the bucket
+* 					  pMaxToads:	amount of the max possible toads within a bucket
+* 					  pLocationID:	foreign-key of the location
+* 				      pLatitude:	latitude coordinate
+* 					  pLongitude: 	longitude coordinate
+* 
+* RETURN            : ID:			identifier of the inserted bucket
 /**********************************************************************/
 delimiter //
 
-DROP PROCEDURE IF EXISTS fn_add_bucket//
+DROP FUNCTION IF EXISTS fn_add_bucket//
 
 CREATE FUNCTION fn_add_bucket (
 	pChipID varchar(17),

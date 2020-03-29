@@ -1,19 +1,21 @@
 /**********************************************************************
 * Project           : DeHaBewe: Smarte Kroetenzaune
 *
-* Program name      : fn_inc_toads.sql
+* Program name      : fn_logout.sql
 *
 * Author            : Dominik Deseyve
 *
-* Purpose           : Increments the toads counter
-* PARAMS            : --
+* Purpose           : Logout a user
+* PARAMS            : pMail:	mail address of the user that wants a logout
 * RETURN            : --
 /**********************************************************************/
 delimiter //
 
 DROP PROCEDURE IF EXISTS fn_logout//
 
-CREATE PROCEDURE fn_logout (IN pMail varchar(127))  
+CREATE PROCEDURE fn_logout (
+	IN pMail varchar(127)
+)  
 BEGIN	
 	DECLARE _userID int(11);
 
