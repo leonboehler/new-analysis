@@ -10,13 +10,13 @@
               {{location.chipId}}
             </mat-panel-title>
             <mat-panel-description>
-              {{ location.street}}
+              {{ location.city}}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
           <mat-form-field>
             <mat-label>ChipId</mat-label>
-            <input id="input_location_chipId" matInput [value]="location.chipId" (input)="onInput($event)">
+            <input id="input_location_chipId" matInput type='number' [value]="location.chipId" (input)="onInput($event)">
           </mat-form-field>
 
             <mat-form-field *ngIf="editedLocation!=null">
@@ -46,11 +46,11 @@
                 <button mat-icon-button (click)="onDeletePoint()"><mat-icon>delete</mat-icon></button>
                 <mat-form-field>
                   <mat-label>Longitude</mat-label>
-                <input id="input_point_latitude" matInput [value]="point.latitude" (input)="onInputPoint($event)">
+                <input id="input_point_latitude" matInput type='number' [value]="point.latitude" (input)="onInputPoint($event)">
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Latitude</mat-label>
-                  <input id="input_point_longitude" matInput [value]="point.longitude" (input)="onInputPoint($event)">
+                  <input id="input_point_longitude" type='number' matInput [value]="point.longitude" (input)="onInputPoint($event)">
                 </mat-form-field>
                 <button mat-icon-button><mat-icon>drag_indicator</mat-icon></button>
               </div>
@@ -75,7 +75,7 @@
                 <div *ngIf="currentBucket!=null && bucket.id == currentBucket.id" (input)="onInput($event)">
                   <mat-form-field matLine>
                     <mat-label>ChipId</mat-label>
-                    <input id="input_bucket_chipId" matInput [value]="currentBucket.chipId" (input)="onInput($event)">
+                    <input id="input_bucket_chipId" matInput type='number' [value]="currentBucket.chipId" (input)="onInput($event)">
                   </mat-form-field>
                   <mat-form-field matLine>
                     <mat-label>Name</mat-label>
@@ -87,11 +87,11 @@
                   </mat-form-field>
                   <mat-form-field matLine>
                     <mat-label>Latitude</mat-label>
-                    <input id="input_bucket_latitude" matInput [value]="currentBucket.position.latitude" (input)="onInput($event)">
+                    <input id="input_bucket_latitude" matInput type='number' [value]="currentBucket.position.latitude" (input)="onInput($event)">
                   </mat-form-field>
                   <mat-form-field matLine>
                     <mat-label>Longitude</mat-label>
-                    <input id="input_bucket_longitude" matInput [value]="currentBucket.position.longitude" (input)="onInput($event)">
+                    <input id="input_bucket_longitude" matInput type='number' [value]="currentBucket.position.longitude" (input)="onInput($event)">
                   </mat-form-field>
                 </div>
               </button>

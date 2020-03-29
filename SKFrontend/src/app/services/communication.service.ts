@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Bucket} from '../models/Bucket';
-import {BehaviorSubject, observable, Observable} from 'rxjs';
+import {BehaviorSubject, observable, Observable, range, forkJoin} from 'rxjs';
 import { interval } from 'rxjs';
 import {AdminInfo} from '../models/adminInfo';
 import {User} from '../models/User';
@@ -24,7 +24,7 @@ export class CommunicationService {
   };
   exampleLocation = {
     chipId: 3114159,
-    stationId: null,
+    stationId: 4,
     name: 'ZweiteLoc',
     description: 'Beschreibung',
     city: 'FN',
@@ -63,7 +63,7 @@ export class CommunicationService {
     token: 'token',
     firstName: 'Ron',
     lastName: 'Chef',
-    email: 'felix@dhbw.de',
+    email: 'paulfax999@gmail.com',
     birthdate: '1960-07-01',
     phoneNumber: '0156824435',
     password: 'csgo1234',
@@ -100,6 +100,7 @@ export class CommunicationService {
   constructor(private http: HttpClient) {
     this.fetchAll();
     this.createUser(this.exampleUser).subscribe()
+   // this.createLocation(this.exampleLocation).subscribe(null)
     /*
     this.bucket.locationId = 1;
     this.createBucket(this.bucket).subscribe(resultBucket => {console.log(resultBucket);
@@ -133,9 +134,9 @@ export class CommunicationService {
             longitude: receivedBucket.bucket_longitude,
               latitude: receivedBucket.bucket_latitude
           };
-          const bucket = new Bucket(receivedBucket.bucket_id, position, '');
+          const bucket = new Bucket(receivedBucket.bucket_chip_id, position, '');
           bucket.locationId =  receivedBucket.location_id;
-          bucket.chipId = receivedBucket.bucket_chip_id;
+          bucket.id = receivedBucket.bucket_id;
           bucket.name = receivedBucket.bucket_name, bucket.battery = receivedBucket.bucket_battery_level, bucket.frogAmountMax = receivedBucket.bucket_max_toads;
           bucket.frogAmount = receivedBucket.bucket_toads_count;
           bucket.reserved = false;
@@ -268,11 +269,19 @@ createStation(station: Station): Observable <{success: boolean; id: number}> {
 createBucket(bucket: Bucket): Observable <{success: boolean; id: number}> {
 
     return new Observable<{success: boolean; id: number}>((observer) => {
+      const body = {
+        chipId: bucket.chipId,
+        name: bucket.name,
+        locationId: bucket.locationId,
+        position: bucket.position,
+        frogAmountMax: bucket.frogAmountMax,
+      };
+
       if (this.logPosts) {
         console.log('CreateBucket sending: ');
-        console.log(JSON.stringify(bucket));
+        console.log(JSON.stringify(body));
       }
-      this.http.post(this.baseUrl + 'admin/bucketcreate', JSON.stringify(bucket), this.httpOptions).subscribe(response => {
+      this.http.post(this.baseUrl + 'admin/bucketcreate', JSON.stringify(body), this.httpOptions).subscribe(response => {
         if (this.logPosts) {
           console.log('CreateBucket response: ');
           console.log(response);
@@ -312,7 +321,16 @@ createLocation(location: Location): Observable <{success: boolean; id: number}> 
         if ((response as any).message === 'success') {
           this.setRoutePoints((response as any).data.Id, location.locationMarkers).subscribe(result => {
             if (result) {
-              observer.next({success: true, id: (response as any).data.Id});
+              const observables = new Array<Observable<{success: boolean; id: number}>>()
+              location.buckets.forEach(bucket => {
+                bucket.locationId = (response as any).data.Id
+                observables.push(this.createBucket(bucket))
+              })
+              forkJoin(observables).subscribe(result => {
+                console.log("ForkJoinResult")
+                console.log(result)
+                observer.next({success: true, id: (response as any).data.Id})
+              });
             } else {
               observer.next({success: false, id: null});
             }

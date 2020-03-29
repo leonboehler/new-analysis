@@ -103,12 +103,13 @@ export class CreateLocationComponent implements OnInit {
   panelClosed(location: Location) {
     console.log("Zu speichernde Location")
     console.log(this.editedLocation)
-    if(this.editedLocation.id==null){
+    if(this.editedLocation.id==null) {
       this.communicationService.createLocation(this.editedLocation).subscribe(result => {
-        if(result.success)this.communicationService.fetchAll()
+        if (result.success) {
+         this.communicationService.fetchAll()
+        }
       });
     }
-
       this.adminService.setSelectedLocation(null);
       this.editingBuckets = false;
       this.adminService.setDrawMode('none');
@@ -129,23 +130,25 @@ export class CreateLocationComponent implements OnInit {
 
   onInput(event) {
     const id = (event.target as Element).id;
+
     switch (id) {
-      case 'input_location_chipId': this.editedLocation.chipId = event.target.value; break;
+      case 'input_location_chipId': this.editedLocation.chipId = Number(event.target.value); break;
       case 'input_location_city': this.editedLocation.city = event.target.value; break;
       case 'input_location_state': this.editedLocation.state = event.target.value; break;
       case 'input_location_location_length': this.editedLocation.routeLength = event.target.value; break;
 
-      case 'input_bucket_chipId': this.currentBucket.chipId = event.target.value; break;
+      case 'input_bucket_chipId': this.currentBucket.chipId = Number(event.target.value); break;
       case 'input_bucket_name': this.currentBucket.name = event.target.value; break;
-      case 'input_bucket_maxFrogs': this.currentBucket.frogAmountMax = event.target.value; break;
-      case 'input_bucket_latitude': this.currentBucket.position.latitude = event.target.value; break;
-      case 'input_bucket_longitude': this.currentBucket.position.longitude = event.target.value; break;
+      case 'input_bucket_maxFrogs': this.currentBucket.frogAmountMax = Number(event.target.value); break;
+      case 'input_bucket_latitude': this.currentBucket.position.latitude = Number(event.target.value); break;
+      case 'input_bucket_longitude': this.currentBucket.position.longitude = Number(event.target.value); break;
     }
 
     this.adminService.setCurrentBucket(this.currentBucket);
   }
 
   saveBuckets() {
+      console.log(this.editedLocation.buckets[0].chipId.constructor.name)
       this.adminService.setCurrentBucket(null);
       this.adminService.setBuckets(new Array<Bucket>());
       this.editingBuckets = false;
@@ -158,8 +161,8 @@ export class CreateLocationComponent implements OnInit {
     else position = {latitude: 0,longitude: 0}
     const bucket = new Bucket(0,position , this.editedLocation.street);
     let maxId = 0
-    this.editedLocation.buckets.forEach(buc => {
-      if(buc.id>maxId){
+    this.createdBuckets.forEach(buc => {
+      if(buc.id>=maxId){
         maxId = buc.id+1
       }
       bucket.id = maxId
@@ -205,8 +208,8 @@ export class CreateLocationComponent implements OnInit {
   onInputPoint(event) {
     const id = (event.target as Element).id;
     switch (id) {
-      case 'input_point_latitude': this.currentPoint.latitude = event.target.value; break;
-      case 'input_point_longitude': this.currentPoint.longitude = event.target.value; break;
+      case 'input_point_latitude': this.currentPoint.latitude = Number(event.target.value); break;
+      case 'input_point_longitude': this.currentPoint.longitude = Number(event.target.value); break;
       }
     this.adminService.setCurrentPoint(this.currentPoint);
   }
