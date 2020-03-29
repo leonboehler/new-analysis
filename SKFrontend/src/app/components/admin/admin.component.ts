@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
     return false;
   }
 
-  createListe(){
+  createLise(){
     this.communicationService.getAdmins().subscribe(response =>{
       for (var i = 0; i < response.length; i++){
         this.test.push(response[i]);
