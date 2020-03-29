@@ -12,7 +12,7 @@ namespace FroggyRestServer.Tests
     {
 
         [TestMethod]
-        public void loginWorks() // TK-0219a
+        public void loginWorks() // TK-0219
         {
             var user = Utilitities.addTestUser();
             var userController = new UserController();
@@ -26,6 +26,36 @@ namespace FroggyRestServer.Tests
             Assert.AreEqual(userSessions[0]["end_ts"], DBNull.Value, "Usersession was already ended");
 
             userController.Logout(user);
+        }
+
+        [TestMethod]
+        public void invalidPasswordDoesntWork() // TK-0219a
+        {
+            var user = Utilitities.addTestUser();
+            var userController = new UserController();
+            user.Password = "WR0o0NG!!!";
+
+            var result = userController.Login(user);
+            var userSessions = (List<Dictionary<string, object>>)MySQLConnector.ConExecuteReaderMany(
+                $"SELECT end_ts FROM log_session WHERE session_id LIKE '{user.Token}';")["data"];
+
+            Assert.AreEqual(result["code"], 413, "Malicious login successful");
+            Assert.AreEqual(userSessions.Count, 0, "Malicious login got open session despite unsuccessful login");
+        }
+
+        [TestMethod]
+        public void invalidEmailDoesntWork() // TK-0219a
+        {
+            var user = Utilitities.addTestUser();
+            var userController = new UserController();
+            user.Email = "evil@hack.er";
+
+            var result = userController.Login(user);
+            var userSessions = (List<Dictionary<string, object>>)MySQLConnector.ConExecuteReaderMany(
+                $"SELECT end_ts FROM log_session WHERE session_id LIKE '{user.Token}';")["data"];
+
+            Assert.AreEqual(result["code"], 411, "Malicious login successful");
+            Assert.AreEqual(userSessions.Count, 0, "Malicious login got open session despite unsuccessful login");
         }
 
         [TestMethod]
