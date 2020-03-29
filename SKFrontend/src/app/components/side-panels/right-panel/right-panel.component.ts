@@ -1,30 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommunicationService} from '../../../services/communication.service';
-import { OrchestratorService } from '../../../services/orchestrator.service'
+import {OrchestratorService} from '../../../services/orchestrator.service';
 import {Bucket} from '../../../models/Bucket';
-import { from } from 'rxjs';
 
+/**
+ * @title RightSidePanel
+ * @description Shows detailed information about the selectedBucket and gives the user the option to reserve it
+ */
 @Component({
   selector: 'app-right-panel',
   templateUrl: './right-panel.component.html',
   styleUrls: ['./right-panel.component.css']
 })
 export class RightPanelComponent implements OnInit {
-
-  buckets: Bucket[];
+  /**
+   * @brief Class for the functionality of the right side bar
+   * @implements OnInit
+   */
   selectedBucket: Bucket;
-  noBucketSelected = true;
 
 
+  /**
+   * @brief Constructor for setting up the orchestratorService
+   * @param orchestratorService
+   * @see orchestratorService
+   */
   constructor(
-    private communicationService: CommunicationService,
     private orchestratorService: OrchestratorService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-    this.communicationService.buckets().subscribe(buckets => {
-      this.buckets = buckets;
-    });
+    /**
+     * @brief Subscription to selectedBucket
+     * @description subscribe to selectedBucket using the orchestrator service to get access to all of its attributes
+     * @see Bucket
+     * @see orchestratorService
+     */
     this.orchestratorService.selectedBucket.subscribe(bucket => {
       this.selectedBucket = bucket;
       console.log(bucket);
@@ -32,11 +44,16 @@ export class RightPanelComponent implements OnInit {
   }
 
   closeSideBar() {
-    // De-select bucket thus closing sidebar
+    /**
+     * @brief Deselect bucket thus closing the sidebar
+     */
     this.orchestratorService.bucketSelected(null);
   }
 
   reserveBucket() {
+    /**
+     * @brief Reserve the selectedBucket
+     */
     this.selectedBucket.reserved = true;
   }
 }

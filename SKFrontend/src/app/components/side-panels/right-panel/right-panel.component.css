@@ -1,16 +1,18 @@
 .panel {
-    height: 100%;
-    width: 100%;
-    background-color: white;
+  height: 100%;
+  width: 100%;
+  background-color: white;
 }
+
 .content {
-    padding: 1em;
+  padding: 1em;
 }
+
 #close {
-    position: absolute;
-    top: 0.25em;
-    right: 0.25em;
-    cursor: pointer;
+  position: absolute;
+  top: 0.25em;
+  right: 0.25em;
+  cursor: pointer;
 }
 
 #reserve {
@@ -19,7 +21,7 @@
   left: 1em;
 }
 
-.bucketHeadline{
+.bucketHeadline {
   color: red;
 }
 

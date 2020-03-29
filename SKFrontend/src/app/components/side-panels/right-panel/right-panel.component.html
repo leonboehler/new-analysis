@@ -1,29 +1,41 @@
 <div *ngIf="selectedBucket != null" class="panel">
-    <div class="content">
-        <h1 class="bucketHeadline">
-            Eimer {{ selectedBucket?.id }}
-        </h1>
-        <h3>
-            Ort: {{ selectedBucket?.locationId }}
-        </h3>
-        <mat-divider></mat-divider>
-        <h3 class="bucketHeadline">
-            Koordinaten
-        </h3>
-        <h4>Latitude: {{ selectedBucket?.position?.latitude }} </h4>
-        <h4>Longitude: {{ selectedBucket?.position?.longitude }} </h4>
-        <mat-divider></mat-divider>
-        <p></p>
-        <h2>Füllstand: {{ selectedBucket?.currentFrogs }}/{{ selectedBucket?.maxFrogs }} </h2>
-        <mat-icon id="close" (click)="closeSideBar()">close</mat-icon>
-        <p class="with-icon" *ngIf="selectedBucket.reserved">
-          <mat-icon class="info">info</mat-icon> <span class="text-with-icon">Dieser Eimer wird bereits geleert!</span>
-        </p>
-        <!-- Paragraph  -->
-        <p class="with-icon" *ngIf="!selectedBucket.reserved && selectedBucket.currentFrogs > 0">
-          <mat-icon class="warn">warning</mat-icon> <span class="text-with-icon">Dieser Eimer muss geleert werden!</span>
-        </p>
+  <div class="content">
+    <!-- Start of text information inside the right panel -
+      contains info only about the selected bucket -->
+    <h1 class="bucketHeadline">
+      Eimer {{ selectedBucket?.id }}
+    </h1>
+    <h3>
+      Ort: {{ selectedBucket?.locationId }}
+    </h3>
+    <mat-divider></mat-divider>
+    <h3 class="bucketHeadline">
+      Koordinaten
+    </h3>
+    <h4>Latitude: {{ selectedBucket?.position?.latitude }} </h4>
+    <h4>Longitude: {{ selectedBucket?.position?.longitude }} </h4>
+    <mat-divider></mat-divider>
+    <p></p>
+    <h2>Füllstand: {{ selectedBucket?.currentFrogs }}/{{ selectedBucket?.maxFrogs }} </h2>
+    <!-- End of Information -->
+    <!-- Icon to close the sidebar -->
+    <mat-icon id="close" (click)="closeSideBar()">close</mat-icon>
+    <!-- Paragraph  informing the user if a bucket is already reserved
+      - only visible if the bucket is already reserved -->
+    <p class="with-icon" *ngIf="selectedBucket.reserved">
+      <mat-icon class="info">info</mat-icon>
+      <span class="text-with-icon">Dieser Eimer wird bereits geleert!</span>
+    </p>
+    <!-- Paragraph  informing the user if a bucket has to be emptied
+    - only visible if the bucket is not reserved and there is at least one frog inside the bucket -->
+    <p class="with-icon" *ngIf="!selectedBucket.reserved && selectedBucket.currentFrogs > 0">
+      <mat-icon class="warn">warning</mat-icon>
+      <span class="text-with-icon">Dieser Eimer muss geleert werden!</span>
+    </p>
 
-      <button id="reserve" mat-raised-button color="accent" [disabled]="selectedBucket.reserved" (click)="reserveBucket()">Auftrag annehmen</button>
-    </div>
+    <!-- button to reserve a bucket, will be disabled if it is reserved -->
+    <button id="reserve" mat-raised-button color="accent" [disabled]="selectedBucket.reserved"
+            (click)="reserveBucket()">Auftrag annehmen
+    </button>
+  </div>
 </div>

@@ -3,19 +3,27 @@
   <mat-divider></mat-divider>
   <mat-divider></mat-divider>
   <mat-action-list role="contentinfo">
+    <!-- SubHeader for MyBuckets section -->
     <h2 class="myBuckets" matSubheader>Meine Eimer</h2>
-    <button [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}"
-            style="cursor: pointer"
-            (pointerover)="pointerOver(bucket.id)"
-            (pointerleave)="pointerLeave()"
-            (click)="selectBucket(bucket.id, bucket)"
-            mat-list-item *ngFor="let bucket of buckets">
+    <!-- button as one list item - contains information about the bucket -->
+    <button
+      [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}"
+      style="cursor: pointer"
+      (pointerover)="pointerOver(bucket.id)"
+      (pointerleave)="pointerLeave()"
+      (click)="selectBucket(bucket.id, bucket)"
+      mat-list-item *ngFor="let bucket of buckets">
+      <!-- Icon inside the button indicating that the bucket is already being emptied -->
       <mat-icon class="info" *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
                 [matTooltipShowDelay]="100"
-                [matTooltipHideDelay]="0">info</mat-icon>
-      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)" matTooltip="Dieser Eimer muss geleert werden!"
-                 [matTooltipShowDelay]="100"
-                 [matTooltipHideDelay]="0">warning</mat-icon>
+                [matTooltipHideDelay]="0">info
+      </mat-icon>
+      <!-- Icon inside the button indicating that the bucket has to be emptied -->
+      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)"
+                matTooltip="Dieser Eimer muss geleert werden!"
+                [matTooltipShowDelay]="100"
+                [matTooltipHideDelay]="0">warning
+      </mat-icon>
       <h4 matLine>Eimer '{{bucket.id}}'</h4>
       <p matLine>
         <span>{{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten</span>
@@ -28,19 +36,27 @@
       </p>
       <mat-divider></mat-divider>
     </button>
+    <!-- SubHeader for AllBuckets section -->
     <h2 class="allBuckets" matSubheader>Alle Eimer</h2>
-    <button [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}"
-            style="cursor: pointer"
-            (pointerover)="pointerOver(bucket.id)"
-            (pointerleave)="pointerLeave()"
-            (click)="selectBucket(bucket.id, bucket)"
-            mat-list-item *ngFor="let bucket of buckets">
+    <!-- button as one list item - contains information about the bucket -->
+    <button
+      [ngStyle]="{background: (clickedItem === bucket.id || hoveredOverItem === bucket.id && hover==true) ? 'lightgrey' : 'white'}"
+      style="cursor: pointer"
+      (pointerover)="pointerOver(bucket.id)"
+      (pointerleave)="pointerLeave()"
+      (click)="selectBucket(bucket.id, bucket)"
+      mat-list-item *ngFor="let bucket of buckets">
+      <!-- Icon inside the button indicating that the bucket is already being emptied -->
       <mat-icon class="info" *ngIf="bucket.reserved" matTooltip="Dieser Eimer wird bereits geleert!"
                 [matTooltipShowDelay]="100"
-                [matTooltipHideDelay]="0">info</mat-icon>
-      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)" matTooltip="Dieser Eimer muss geleert werden!"
+                [matTooltipHideDelay]="0">info
+      </mat-icon>
+      <!-- Icon inside the button indicating that the bucket has to be emptied -->
+      <mat-icon class="warn" *ngIf="(!bucket.reserved && bucket.currentFrogs >= 1)"
+                matTooltip="Dieser Eimer muss geleert werden!"
                 [matTooltipShowDelay]="100"
-                [matTooltipHideDelay]="0">warning</mat-icon>
+                [matTooltipHideDelay]="0">warning
+      </mat-icon>
       <h4 matLine>Eimer '{{bucket.id}}'</h4>
       <p matLine>
         <span>{{bucket.currentFrogs}}/{{ bucket.maxFrogs}} Kröten</span>
