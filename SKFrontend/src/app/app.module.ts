@@ -35,6 +35,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { CreateStationComponent } from './components/create-station/create-station.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AdminEditingUserComponent } from './components/admin-editing-user/admin-editing-user.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -57,7 +60,9 @@ import { CreateStationComponent } from './components/create-station/create-stati
     TimeSelectionComponent,
     CreateLocationComponent,
     AdminMapComponent,
-    CreateStationComponent
+    CreateStationComponent,
+    AdminComponent,
+    AdminEditingUserComponent
   ],
   imports: [
     BrowserModule,
@@ -76,9 +81,10 @@ import { CreateStationComponent } from './components/create-station/create-stati
     HttpClientModule,
     MatExpansionModule,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MatExpansionModule,
+    MatSlideToggleModule
   ],
-
   providers: [],
   bootstrap: [AppComponent]
 })

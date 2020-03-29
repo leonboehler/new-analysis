@@ -1,0 +1,72 @@
+<!--start register page-->
+<div class="test">
+  <form class="register_form">
+    <div class="register_personaldata">
+      <mat-form-field class="full-width">
+        <mat-label>Vorname</mat-label>
+        <input matInput id="input_firstname" value="{{user.firstName}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Nachname</mat-label>
+        <input matInput id="input_name" value="{{user.lastName}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email"  id="input_email" placeholder="max.m@example.com" value="{{user.mail}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Geburtsdatum</mat-label>
+        <input matInput type="date" id="input_birthday" value="{{getBirthday().value }}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Telefonnummer</mat-label>
+        <span matPrefix>+49</span>
+        <input matInput type="tel" #telNumber id="input_telnumber" value="{{user.phoneNumber}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Passwort</mat-label>
+        <input matInput type="password" id="input_password" #setPassword minlength="8" value="{{user.password}}">
+        <mat-hint align="end">mind. 8 / {{setPassword.value.length}}</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Passwort bestätigen</mat-label>
+        <input matInput type="password" #confirmPassword minlength="8" id="input_password_confirm" value="{{user.password}}">
+        <mat-hint align="end">mind. 8 / {{confirmPassword.value.length}}</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Straße</mat-label>
+        <input matInput type="text" id="input_street" value="{{user.address.street}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Hausnummer</mat-label>
+        <input matInput type="number" id="input_streetNumber" value="{{user.address.streetNumber}}">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Postleitzahl</mat-label>
+        <input matInput id="input_postcode" #postalCode maxlength="5" placeholder="07815" value="{{user.address.postCode}}">
+        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Stadt</mat-label>
+        <input matInput type="text" id="input_city" value="{{user.address.city}}">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Bundesland</mat-label>
+        <input matInput type="text" id="input_state" value="{{user.address.state}}">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Land</mat-label>
+        <input matInput disabled value="Deutschland" id="input_country" value="{{user.address.country}}">
+      </mat-form-field>
+
+      <app-time-selection [selectedTimes]="[]" (valueChanged)="onTimeChanged($event)"></app-time-selection>
+
+      <mat-slide-toggle class="example-margin" [checked]="checked" (click)="setRolle()">Admin!</mat-slide-toggle>
+
+
+
+      <button mat-raised-button color="accent" id="register_button" (click)="onClickSafe();">Speichern</button>
+
+    </div>
+  </form>
+</div>

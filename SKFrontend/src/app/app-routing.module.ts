@@ -16,6 +16,8 @@ import { HomeComponent } from './components/home/home.component';
 import {TimeSelectionComponent} from './components/time-selection/time-selection.component';
 import {CreateLocationComponent} from './components/create-location/create-location.component';
 import {CreateStationComponent} from './components/create-station/create-station.component';
+import {AdminComponent} from "./components/admin/admin.component";
+import {AdminEditingUserComponent} from "./components/admin-editing-user/admin-editing-user.component";
 
 
 const routes: Routes = [
@@ -33,7 +35,10 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'home', component: HomeComponent},
   {path: 'locCreate', component: CreateLocationComponent},
-  {path: 'stationCreate', component: CreateStationComponent}
+  {path: 'stationCreate', component: CreateStationComponent},
+  {path: 'locCreate', component: CreateLocationComponent},
+  {path: 'admin', component: AdminComponent},
+  {path: 'adminEditingUser', component: AdminEditingUserComponent}
 ];
 
 @NgModule({
