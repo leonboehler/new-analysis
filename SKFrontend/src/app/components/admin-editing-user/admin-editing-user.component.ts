@@ -14,7 +14,7 @@ export class AdminEditingUserComponent implements OnInit {
 
   data: userData[];
   checked = false;
-  user = this.communicationService.getEditUser();
+  user = this.orchestratorService.getEditUser();
 
   onTimeChanged(times: Array<string>){
     //this.user.operationalReadiness = times;
