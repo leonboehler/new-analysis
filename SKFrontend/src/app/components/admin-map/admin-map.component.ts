@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import {CommunicationService} from '../../services/communication.service';
 import {OrchestratorService} from '../../services/orchestrator.service';
 import {AdminService} from '../../services/admin.service';
+import {Station} from '../../models/Station';
 import {Location} from '../../models/Location';
+import {Bucket} from '../../models/Bucket';
 import {Subscription} from 'rxjs';
 
 import Map from 'ol/Map';
@@ -33,6 +35,7 @@ export class AdminMapComponent implements OnInit {
 
     //String used to select the current click interaction with the map
     drawMode: string = 'none';
+    selectedStation: Station;
     selectedLocation: Location;
 
     constructor(private communicationService: CommunicationService,
@@ -41,6 +44,42 @@ export class AdminMapComponent implements OnInit {
 
 
     ngOnInit(): void {
+
+        //Style Function to give the markers a dynamic size
+        let stationStyleFunction = function(feature) {
+
+            let station = feature.get('station');
+
+            //Default values
+            let scale = 0.07;
+
+            //Make the marker larger if it is selected
+            if(this.selectedStation == station){
+                scale = 0.1;
+            }
+
+            //Create final Icon
+            let style = new Style({
+                image: new Icon({
+                    src: '/assets/station.png',
+                    imgSize: [512, 512],
+                    scale: scale,
+                    color: 'grey'
+                })
+            });
+
+            return style;
+        }.bind(this)
+
+        //Create VectorSource outside the Layer to be able to add Features to it later on
+        let stationSource = new VectorSource();
+
+        //Create VectorLayer outside the map to be able to refresh it using stationLayer.changed()
+        let stationLayer = new VectorLayer({
+            source: stationSource,
+            style: stationStyleFunction
+        })
+
 
         //Style Function that colors the locations dynamically
         let locationStyleFunction = function(feature) {
@@ -179,6 +218,7 @@ export class AdminMapComponent implements OnInit {
                 new TileLayer({
                     source: new OsmSource()
                 }),
+                stationLayer,
                 locationLayer,
                 locationEditLayer,
                 bucketLayer,
@@ -200,10 +240,14 @@ export class AdminMapComponent implements OnInit {
             //Basic Selection Functionality
             if(this.drawMode == 'none'){
 
+              let selectedStation = null;
               let selectedLocation = null;
               let selectedBucket = null;
 
               map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+                  if(layer == stationLayer){
+                      selectedStation = feature.get('station');
+                  }
                   if(layer == locationLayer){
                       selectedLocation = feature.get('location');
                   }
@@ -212,11 +256,18 @@ export class AdminMapComponent implements OnInit {
                   }
               }.bind(this));
 
+              //If a station is selected, don't select anything else with it
+              if(selectedStation != null){
+                  selectedLocation = null;
+                  selectedBucket = null;
+              }
+
               //If a bucket is selected, don't select the location below it
               if(selectedBucket != null){
                   selectedLocation = null;
               }
 
+              this.adminService.setSelectedStation(selectedStation);
               this.adminService.setSelectedLocation(selectedLocation);
               this.adminService.setSelectedBucket(selectedBucket);
 
@@ -254,8 +305,44 @@ export class AdminMapComponent implements OnInit {
         }.bind(this));
 
 
+        // Subscribe to Stations
+        this.communicationService.allstations.subscribe(stations => {
+
+            console.log('hi');
+
+            //Parse all stations into OpenLayers features
+            let features = [];
+            stations.forEach(station => {
+
+                const coords = fromLonLat([station.position.longitude, station.position.latitude]);
+                features.push(new Feature({
+                    station: station,
+                    geometry: new Point(coords)
+                }));
+
+            });
+
+            //Refresh buckets
+            stationSource.clear();
+            stationSource.addFeatures(features);
+            stationLayer.changed();
+        })
+
+        //Subscription to update the selected bucket
+        this.adminService.selectedStation.subscribe(selectedStation => {
+            this.selectedStation = selectedStation;
+            stationLayer.changed();
+
+            //Jump to the currently selected station
+            if(selectedStation != null){
+                view.setCenter(fromLonLat([selectedStation.position.longitude, selectedStation.position.latitude]));
+                view.setZoom(14);
+            }
+        });
+
+
         // Subscribe to locations
-      this.communicationService.alllocations.subscribe(locations => {
+        this.communicationService.alllocations.subscribe(locations => {
 
             //Parse all locations into OpenLayers features
             let features = [];

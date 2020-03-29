@@ -68,6 +68,9 @@ export class AdminService {
     this.drawMode.next(mode);
   }
 
+  setSelectedStation(station: Station) {
+    this.selectedStation.next(station);
+  }
   setSelectedLocation(location: Location) {
     this.selectedLocation.next(location);
   }
