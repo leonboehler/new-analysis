@@ -15,7 +15,9 @@ export class CreateStationComponent implements OnInit {
   constructor(private adminService: AdminService, private communicationService: CommunicationService) { }
 
   ngOnInit(): void {
-
+    this.communicationService.allstations.subscribe(stations => {
+      this.stations = stations
+    })
   }
 
   panelOpened(station: Station){
