@@ -40,7 +40,7 @@ export class AdminComponent implements OnInit {
     return false;
   }
   onClickStation(){
-    this.router.navigate(['/locSelection']);
+    this.router.navigate(['/stationCreate']);
   }
   onClickLocation(){
     this.router.navigate(['/locCreate']);

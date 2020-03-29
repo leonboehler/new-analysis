@@ -22,7 +22,7 @@ export class OrchestratorService {
       this.currentUser = user;
     });
 
-    this.communicationService.locations().subscribe(locations => {
+    this.communicationService.alllocations.subscribe(locations => {
       this.loadedLocations = locations;
     });
   }
