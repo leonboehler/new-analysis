@@ -26,6 +26,8 @@ namespace FroggyRestServer.Tests
             Assert.AreEqual(userSessions[0]["end_ts"], DBNull.Value, "Usersession was already ended");
 
             userController.Logout(user);
+
+            MySQLConnector.ConExecuteReaderSingle("DELETE from st_user");
         }
 
         [TestMethod]
@@ -41,6 +43,8 @@ namespace FroggyRestServer.Tests
 
             Assert.AreEqual(result["code"], 413, "Malicious login successful");
             Assert.AreEqual(userSessions.Count, 0, "Malicious login got open session despite unsuccessful login");
+
+            MySQLConnector.ConExecuteReaderSingle("DELETE from st_user");
         }
 
         [TestMethod]
@@ -56,6 +60,8 @@ namespace FroggyRestServer.Tests
 
             Assert.AreEqual(result["code"], 411, "Malicious login successful");
             Assert.AreEqual(userSessions.Count, 0, "Malicious login got open session despite unsuccessful login");
+
+            MySQLConnector.ConExecuteReaderSingle("DELETE from st_user");
         }
 
         [TestMethod]
@@ -72,6 +78,8 @@ namespace FroggyRestServer.Tests
 
             Assert.AreEqual(result["code"], 200, "Logout unsuccessful");
             Assert.AreEqual(openSessions.Count, 0, "Usersession wasn't ended on logout");
+
+            MySQLConnector.ConExecuteReaderSingle("DELETE from st_user");
         }
     }
 }
