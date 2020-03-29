@@ -28,6 +28,10 @@
   text-shadow: 0 0 3px #000;
 }
 
+.warn {
+  color: red;
+}
+
 .with-icon {
   display: flex;
   align-items: center;

@@ -17,9 +17,13 @@
         <h2>Füllstand: {{ selectedBucket?.currentFrogs }}/{{ selectedBucket?.maxFrogs }} </h2>
         <mat-icon id="close" (click)="closeSideBar()">close</mat-icon>
         <p class="with-icon" *ngIf="selectedBucket.reserved">
-          <mat-icon class="info">info</mat-icon> <span class="text-with-icon">Eimer wird bereits geleert!</span>
+          <mat-icon class="info">info</mat-icon> <span class="text-with-icon">Dieser Eimer wird bereits geleert!</span>
+        </p>
+        <!-- Paragraph  -->
+        <p class="with-icon" *ngIf="!selectedBucket.reserved && selectedBucket.currentFrogs > 0">
+          <mat-icon class="warn">warning</mat-icon> <span class="text-with-icon">Dieser Eimer muss geleert werden!</span>
         </p>
 
-      <button id="reserve" mat-raised-button color="accent" (click)="reserveBucket()">Auftrag annehmen</button>
+      <button id="reserve" mat-raised-button color="accent" [disabled]="selectedBucket.reserved" (click)="reserveBucket()">Auftrag annehmen</button>
     </div>
 </div>
