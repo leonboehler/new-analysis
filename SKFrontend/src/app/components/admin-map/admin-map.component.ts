@@ -287,7 +287,7 @@ export class AdminMapComponent implements OnInit {
                   selectedLocation = null;
               }
 
-              this.adminService.setCurrentStation(selectedStation);
+              this.adminService.setSelectedStation(selectedStation);
               this.adminService.setSelectedLocation(selectedLocation);
               this.adminService.setSelectedBucket(selectedBucket);
 
