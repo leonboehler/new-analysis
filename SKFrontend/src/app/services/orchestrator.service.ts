@@ -14,6 +14,7 @@ export class OrchestratorService {
   selectedLocation: BehaviorSubject<Location> = new BehaviorSubject<Location>(null)
 
   loadedLocations = new Array<Location>()
+  editUser: User
 
   currentUser: User
   constructor(private communicationService: CommunicationService) {
@@ -24,6 +25,13 @@ export class OrchestratorService {
     this.communicationService.locations().subscribe(locations => {
       this.loadedLocations = locations;
     });
+  }
+  setEditUser(editUser: User) {
+    this.editUser = editUser;
+
+  }
+  getEditUser(){
+    return this.editUser;
   }
 
   getLocationFromId(id: string): Location {

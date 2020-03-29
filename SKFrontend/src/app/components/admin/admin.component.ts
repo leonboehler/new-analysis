@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from '../../services/communication.service';
 import {Router} from "@angular/router";
+import {OrchestratorService} from "../../services/orchestrator.service";
 
 @Component({
   selector: 'app-admin',
@@ -9,13 +10,13 @@ import {Router} from "@angular/router";
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private communicationService:CommunicationService, private router: Router) { this.createList() }
+  constructor(private communicationService:CommunicationService, private orchestratorService: OrchestratorService, private router: Router) { this.createList() }
   test = new Array();
 
   edit(user){
     console.log(user.firstName);
     //TODO: open editing panel with user data
-    this.communicationService.setEditUser(user);
+    this.orchestratorService.setEditUser(user);
     this.router.navigate(['/adminEditingUser']);
 
   }
@@ -38,6 +39,12 @@ export class AdminComponent implements OnInit {
       }
     })
     return false;
+  }
+  onClickStation(){
+    this.router.navigate(['/adminEditingUser']);
+  }
+  onClickLocation(){
+    this.router.navigate(['/adminEditingUser']);
   }
   ngOnInit(): void {
   }

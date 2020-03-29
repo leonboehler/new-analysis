@@ -16,17 +16,9 @@ export class CommunicationService {
   baseUrl = 'https://froggyrestserver20200324160726.azurewebsites.net/'
   mockUp = true
   token: string
-  editUser: User
+
 
   constructor(private http: HttpClient) { }
-
-  setEditUser(editUser: User) {
-    this.editUser = editUser;
-
-  }
-  getEditUser(){
-    return this.editUser;
-  }
 
   buckets(): Observable<Bucket[]> {
     if (this.mockUp) {
